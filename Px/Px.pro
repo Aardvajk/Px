@@ -18,4 +18,19 @@ LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a"
 
 
 SOURCES += \
-    lib.cpp
+    common/OpCodes.cpp \
+    scanner/Lexer.cpp \
+    scanner/Scanner.cpp \
+    scanner/Source.cpp \
+    scanner/SourceList.cpp \
+    scanner/Token.cpp
+
+HEADERS += \
+    common/OpCodes.h \
+    framework/Error.h \
+    scanner/Lexer.h \
+    scanner/Location.h \
+    scanner/Scanner.h \
+    scanner/Source.h \
+    scanner/SourceList.h \
+    scanner/Token.h

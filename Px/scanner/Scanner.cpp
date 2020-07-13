@@ -1,0 +1,36 @@
+#include "Scanner.h"
+
+#include "framework/Error.h"
+
+Scanner::Scanner(Lexer::Mode mode) : mode(mode)
+{
+}
+
+void Scanner::push(Source *source)
+{
+    state.push_back({ source, Token() });
+}
+
+void Scanner::pop()
+{
+    state.pop_back();
+}
+
+Token Scanner::next(bool get)
+{
+    if(get)
+    {
+        state.back().tok = Lexer::next(mode, *state.back().src);
+        if(state.back().tok.type() == Token::Type::Invalid)
+        {
+            throw Error(state.back().tok.location(), "invalid token - ", state.back().tok.text());
+        }
+    }
+
+    return state.back().tok;
+}
+
+Token Scanner::token() const
+{
+    return state.back().tok;
+}
