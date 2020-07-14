@@ -22,11 +22,13 @@ SOURCES += \
         application/Context.cpp \
         entity/Entity.cpp \
         main.cpp \
+        parser/Code.cpp \
         parser/Parser.cpp
 
 HEADERS += \
     application/Context.h \
     entity/Entity.h \
+    parser/Code.h \
     parser/Parser.h
 
 DISTFILES += \

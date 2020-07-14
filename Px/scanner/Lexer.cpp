@@ -21,8 +21,9 @@ struct Reserved
 
 static const std::vector<Reserved> piReserved =
 {
-    { "var", Token::Type::RwVar },
     { "func", Token::Type::RwFunc },
+    { "var", Token::Type::RwVar },
+    { "arg", Token::Type::RwArg },
 };
 
 Source::Char skip(Source &source)

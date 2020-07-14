@@ -2,10 +2,18 @@
 
 const char *OpCode::toString(Reg v)
 {
-    return "";
+    static const char *s[] =
+    {
+    };
+
+    return s[static_cast<int>(v)];
 }
 
 const char *OpCode::toString(Op v)
 {
-    return "";
+    static const char *s[] =
+    {
+    };
+
+    return s[static_cast<int>(v)];
 }

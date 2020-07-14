@@ -44,7 +44,7 @@ pcx::any Entity::property(const std::string &name) const
 
 const char *Entity::toString(Type v)
 {
-    static const char *s[] = { "block", "func", "(invalid)" };
+    static const char *s[] = { "block", "global", "func", "var", "arg", "label", "(invalid)" };
     return s[static_cast<int>(v)];
 }
 

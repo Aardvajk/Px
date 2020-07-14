@@ -14,7 +14,7 @@ public:
         Id, StringLiteral, IntLiteral,
         Colon, Semicolon,
         LeftBrace, RightBrace,
-        RwVar, RwFunc,
+        RwFunc, RwVar, RwArg,
         Eof, Invalid
     };
 

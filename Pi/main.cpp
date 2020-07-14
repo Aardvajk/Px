@@ -22,7 +22,10 @@ int main(int argc, char *argv[])
 
         auto e = Parser::build(c);
 
-        Entity::print(*e, std::cout);
+        for(auto &n: e->entities)
+        {
+            Entity::print(n, std::cout);
+        }
     }
 
     catch(const Error &error)

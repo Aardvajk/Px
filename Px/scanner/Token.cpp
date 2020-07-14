@@ -24,6 +24,8 @@ const char *Token::toString(Type v)
         case Type::LeftBrace: return "left brace";
         case Type::RightBrace: return "right brace";
         case Type::RwFunc: return "func";
+        case Type::RwVar: return "var";
+        case Type::RwArg: return "arg";
 
         default: return "(invalid)";
     }
