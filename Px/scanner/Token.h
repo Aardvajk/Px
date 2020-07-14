@@ -11,7 +11,10 @@ class Token
 public:
     enum class Type
     {
-        Id,
+        Id, StringLiteral, IntLiteral,
+        Colon, Semicolon,
+        LeftBrace, RightBrace,
+        RwVar, RwFunc,
         Eof, Invalid
     };
 

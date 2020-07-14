@@ -30,6 +30,23 @@ Token Scanner::next(bool get)
     return state.back().tok;
 }
 
+Token Scanner::match(Token::Type type, bool get)
+{
+    auto tok = next(get);
+    if(tok.type() != type)
+    {
+        throw Error(tok.location(), Token::toString(type), " expected - ", tok.text());
+    }
+
+    return tok;
+}
+
+Token Scanner::consume(Token::Type type, bool get)
+{
+    match(type, get);
+    return next(true);
+}
+
 Token Scanner::token() const
 {
     return state.back().tok;

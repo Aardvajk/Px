@@ -18,6 +18,8 @@ public:
     void pop();
 
     Token next(bool get);
+    Token match(Token::Type type, bool get);
+    Token consume(Token::Type type, bool get);
 
     Token token() const;
 

@@ -20,10 +20,15 @@ LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a" \
 PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 SOURCES += \
         application/Context.cpp \
-        main.cpp
+        entity/Entity.cpp \
+        main.cpp \
+        parser/Parser.cpp
 
 HEADERS += \
-    application/Context.h
+    application/Context.h \
+    entity/Entity.h \
+    parser/Parser.h
 
 DISTFILES += \
-    ../../workspace/source.pi
+    ../../workspace/source.pi \
+    ../workspace/source.pi

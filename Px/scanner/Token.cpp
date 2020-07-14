@@ -17,6 +17,13 @@ const char *Token::toString(Type v)
     switch(v)
     {
         case Type::Id: return "identifier";
+        case Type::StringLiteral: return "string literal";
+        case Type::IntLiteral: return "int literal";
+        case Type::Colon: return "colon";
+        case Type::Semicolon: return "semicolon";
+        case Type::LeftBrace: return "left brace";
+        case Type::RightBrace: return "right brace";
+        case Type::RwFunc: return "func";
 
         default: return "(invalid)";
     }

@@ -2,6 +2,8 @@
 
 #include "application/Context.h"
 
+#include "parser/Parser.h"
+
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -18,12 +20,9 @@ int main(int argc, char *argv[])
 
         c.open(files[0]);
 
-        auto t = c.scanner.next(true);
-        while(t.type() != Token::Type::Eof)
-        {
-            std::cout << "[" << t.text() << "]\n";
-            t = c.scanner.next(true);
-        }
+        auto e = Parser::build(c);
+
+        Entity::print(*e, std::cout);
     }
 
     catch(const Error &error)
