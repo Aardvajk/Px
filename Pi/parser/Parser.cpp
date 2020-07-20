@@ -16,7 +16,7 @@ void codeConstruct(Context &c, Entity *block, bool get)
     auto tok = c.scanner.next(get);
     if(tok.type() == Token::Type::StringLiteral)
     {
-        auto e = new Entity(Entity::Type::Label);
+        auto e = new Entity(Entity::Type::Label, tok.location());
         block->entities.push_back(e);
 
         e->properties["name"] = tok.text();
@@ -36,7 +36,7 @@ Entity *headerConstruct(Context &c, Entity *block, Entity::Type type, bool get)
 {
     auto name = c.scanner.match(Token::Type::StringLiteral, get);
 
-    auto e = new Entity(type);
+    auto e = new Entity(type, name.location());
     block->entities.push_back(e);
 
     e->properties["name"] = name.text();
@@ -60,6 +60,8 @@ void funcConstruct(Context &c, Entity *block, bool get)
     auto tok = c.scanner.next(true);
     if(tok.type() == Token::Type::LeftBrace)
     {
+        f->properties["defined"] = true;
+
         c.scanner.next(true);
         while(c.scanner.token().type() == Token::Type::RwArg)
         {
@@ -101,7 +103,7 @@ void construct(Context &c, Entity *block, bool get)
 
 EntityPtr Parser::build(Context &c)
 {
-    EntityPtr block = new Entity(Entity::Type::Block);
+    EntityPtr block = new Entity(Entity::Type::Block, Location());
 
     c.scanner.next(true);
     while(c.scanner.token().type() != Token::Type::Eof)

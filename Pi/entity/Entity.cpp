@@ -27,7 +27,11 @@ void printEntity(const Entity &e, std::ostream &os, unsigned tab)
 
 }
 
-Entity::Entity(Type type) : type(type)
+Entity::Entity() : type(Type::Invalid)
+{
+}
+
+Entity::Entity(Type type, Location location) : type(type), location(location)
 {
 }
 

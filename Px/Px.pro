@@ -16,9 +16,12 @@ INCLUDEPATH += "C:/Projects/pcx"
 
 LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a"
 
+PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
+    common/Object.cpp \
     common/OpCodes.cpp \
+    framework/Console.cpp \
     scanner/Lexer.cpp \
     scanner/Scanner.cpp \
     scanner/Source.cpp \
@@ -26,7 +29,9 @@ SOURCES += \
     scanner/Token.cpp
 
 HEADERS += \
+    common/Object.h \
     common/OpCodes.h \
+    framework/Console.h \
     framework/Error.h \
     scanner/Lexer.h \
     scanner/Location.h \

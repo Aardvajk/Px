@@ -1,22 +1,17 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef SYM_H
+#define SYM_H
 
-#include "scanner/Location.h"
-
-#include <pcx/ptr_vector.h>
 #include <pcx/any.h>
 #include <pcx/scoped_ptr.h>
 
 #include <string>
 #include <unordered_map>
-#include <iostream>
 
-class Entity
+class Sym
 {
 public:
     enum class Type
     {
-        Block,
         Global,
         Func,
         Var,
@@ -25,20 +20,15 @@ public:
         Invalid
     };
 
-    Entity();
-    Entity(Type type, Location location);
+    Sym(Type type, std::string name);
 
     pcx::any property(const std::string &name) const;
 
     static const char *toString(Type v);
-    static void print(const Entity &entity, std::ostream &os);
 
     Type type;
-    Location location;
+    std::string name;
     std::unordered_map<std::string, pcx::any> properties;
-    pcx::ptr_vector<Entity> entities;
 };
 
-using EntityPtr = pcx::scoped_ptr<Entity>;
-
-#endif // ENTITY_H
+#endif // SYM_H
