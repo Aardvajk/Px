@@ -9,7 +9,6 @@
 
 #include <string>
 #include <unordered_map>
-#include <iostream>
 
 class Entity
 {
@@ -22,6 +21,7 @@ public:
         Var,
         Arg,
         Label,
+        Instruction,
         Invalid
     };
 
@@ -31,7 +31,6 @@ public:
     pcx::any property(const std::string &name) const;
 
     static const char *toString(Type v);
-    static void print(const Entity &entity, std::ostream &os);
 
     Type type;
     Location location;

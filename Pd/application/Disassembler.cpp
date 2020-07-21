@@ -9,7 +9,10 @@
 #include <pcx/join_str.h>
 #include <pcx/lexical_cast.h>
 
-std::string Disassembler::bytes(ByteReader &rm, std::size_t n)
+namespace
+{
+
+std::string bytes(ByteReader &rm, std::size_t n)
 {
     std::vector<char> v;
     for(std::size_t i = 0; i < n; ++i)
@@ -18,6 +21,8 @@ std::string Disassembler::bytes(ByteReader &rm, std::size_t n)
     }
 
     return pcx::join_str(v, ",", [](char c){ return pcx::lexical_cast<std::string>(int(c)); });
+}
+
 }
 
 void Disassembler::disassemble(Context &c, const char *data, std::size_t size, std::ostream &os)

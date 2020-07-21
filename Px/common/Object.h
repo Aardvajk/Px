@@ -10,12 +10,23 @@
 namespace Object
 {
 
+class Link
+{
+public:
+    Link(){ }
+    Link(std::size_t address, std::size_t id) : address(address), id(id) { }
+
+    std::size_t address;
+    std::size_t id;
+};
+
 class Entity
 {
 public:
     char type;
     std::size_t id;
     std::size_t offset;
+    std::vector<Link> links;
     std::vector<char> data;
 };
 

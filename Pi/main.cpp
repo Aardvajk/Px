@@ -31,33 +31,7 @@ int main(int argc, char *argv[])
 
         auto e = Parser::build(c);
 
-        for(auto &n: e->entities)
-        {
-            Entity::print(n, std::cout);
-        }
-
-        std::cout << std::string(80, '=') << "\n";
-
         Compiler::compile(c, *e);
-
-        std::cout << "strings\n";
-        for(auto &s: c.strings)
-        {
-            std::cout << "    " << s << "\n";
-        }
-
-        std::cout << "globals\n";
-        for(auto &g: c.globals)
-        {
-            std::cout << "    " << g.sym->name << " " << g.id << "\n";
-        }
-
-        std::cout << "functions\n";
-        for(auto &f: c.functions)
-        {
-            std::cout << "    " << f.sym->name << " " << f.id << "\n";
-        }
-
         Generator::generate(c, files[1]);
     }
 

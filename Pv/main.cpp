@@ -1,4 +1,5 @@
 #include "framework/Error.h"
+#include "framework/ByteReader.h"
 
 #include "application/Machine.h"
 
@@ -13,7 +14,17 @@ namespace
 
 void serviceProc(int code, Memory &mm, Registers &rg)
 {
-    std::cout << "service " << code << "\n";
+    auto sp = rg.sp();
+    ByteReader rm(mm(0), sp);
+
+    if(code == 1)
+    {
+        std::cout << "int " << rm.get<int>() << "\n";
+    }
+    else
+    {
+        std::cout << "service " << code << "\n";
+    }
 }
 
 }

@@ -8,6 +8,13 @@ namespace Code
 
 enum class Type
 {
+    Push,
+    Pop,
+
+    Call,
+
+    Service,
+
     Invalid
 };
 

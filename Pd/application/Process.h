@@ -9,6 +9,7 @@ namespace Process
 {
 
 void unit(Context &c, const std::string &path, pcx::data_istream &is, std::ostream &os);
+void executable(Context &c, const std::string &path, pcx::data_istream &is, std::ostream &os);
 
 }
 

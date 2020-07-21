@@ -32,6 +32,10 @@ int main(int argc, char *argv[])
         {
             Process::unit(c, path, is, std::cout);
         }
+        else if(path.length() > 4 && path.substr(path.length() - 3) == ".px")
+        {
+            Process::executable(c, path, is, std::cout);
+        }
 
         std::cout << banner();
     }

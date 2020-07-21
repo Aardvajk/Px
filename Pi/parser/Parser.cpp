@@ -3,13 +3,63 @@
 #include "framework/Error.h"
 
 #include "application/Context.h"
-
-#include "parser/Code.h"
+#include "application//Code.h"
 
 #include <pcx/lexical_cast.h>
 
 namespace
 {
+
+void pushNumericLiteralConstruct(Context &c, Token::Type type, Entity *e, bool get)
+{
+    c.scanner.match(Token::Type::LeftParen, get);
+
+    e->properties["pushtype"] = std::string("numeric");
+    e->properties["valuetype"] = type;
+
+    auto val = c.scanner.match(Token::Type::IntLiteral, true).text();
+
+    switch(type)
+    {
+        case Token::Type::RwInt: e->properties["value"] = pcx::lexical_cast<int>(val); break;
+
+        default: break;
+    }
+
+    c.scanner.match(Token::Type::RightParen, true);
+}
+
+void pushAddrOfConstruct(Context &c, Entity *e, bool get)
+{
+    auto id = c.scanner.match(Token::Type::StringLiteral, get);
+
+    e->properties["pushtype"] = std::string("addrof");
+    e->properties["target"] = id.text();
+}
+
+void pushConstruct(Context &c, Entity *e, bool get)
+{
+    auto tok = c.scanner.next(get);
+
+    switch(tok.type())
+    {
+        case Token::Type::RwInt: pushNumericLiteralConstruct(c, tok.type(), e, true); break;
+
+        case Token::Type::Amp: pushAddrOfConstruct(c, e, true); break;
+
+        default: throw Error(tok.location(), "invalid push syntax - ", tok.text());
+    }
+}
+
+void popConstruct(Context &c, Entity *e, bool get)
+{
+    e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
+}
+
+void serviceConstruct(Context &c, Entity *e, bool get)
+{
+    e->properties["code"] = pcx::lexical_cast<int>(c.scanner.match(Token::Type::IntLiteral, get).text());
+}
 
 void codeConstruct(Context &c, Entity *block, bool get)
 {
@@ -25,10 +75,29 @@ void codeConstruct(Context &c, Entity *block, bool get)
     else
     {
         auto t = Code::fromString(tok.text());
+        if(t == Code::Type::Invalid)
+        {
+            throw Error(tok.location(), "instruction expected - ", tok.text());
+        }
+
+        auto e = new Entity(Entity::Type::Instruction, tok.location());
+        block->entities.push_back(e);
+
+        e->properties["instruction"] = t;
+
         switch(t)
         {
-            default: throw Error(tok.location(), "instruction expected - ", tok.text());
+            case Code::Type::Push: pushConstruct(c, e, true); break;
+            case Code::Type::Pop: popConstruct(c, e, true); break;
+
+            case Code::Type::Call: break;
+
+            case Code::Type::Service: serviceConstruct(c, e, true); break;
+
+            default: break;
         }
+
+        c.scanner.consume(Token::Type::Semicolon, true);
     }
 }
 

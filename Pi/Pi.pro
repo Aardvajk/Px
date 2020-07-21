@@ -25,7 +25,7 @@ SOURCES += \
         entity/Entity.cpp \
         generator/Generator.cpp \
         main.cpp \
-        parser/Code.cpp \
+        application/Code.cpp \
         parser/Parser.cpp \
         syms/Sym.cpp \
         syms/SymStack.cpp
@@ -37,7 +37,7 @@ HEADERS += \
     components/Global.h \
     entity/Entity.h \
     generator/Generator.h \
-    parser/Code.h \
+    application/Code.h \
     parser/Parser.h \
     syms/Sym.h \
     syms/SymStack.h

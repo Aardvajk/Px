@@ -1,9 +1,12 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
+#include "common/Object.h"
+
 #include <pcx/datastream.h>
 
 #include <cstddef>
+#include <vector>
 
 class Sym;
 
@@ -14,6 +17,8 @@ public:
 
     Sym *sym;
     std::size_t id;
+
+    std::vector<Object::Link> links;
 
     pcx::data_ostringstream bytes;
 };

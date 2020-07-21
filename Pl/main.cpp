@@ -3,6 +3,8 @@
 #include "application/Context.h"
 #include "application/Prologue.h"
 #include "application/Loader.h"
+#include "application/Linker.h"
+#include "application/Generator.h"
 #include "application/Output.h"
 
 #include <iostream>
@@ -31,7 +33,17 @@ int main(int argc, char *argv[])
             Loader::load(c, files[i]);
         }
 
-        Prologue::generate(c);
+        auto mp = Prologue::generate(c);
+        Generator::generate(c);
+        Linker::link(c);
+
+        auto m = c.find("main");
+        if(!m)
+        {
+            throw Error("no main function found");
+        }
+
+        mp.assign(c.ds, m->offset + c.ds.position());
 
         Output::create(c, files[0]);
     }

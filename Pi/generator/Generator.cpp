@@ -26,6 +26,8 @@ void Generator::generate(Context &c, const std::string &path)
     {
         os << 'V' << g.id;
 
+        os << std::size_t(0);
+
         os << g.bytes.position();
         os.write(g.bytes.data().data(), g.bytes.position());
     }
@@ -33,6 +35,12 @@ void Generator::generate(Context &c, const std::string &path)
     for(auto &f: c.functions)
     {
         os << 'F' << f.id;
+
+        os << f.links.size();
+        for(auto &n: f.links)
+        {
+            os << n.address << n.id;
+        }
 
         os << f.bytes.position();
         os.write(f.bytes.data().data(), f.bytes.position());

@@ -1,12 +1,14 @@
 #ifndef PROLOGUE_H
 #define PROLOGUE_H
 
+#include <pcx/datastream.h>
+
 class Context;
 
 namespace Prologue
 {
 
-void generate(Context &c);
+pcx::data_ostream_patch<std::size_t> generate(Context &c);
 
 }
 

@@ -23,6 +23,8 @@ const char *Token::toString(Type v)
         case Type::Semicolon: return "semicolon";
         case Type::LeftBrace: return "left brace";
         case Type::RightBrace: return "right brace";
+        case Type::LeftParen: return "left bracket";
+        case Type::RightParen: return "right bracket";
         case Type::RwFunc: return "func";
         case Type::RwVar: return "var";
         case Type::RwArg: return "arg";

@@ -13,4 +13,18 @@ void Loader::load(Context &c, const std::string &path)
     {
         throw Error("unable to open - ", path);
     }
+
+    auto u = new Object::Unit(path);
+    c.units.push_back(u);
+
+    is >> u->strings;
+
+    auto count = is.get<std::size_t>();
+    for(std::size_t i = 0; i < count; ++i)
+    {
+        auto e = new Object::Entity();
+        u->entities.push_back(e);
+
+        Object::load(is, *e);
+    }
 }

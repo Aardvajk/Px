@@ -5,6 +5,13 @@ namespace
 
 const char *s[] =
 {
+    "push",
+    "pop",
+
+    "call",
+
+    "service",
+
     ""
 };
 

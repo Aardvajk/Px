@@ -15,4 +15,5 @@ void Output::create(Context &c, const std::string &path)
     }
 
     os.write(c.ds.data().data(), c.ds.position());
+    os.write(c.cs.data().data(), c.cs.position());
 }

@@ -8,17 +8,12 @@
 #include "application/Disassembler.h"
 
 #include <pcx/indexed_range.h>
-#include <pcx/join_str.h>
 
 namespace
 {
 
 void value(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
 {
-    std::size_t n = 0;
-    ByteReader rm(e.data.data(), n);
-
-    os << Disassembler::bytes(rm, e.data.size()) << "\n";
 }
 
 void function(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
@@ -60,3 +55,12 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
         }
     }
 }
+
+void Process::executable(Context &c, const std::string &path, pcx::data_istream &is, std::ostream &os)
+{
+    auto v = is.all();
+
+    os << banner(path);
+    Disassembler::disassemble(c, v.data(), v.size(), os);
+}
+

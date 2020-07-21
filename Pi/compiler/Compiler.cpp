@@ -5,6 +5,7 @@
 #include "framework/Error.h"
 
 #include "application/Context.h"
+#include "application/Code.h"
 
 #include "entity/Entity.h"
 
@@ -31,8 +32,71 @@ void compileGlobal(Context &c, Entity &e)
     }
 }
 
-void compileArg(Context &c, Function *func, Entity &e)
+template<typename T> void compilePushNumeric(Context &c, Entity &e)
 {
+    c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << sizeof(T);
+    c.func().bytes << OpCode::Op::CopyAI << OpCode::Reg::Sp << sizeof(T) << e.properties["value"].to<T>();
+}
+
+void compilePush(Context &c, Entity &e)
+{
+    auto type = e.property("pushtype").to<std::string>();
+
+    if(type == "numeric")
+    {
+        switch(e.property("valuetype").to<Token::Type>())
+        {
+            case Token::Type::RwInt: compilePushNumeric<int>(c, e); break;
+
+            default: break;
+        }
+    }
+    else if(type == "addrof")
+    {
+        auto target = e.property("target").to<std::string>();
+        auto sym = c.syms.find(target);
+
+        if(!sym || sym->type == Sym::Type::Func || sym->type == Sym::Type::Global)
+        {
+            pcx::data_ostream_patch<std::size_t> p;
+
+            c.func().bytes << OpCode::Op::SetRI << OpCode::Reg::Dx << p;
+            c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Dx;
+
+            c.func().links.push_back(Object::Link(p.position(), c.strings.insert(target)));
+        }
+    }
+}
+
+void compilePop(Context &c, Entity &e)
+{
+    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << e.properties["amount"].to<std::size_t>();
+}
+
+void compileCall(Context &c, Entity &e)
+{
+    c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
+    c.func().bytes << OpCode::Op::Call << OpCode::Reg::Dx;
+}
+
+void compileService(Context &c, Entity &e)
+{
+    c.func().bytes << OpCode::Op::Svc << e.property("code").to<int>();
+}
+
+void compileInstruction(Context &c, Entity &e)
+{
+    switch(e.property("instruction").to<Code::Type>())
+    {
+        case Code::Type::Push: compilePush(c, e); break;
+        case Code::Type::Pop: compilePop(c, e); break;
+
+        case Code::Type::Call: compileCall(c, e); break;
+
+        case Code::Type::Service: compileService(c, e); break;
+
+        default: break;
+    }
 }
 
 void compileFunction(Context &c, Entity &e)
@@ -58,7 +122,7 @@ void compileFunction(Context &c, Entity &e)
         {
             switch(n.type)
             {
-                case Entity::Type::Arg: compileArg(c, f, n); break;
+                case Entity::Type::Instruction: compileInstruction(c, n); break;
 
                 default: break;
             }
