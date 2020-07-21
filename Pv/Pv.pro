@@ -26,7 +26,6 @@ SOURCES += \
 
 HEADERS += \
     application/Machine.h \
-    components/ByteReader.h \
     components/Memory.h \
     components/Registers.h \
     components/Stack.h \

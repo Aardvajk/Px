@@ -19,6 +19,24 @@ const char *OpCode::toString(Op v)
     static const char *s[] =
     {
         "end",
+
+        "setri",
+
+        "subri",
+        "addri",
+
+        "copyrr",
+        "copyra",
+        "copyar",
+        "copyai",
+        "copyaa",
+
+        "pushr",
+        "popr",
+
+        "call",
+        "ret",
+
         "svc",
         "(invalid)"
     };

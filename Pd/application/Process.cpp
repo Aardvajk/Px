@@ -1,20 +1,29 @@
 #include "Process.h"
 
 #include "framework/Console.h"
+#include "framework/ByteReader.h"
 
 #include "common/Object.h"
 
+#include "application/Disassembler.h"
+
 #include <pcx/indexed_range.h>
+#include <pcx/join_str.h>
 
 namespace
 {
 
 void value(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
 {
+    std::size_t n = 0;
+    ByteReader rm(e.data.data(), n);
+
+    os << Disassembler::bytes(rm, e.data.size()) << "\n";
 }
 
 void function(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
 {
+    Disassembler::disassemble(c, e.data.data(), e.data.size(), os);
 }
 
 }

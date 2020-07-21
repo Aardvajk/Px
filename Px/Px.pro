@@ -31,6 +31,7 @@ SOURCES += \
 HEADERS += \
     common/Object.h \
     common/OpCodes.h \
+    framework/ByteReader.h \
     framework/Console.h \
     framework/Error.h \
     scanner/Lexer.h \

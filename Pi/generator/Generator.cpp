@@ -25,10 +25,16 @@ void Generator::generate(Context &c, const std::string &path)
     for(auto &g: c.globals)
     {
         os << 'V' << g.id;
+
+        os << g.bytes.position();
+        os.write(g.bytes.data().data(), g.bytes.position());
     }
 
     for(auto &f: c.functions)
     {
         os << 'F' << f.id;
+
+        os << f.bytes.position();
+        os.write(f.bytes.data().data(), f.bytes.position());
     }
 }

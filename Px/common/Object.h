@@ -16,6 +16,7 @@ public:
     char type;
     std::size_t id;
     std::size_t offset;
+    std::vector<char> data;
 };
 
 class Unit

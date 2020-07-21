@@ -1,5 +1,7 @@
 #include "Compiler.h"
 
+#include "common/OpCodes.h"
+
 #include "framework/Error.h"
 
 #include "application/Context.h"
@@ -22,6 +24,11 @@ void compileGlobal(Context &c, Entity &e)
 
     auto g = new Global(c.syms.add(new Sym(Sym::Type::Func, n)), c.strings.insert(n));
     c.globals.push_back(g);
+
+    for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
+    {
+        g->bytes << char(0);
+    }
 }
 
 void compileArg(Context &c, Function *func, Entity &e)
@@ -44,6 +51,9 @@ void compileFunction(Context &c, Entity &e)
 
         c.syms.push();
 
+        c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Bp;
+        c.func().bytes << OpCode::Op::CopyRR << OpCode::Reg::Sp << OpCode::Reg::Bp;
+
         for(auto &n: e.entities)
         {
             switch(n.type)
@@ -53,6 +63,9 @@ void compileFunction(Context &c, Entity &e)
                 default: break;
             }
         }
+
+        c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Bp;
+        c.func().bytes << OpCode::Op::Ret << std::size_t(0);
 
         c.syms.pop();
     }

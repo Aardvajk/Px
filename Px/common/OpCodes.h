@@ -22,6 +22,24 @@ const char *toString(Reg v);
 enum class Op : std::uint8_t
 {
     End,
+
+    SetRI,
+
+    SubRI,
+    AddRI,
+
+    CopyRR,
+    CopyRA,
+    CopyAR,
+    CopyAI,
+    CopyAA,
+
+    PushR,
+    PopR,
+
+    Call,
+    Ret,
+
     Svc,
     Invalid
 };

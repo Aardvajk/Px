@@ -21,9 +21,11 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        application/Disassembler.cpp \
         application/Process.cpp \
         main.cpp
 
 HEADERS += \
     application/Context.h \
+    application/Disassembler.h \
     application/Process.h

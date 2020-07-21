@@ -1,6 +1,8 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+#include <pcx/datastream.h>
+
 #include <cstddef>
 
 class Sym;
@@ -12,6 +14,8 @@ public:
 
     Sym *sym;
     std::size_t id;
+
+    pcx::data_ostringstream bytes;
 };
 
 #endif // GLOBAL_H
