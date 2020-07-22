@@ -49,6 +49,7 @@ void compilePush(Context &c, Entity &e)
     {
         switch(e.property("valuetype").to<Primitive::Type>())
         {
+            case Primitive::Type::Char: compilePushNumeric<char>(c, e); break;
             case Primitive::Type::Int: compilePushNumeric<int>(c, e); break;
 
             default: break;

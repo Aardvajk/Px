@@ -8,6 +8,7 @@ namespace Primitive
 
 enum class Type
 {
+    Char,
     Int,
     Invalid
 };

@@ -20,7 +20,11 @@ void serviceProc(int code, Memory &mm, Registers &rg)
 
     if(code == 1)
     {
-        std::cout << "integer " << rm.get<int>() << "\n";
+        std::cout << "int " << rm.get<int>() << "\n";
+    }
+    else if(code == 2)
+    {
+        std::cout << "char " << rm.get<char>() << "\n";
     }
     else
     {

@@ -23,6 +23,7 @@ void pushNumericLiteralConstruct(Context &c, Primitive::Type type, Entity *e, bo
 
     switch(type)
     {
+        case Primitive::Type::Char: e->properties["value"] = static_cast<char>(pcx::lexical_cast<int>(val)); break;
         case Primitive::Type::Int: e->properties["value"] = pcx::lexical_cast<int>(val); break;
 
         default: break;
