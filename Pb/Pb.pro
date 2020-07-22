@@ -17,7 +17,11 @@ INCLUDEPATH += "C:/Projects/pcx" \
 LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a" \
         "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
-PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
+PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a" \
+                  "C:/Projects/Px/Px/build-Pi/release/Pi.exe" \
+                  "C:/Projects/Px/Px/build-Pd/release/Pd.exe" \
+                  "C:/Projects/Px/Px/build-Pl/release/Pl.exe" \
+                  "C:/Projects/Px/Px/build-Pv/release/Pv.exe"
 
 SOURCES += \
         main.cpp

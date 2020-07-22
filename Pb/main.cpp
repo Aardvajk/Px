@@ -25,41 +25,27 @@ int main(int argc, char *argv[])
             throw Error("unable to open - ", files[0]);
         }
 
-        bool echo = true;
+        std::cout << banner();
 
         for(auto s: v)
         {
             if(s.length() > 1 && !std::isspace(s[0]))
             {
-                bool quiet = false;
-
-                if(s[0] == '#')
-                {
-                    s = s.substr(1);
-                    quiet = true;
-                }
-
-                if(!quiet && echo)
-                {
-                    std::cout << banner();
-                    std::cout << "> " << s << "\n";
-                }
+                std::cout << "> " << s << "\n";
 
                 std::istringstream is(s);
 
                 std::string exe, param;
                 is >> exe >> param;
 
-                if(exe == "echo")
-                {
-                    echo = (param == "on");
-                }
-                else if(std::system(pcx::str("C:/Projects/Px/Px/build-", exe, "/release/", s).c_str()))
+                if(std::system(pcx::str("C:/Projects/Px/Px/build-", exe, "/release/", s).c_str()))
                 {
                     return -1;
                 }
             }
         }
+
+        std::cout << banner();
     }
 
     catch(const Error &e)

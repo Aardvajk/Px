@@ -1,5 +1,6 @@
 #include "framework/Error.h"
 #include "framework/ByteReader.h"
+#include "framework/Console.h"
 
 #include "application/Machine.h"
 
@@ -19,7 +20,7 @@ void serviceProc(int code, Memory &mm, Registers &rg)
 
     if(code == 1)
     {
-        std::cout << "int " << rm.get<int>() << "\n";
+        std::cout << "integer " << rm.get<int>() << "\n";
     }
     else
     {
@@ -48,8 +49,11 @@ int main(int argc, char *argv[])
         }
 
         Machine m({ std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>() }, serviceProc);
+
+        std::cout << banner("executing");
         m.execute();
 
+        std::cout << banner("shutdown");
         m.shutdown();
     }
 
