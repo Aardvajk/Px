@@ -10,6 +10,7 @@
 #include "entity/Entity.h"
 
 #include <pcx/scoped_push.h>
+#include <pcx/range_reverse.h>
 
 namespace
 {
@@ -17,7 +18,6 @@ namespace
 void compileGlobal(Context &c, Entity &e)
 {
     auto n = e.property("name").to<std::string>();
-
     if(c.syms.findLocal(n))
     {
         throw Error(e.location, "symbol already defined - ", n);
@@ -67,6 +67,12 @@ void compilePush(Context &c, Entity &e)
 
             c.func().links.push_back(Object::Link(p.position(), c.strings.insert(target)));
         }
+        else if(sym->type == Sym::Type::Arg || sym->type == Sym::Type::Var)
+        {
+            c.func().bytes << OpCode::Op::CopyRR << OpCode::Reg::Bp << OpCode::Reg::Dx;
+            c.func().bytes << (sym->type == Sym::Type::Arg ? OpCode::Op::AddRI : OpCode::Op::SubRI) << OpCode::Reg::Dx << sym->property("offset").to<std::size_t>();
+            c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Dx;
+        }
     }
     else if(type == "value")
     {
@@ -85,6 +91,15 @@ void compilePush(Context &c, Entity &e)
 
             c.func().links.push_back(Object::Link(p.position(), c.strings.insert(target)));
         }
+        else if(sym->type == Sym::Type::Arg || sym->type == Sym::Type::Var)
+        {
+            auto size = sym->property("size").to<std::size_t>();
+
+            c.func().bytes << OpCode::Op::CopyRR << OpCode::Reg::Bp << OpCode::Reg::Dx;
+            c.func().bytes << (sym->type == Sym::Type::Arg ? OpCode::Op::AddRI : OpCode::Op::SubRI) << OpCode::Reg::Dx << sym->property("offset").to<std::size_t>();
+            c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << size;
+            c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Dx << OpCode::Reg::Sp << size;
+        }
         else if(sym->type == Sym::Type::Func)
         {
             throw Error(e.location, "cannot push function by value - ", target);
@@ -94,13 +109,30 @@ void compilePush(Context &c, Entity &e)
 
 void compilePop(Context &c, Entity &e)
 {
-    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << e.properties["amount"].to<std::size_t>();
+    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << e.property("amount").to<std::size_t>();
 }
 
 void compileCall(Context &c, Entity &e)
 {
     c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
     c.func().bytes << OpCode::Op::Call << OpCode::Reg::Dx;
+}
+
+void compileLoad(Context &c, Entity &e)
+{
+    auto amount = e.property("amount").to<std::size_t>();
+
+    c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
+    c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << amount;
+    c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Dx << OpCode::Reg::Sp << amount;
+}
+
+void compileStore(Context &c, Entity &e)
+{
+    auto amount = e.property("amount").to<std::size_t>();
+
+    c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
+    c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Sp << OpCode::Reg::Dx << amount;
 }
 
 void compileService(Context &c, Entity &e)
@@ -117,10 +149,45 @@ void compileInstruction(Context &c, Entity &e)
 
         case Code::Type::Call: compileCall(c, e); break;
 
+        case Code::Type::Load: compileLoad(c, e); break;
+        case Code::Type::Store: compileStore(c, e); break;
+
         case Code::Type::Service: compileService(c, e); break;
 
         default: break;
     }
+}
+
+void compileArg(Context &c, Entity &e)
+{
+    auto n = e.property("name").to<std::string>();
+    if(c.syms.findLocal(n))
+    {
+        throw Error(e.location, "symbol already defined - ", n);
+    }
+
+    auto s = c.syms.add(new Sym(Sym::Type::Arg, n));
+
+    s->properties["size"] = e.property("size").to<std::size_t>();
+    s->properties["offset"] = c.func().args + (sizeof(std::size_t) * 2);
+
+    c.func().args += s->property("size").to<std::size_t>();
+}
+
+void compileVar(Context &c, Entity &e)
+{
+    auto n = e.property("name").to<std::string>();
+    if(c.syms.findLocal(n))
+    {
+        throw Error(e.location, "symbol already defined - ", n);
+    }
+
+    auto s = c.syms.add(new Sym(Sym::Type::Var, n));
+
+    s->properties["size"] = e.property("size").to<std::size_t>();
+    s->properties["offset"] = c.func().vars;
+
+    c.func().vars += s->property("size").to<std::size_t>();
 }
 
 void compileFunction(Context &c, Entity &e)
@@ -142,18 +209,35 @@ void compileFunction(Context &c, Entity &e)
         c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Bp;
         c.func().bytes << OpCode::Op::CopyRR << OpCode::Reg::Sp << OpCode::Reg::Bp;
 
-        for(auto &n: e.entities)
-        {
-            switch(n.type)
-            {
-                case Entity::Type::Instruction: compileInstruction(c, n); break;
+        std::size_t index = 0;
 
-                default: break;
-            }
+        std::vector<Entity*> args;
+        while(index < e.entities.size() && e.entities[index].type == Entity::Type::Arg)
+        {
+            args.push_back(e.entities.ptr(index++));
         }
 
+        for(auto &e: pcx::range_reverse(args))
+        {
+            compileArg(c, *e);
+        }
+
+        while(index < e.entities.size() && e.entities[index].type == Entity::Type::Var)
+        {
+            compileVar(c, e.entities[index++]);
+        }
+
+        c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << c.func().vars;
+
+        while(index < e.entities.size())
+        {
+            compileInstruction(c, e.entities[index++]);
+        }
+
+        c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << c.func().vars;
+
         c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Bp;
-        c.func().bytes << OpCode::Op::Ret << std::size_t(0);
+        c.func().bytes << OpCode::Op::Ret << c.func().args;
 
         c.syms.pop();
     }

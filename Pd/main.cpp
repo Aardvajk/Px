@@ -36,8 +36,6 @@ int main(int argc, char *argv[])
         {
             Process::executable(c, path, is, std::cout);
         }
-
-        std::cout << banner();
     }
 
     catch(const Error &error)

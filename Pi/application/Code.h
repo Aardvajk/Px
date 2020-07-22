@@ -13,6 +13,9 @@ enum class Type
 
     Call,
 
+    Load,
+    Store,
+
     Service,
 
     Invalid

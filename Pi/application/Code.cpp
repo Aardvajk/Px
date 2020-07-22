@@ -10,6 +10,9 @@ const char *s[] =
 
     "call",
 
+    "load",
+    "store",
+
     "service",
 
     ""
