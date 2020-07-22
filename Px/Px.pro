@@ -21,6 +21,7 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 SOURCES += \
     common/Object.cpp \
     common/OpCodes.cpp \
+    common/Primitives.cpp \
     framework/Console.cpp \
     scanner/Lexer.cpp \
     scanner/Scanner.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
 HEADERS += \
     common/Object.h \
     common/OpCodes.h \
+    common/Primitives.h \
     framework/ByteReader.h \
     framework/Console.h \
     framework/Error.h \

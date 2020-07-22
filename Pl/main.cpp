@@ -37,10 +37,16 @@ int main(int argc, char *argv[])
         Generator::generate(c);
         Linker::link(c);
 
-        auto m = c.find("main");
+        auto ep = c.args["entrypoint"];
+        if(ep.empty())
+        {
+            throw Error("no entrypoint specified");
+        }
+
+        auto m = c.find(ep[0]);
         if(!m)
         {
-            throw Error("no main function found");
+            throw Error("entrypoint not found - ", ep[0]);
         }
 
         mp.assign(c.ds, m->offset + c.ds.position());

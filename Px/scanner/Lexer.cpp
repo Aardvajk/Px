@@ -23,8 +23,7 @@ static const std::vector<Reserved> piReserved =
 {
     { "func", Token::Type::RwFunc },
     { "var", Token::Type::RwVar },
-    { "arg", Token::Type::RwArg },
-    { "int", Token::Type::RwInt }
+    { "arg", Token::Type::RwArg }
 };
 
 Source::Char skip(Source &source)

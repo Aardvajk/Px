@@ -15,7 +15,6 @@ public:
         Colon, Semicolon, Amp,
         LeftBrace, RightBrace, LeftParen, RightParen,
         RwFunc, RwVar, RwArg,
-        RwInt,
         Eof, Invalid
     };
 

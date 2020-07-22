@@ -2,6 +2,8 @@
 
 #include "framework/Error.h"
 
+#include "common/Primitives.h"
+
 #include "application/Context.h"
 #include "application//Code.h"
 
@@ -10,7 +12,7 @@
 namespace
 {
 
-void pushNumericLiteralConstruct(Context &c, Token::Type type, Entity *e, bool get)
+void pushNumericLiteralConstruct(Context &c, Primitive::Type type, Entity *e, bool get)
 {
     c.scanner.match(Token::Type::LeftParen, get);
 
@@ -21,7 +23,7 @@ void pushNumericLiteralConstruct(Context &c, Token::Type type, Entity *e, bool g
 
     switch(type)
     {
-        case Token::Type::RwInt: e->properties["value"] = pcx::lexical_cast<int>(val); break;
+        case Primitive::Type::Int: e->properties["value"] = pcx::lexical_cast<int>(val); break;
 
         default: break;
     }
@@ -49,10 +51,18 @@ void pushConstruct(Context &c, Entity *e, bool get)
 {
     auto tok = c.scanner.next(get);
 
+    if(tok.type() == Token::Type::Id)
+    {
+        auto type = Primitive::fromString(tok.text());
+        if(type != Primitive::Type::Invalid)
+        {
+            pushNumericLiteralConstruct(c, type, e, true);
+            return;
+        }
+    }
+
     switch(tok.type())
     {
-        case Token::Type::RwInt: pushNumericLiteralConstruct(c, tok.type(), e, true); break;
-
         case Token::Type::Amp: pushAddrOfConstruct(c, e, true); break;
         case Token::Type::StringLiteral: pushValueConstruct(c, e, false); break;
 

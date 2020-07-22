@@ -1,6 +1,7 @@
 #include "Compiler.h"
 
 #include "common/OpCodes.h"
+#include "common/Primitives.h"
 
 #include "framework/Error.h"
 
@@ -46,9 +47,9 @@ void compilePush(Context &c, Entity &e)
 
     if(type == "numeric")
     {
-        switch(e.property("valuetype").to<Token::Type>())
+        switch(e.property("valuetype").to<Primitive::Type>())
         {
-            case Token::Type::RwInt: compilePushNumeric<int>(c, e); break;
+            case Primitive::Type::Int: compilePushNumeric<int>(c, e); break;
 
             default: break;
         }
