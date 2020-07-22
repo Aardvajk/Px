@@ -37,6 +37,14 @@ void pushAddrOfConstruct(Context &c, Entity *e, bool get)
     e->properties["target"] = id.text();
 }
 
+void pushValueConstruct(Context &c, Entity *e, bool get)
+{
+    auto id = c.scanner.match(Token::Type::StringLiteral, get);
+
+    e->properties["pushtype"] = std::string("value");
+    e->properties["target"] = id.text();
+}
+
 void pushConstruct(Context &c, Entity *e, bool get)
 {
     auto tok = c.scanner.next(get);
@@ -46,6 +54,7 @@ void pushConstruct(Context &c, Entity *e, bool get)
         case Token::Type::RwInt: pushNumericLiteralConstruct(c, tok.type(), e, true); break;
 
         case Token::Type::Amp: pushAddrOfConstruct(c, e, true); break;
+        case Token::Type::StringLiteral: pushValueConstruct(c, e, false); break;
 
         default: throw Error(tok.location(), "invalid push syntax - ", tok.text());
     }

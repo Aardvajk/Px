@@ -23,8 +23,10 @@ void compileGlobal(Context &c, Entity &e)
         throw Error(e.location, "symbol already defined - ", n);
     }
 
-    auto g = new Global(c.syms.add(new Sym(Sym::Type::Func, n)), c.strings.insert(n));
+    auto g = new Global(c.syms.add(new Sym(Sym::Type::Global, n)), c.strings.insert(n));
     c.globals.push_back(g);
+
+    g->sym->properties["size"] = e.properties["size"].to<std::size_t>();
 
     for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
     {
@@ -64,6 +66,28 @@ void compilePush(Context &c, Entity &e)
             c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Dx;
 
             c.func().links.push_back(Object::Link(p.position(), c.strings.insert(target)));
+        }
+    }
+    else if(type == "value")
+    {
+        auto target = e.property("target").to<std::string>();
+
+        auto sym = c.syms.find(target);
+        if(!sym || sym->type == Sym::Type::Global)
+        {
+            pcx::data_ostream_patch<std::size_t> p;
+
+            auto size = sym ? sym->properties["size"].to<std::size_t>() : sizeof(std::size_t);
+
+            c.func().bytes << OpCode::Op::SetRI << OpCode::Reg::Dx << p;
+            c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << size;
+            c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Dx << OpCode::Reg::Sp << size;
+
+            c.func().links.push_back(Object::Link(p.position(), c.strings.insert(target)));
+        }
+        else if(sym->type == Sym::Type::Func)
+        {
+            throw Error(e.location, "cannot push function by value - ", target);
         }
     }
 }
