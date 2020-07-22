@@ -60,12 +60,7 @@ void pushConstruct(Context &c, Entity *e, bool get)
     }
 }
 
-void popConstruct(Context &c, Entity *e, bool get)
-{
-    e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
-}
-
-void loadStoreConstruct(Context &c, Entity *e, bool get)
+void amountConstruct(Context &c, Entity *e, bool get)
 {
     e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
 }
@@ -102,12 +97,13 @@ void codeConstruct(Context &c, Entity *block, bool get)
         switch(t)
         {
             case Code::Type::Push: pushConstruct(c, e, true); break;
-            case Code::Type::Pop: popConstruct(c, e, true); break;
 
             case Code::Type::Call: break;
 
+            case Code::Type::Pop:
             case Code::Type::Load:
-            case Code::Type::Store: loadStoreConstruct(c, e, true); break;
+            case Code::Type::Store:
+            case Code::Type::AllocS: amountConstruct(c, e, true); break;
 
             case Code::Type::Service: serviceConstruct(c, e, true); break;
 

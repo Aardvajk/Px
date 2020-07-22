@@ -135,6 +135,11 @@ void compileStore(Context &c, Entity &e)
     c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Sp << OpCode::Reg::Dx << amount;
 }
 
+void compileAllocS(Context &c, Entity &e)
+{
+    c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << e.property("amount").to<std::size_t>();
+}
+
 void compileService(Context &c, Entity &e)
 {
     c.func().bytes << OpCode::Op::Svc << e.property("code").to<int>();
@@ -151,6 +156,8 @@ void compileInstruction(Context &c, Entity &e)
 
         case Code::Type::Load: compileLoad(c, e); break;
         case Code::Type::Store: compileStore(c, e); break;
+
+        case Code::Type::AllocS: compileAllocS(c, e); break;
 
         case Code::Type::Service: compileService(c, e); break;
 
@@ -226,6 +233,11 @@ void compileFunction(Context &c, Entity &e)
         {
             compileVar(c, e.entities[index++]);
         }
+
+        auto r = c.syms.add(new Sym(Sym::Type::Arg, "@ret"));
+
+        r->properties["size"] = e.property("size").to<std::size_t>();
+        r->properties["offset"] = c.func().args + (sizeof(std::size_t) * 2);
 
         c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << c.func().vars;
 

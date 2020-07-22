@@ -13,6 +13,8 @@ const char *s[] =
     "load",
     "store",
 
+    "allocs",
+
     "service",
 
     ""

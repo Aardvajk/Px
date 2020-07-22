@@ -16,6 +16,8 @@ enum class Type
     Load,
     Store,
 
+    AllocS,
+
     Service,
 
     Invalid
