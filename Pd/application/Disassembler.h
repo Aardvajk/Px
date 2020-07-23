@@ -10,7 +10,7 @@ class Context;
 namespace Disassembler
 {
 
-void disassemble(Context &c, const char *data, std::size_t size, std::ostream &os);
+void disassemble(Context &c, std::size_t index, const char *data, std::size_t size, std::ostream &os);
 
 }
 

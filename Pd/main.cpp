@@ -7,6 +7,21 @@
 #include <pcx/datastream.h>
 
 #include <iostream>
+#include <fstream>
+
+namespace
+{
+
+void loadFileMapIfPresent(Context &c, const std::string &path)
+{
+    std::ifstream is(path);
+    if(is.is_open())
+    {
+        c.dm.read(is);
+    }
+}
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +42,8 @@ int main(int argc, char *argv[])
         {
             throw Error("unable to open - ", path);
         }
+
+        loadFileMapIfPresent(c, path + ".pmap");
 
         if(path.length() > 4 && path.substr(path.length() - 3) == ".po")
         {

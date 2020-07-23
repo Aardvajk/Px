@@ -12,6 +12,11 @@ template<typename... Args> std::string banner(Args&&... args)
     return banner_imp(pcx::str(std::forward<Args>(args)...), '=');
 }
 
+template<typename... Args> std::string custom_banner(char ch, Args&&... args)
+{
+    return banner_imp(pcx::str(std::forward<Args>(args)...), ch);
+}
+
 std::size_t padw(std::size_t n);
 
 template<typename T> std::string pad(const T &text, std::size_t width)

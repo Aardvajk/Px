@@ -16,9 +16,9 @@ void value(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
 {
 }
 
-void function(Context &c, Object::Unit &u, Object::Entity &e, std::ostream &os)
+void function(Context &c, Object::Unit &u, std::size_t index, Object::Entity &e, std::ostream &os)
 {
-    Disassembler::disassemble(c, e.data.data(), e.data.size(), os);
+    Disassembler::disassemble(c, index, e.data.data(), e.data.size(), os);
 }
 
 }
@@ -44,14 +44,14 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
         std::cout << pad(s.index, pw) << ": " << s.value << "\n";
     }
 
-    for(auto e: u.entities)
+    for(auto e: pcx::indexed_range(u.entities))
     {
-        os << banner(e.type, " ", u.strings[e.id]);
+        os << banner(e.value.type, " ", u.strings[e.value.id]);
 
-        switch(e.type)
+        switch(e.value.type)
         {
-            case 'V': value(c, u, e, os); break;
-            case 'F': function(c, u, e, os); break;
+            case 'V': value(c, u, e.value, os); break;
+            case 'F': function(c, u, e.index, e.value, os); break;
         }
     }
 }
@@ -61,6 +61,6 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
     auto v = is.all();
 
     os << banner(path);
-    Disassembler::disassemble(c, v.data(), v.size(), os);
+    Disassembler::disassemble(c, 0, v.data(), v.size(), os);
 }
 

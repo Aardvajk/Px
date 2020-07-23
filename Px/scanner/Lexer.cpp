@@ -167,3 +167,46 @@ Token Lexer::next(Mode mode, Source &source)
 
     throw Error(loc, pcx::str("invalid character - ", char(ch)));
 }
+
+
+std::string Lexer::encodeString(const std::string &text)
+{
+    std::string s;
+
+    for(std::size_t i = 0; i < text.length(); ++i)
+    {
+        auto ch = text[i];
+
+        switch(ch)
+        {
+            case '\n': s += "\\n"; break;
+            case '\t': s += "\\t"; break;
+            case '\0': s += "\\0"; break;
+            case '\"': s += "\\\""; break;
+            case '\'': s += "\\'"; break;
+
+            default: s += ch;
+        }
+    }
+
+    return s;
+}
+
+std::string Lexer::decodeString(const std::string &text)
+{
+    std::string s;
+
+    for(std::size_t i = 0; i < text.length(); ++i)
+    {
+        Source::Char ch = static_cast<Source::Char>(text[i]);
+
+        if(ch == '\\' && i < text.length() - 1)
+        {
+            ch = translateEscapeChar(text[++i]);
+        }
+
+        s += static_cast<char>(ch);
+    }
+
+    return s;
+}

@@ -297,6 +297,7 @@ void compileFunction(Context &c, Entity &e)
         c.cm("-function epilogue");
         c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Bp;
         c.func().bytes << OpCode::Op::Ret << c.func().args;
+        c.cm("-function end");
 
         c.cm("}");
         c.cm.setCurrentSize(c.func().bytes.position());

@@ -33,7 +33,13 @@ public:
 
     template<typename... Args> FileMap &operator()(Args&&... args);
 
+    void read(std::istream &is);
     void write(std::ostream &os) const;
+
+    Entry &operator[](std::size_t index){ return v[index]; }
+    const Entry &operator[](std::size_t index) const { return v[index]; }
+
+    std::size_t size() const { return v.size(); }
 
 private:
     std::vector<Entry> v;

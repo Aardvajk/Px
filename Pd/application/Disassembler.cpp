@@ -6,11 +6,35 @@
 #include "framework/Console.h"
 #include "framework/Error.h"
 
+#include "application/Context.h"
+
 #include <pcx/join_str.h>
 #include <pcx/lexical_cast.h>
 
 namespace
 {
+
+void map(Context &c, std::size_t index, std::size_t &map, std::size_t pc, std::ostream &os)
+{
+    if(index < c.dm.size())
+    {
+        auto &e = c.dm[index].comments;
+
+        while(map < e.size() && e[map].address <= pc)
+        {
+            auto s = e[map++].comment;
+
+            if(s.length() && s[0] == '-')
+            {
+                os << custom_banner('-', s.substr(1));
+            }
+            else
+            {
+                os << s << "\n";
+            }
+        }
+    }
+}
 
 std::string bytes(ByteReader &rm, std::size_t n)
 {
@@ -25,9 +49,10 @@ std::string bytes(ByteReader &rm, std::size_t n)
 
 }
 
-void Disassembler::disassemble(Context &c, const char *data, std::size_t size, std::ostream &os)
+void Disassembler::disassemble(Context &c, std::size_t index, const char *data, std::size_t size, std::ostream &os)
 {
     std::size_t pc = 0;
+    std::size_t mapIndex = 0;
     ByteReader rm(data, pc);
 
     auto pcw = padw(size);
@@ -40,6 +65,8 @@ void Disassembler::disassemble(Context &c, const char *data, std::size_t size, s
         Reg r0, r1;
         std::size_t s0;
         int i0;
+
+        map(c, index, mapIndex, pc, os);
 
         os << pad(pc, pcw) << ": ";
 
@@ -74,4 +101,6 @@ void Disassembler::disassemble(Context &c, const char *data, std::size_t size, s
 
         os << "\n";
     }
+
+    map(c, index, mapIndex, pc, os);
 }
