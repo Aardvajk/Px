@@ -2,6 +2,7 @@
 #define CONTEXT_H
 
 #include "common/Object.h"
+#include "common/FileMap.h"
 
 #include <pcx/args.h>
 #include <pcx/datastream.h>
@@ -16,12 +17,17 @@ public:
 
     Object::Entity *find(const std::string &name);
 
+    std::size_t dataPosition() const;
+
     pcx::args args;
 
     pcx::ptr_vector<Object::Unit> units;
 
     pcx::data_ostringstream ds;
     pcx::data_ostringstream cs;
+
+    FileMap dm;
+    FileMap cm;
 };
 
 #endif // CONTEXT_H

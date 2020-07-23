@@ -8,7 +8,8 @@ class Context;
 namespace Output
 {
 
-void create(Context &c, const std::string &path);
+void exe(Context &c, const std::string &path);
+void map(Context &c, const std::string &path);
 
 }
 

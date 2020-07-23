@@ -19,3 +19,8 @@ Object::Entity *Context::find(const std::string &name)
 
     return nullptr;
 }
+
+std::size_t Context::dataPosition() const
+{
+    return ds.position();
+}

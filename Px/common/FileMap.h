@@ -31,6 +31,8 @@ public:
     void begin(char type, const std::string &name, pcx::optional<pcx::callback<std::size_t> > callback);
     void setCurrentSize(std::size_t size);
 
+    void push_back(const Entry &e){ v.push_back(e); }
+
     template<typename... Args> FileMap &operator()(Args&&... args);
 
     void read(std::istream &is);

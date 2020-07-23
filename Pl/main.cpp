@@ -51,7 +51,8 @@ int main(int argc, char *argv[])
 
         mp.assign(c.ds, m->offset + c.ds.position());
 
-        Output::create(c, files[0]);
+        Output::exe(c, files[0]);
+        Output::map(c, files[0] + ".pmap");
     }
 
     catch(const Error &error)

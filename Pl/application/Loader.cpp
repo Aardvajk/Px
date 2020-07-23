@@ -27,4 +27,21 @@ void Loader::load(Context &c, const std::string &path)
 
         Object::load(is, *e);
     }
+
+    std::ifstream ds(path + ".pmap");
+    if(ds.is_open())
+    {
+        FileMap m;
+        m.read(ds);
+
+        for(std::size_t i = 0; i < m.size(); ++i)
+        {
+            auto &e = m[i];
+            switch(e.type)
+            {
+                case 'V': c.dm.push_back(e); break;
+                case 'F': c.cm.push_back(e); break;
+            }
+        }
+    }
 }

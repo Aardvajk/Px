@@ -5,6 +5,7 @@
 
 #include "common/Object.h"
 
+#include "application/Context.h"
 #include "application/Disassembler.h"
 
 #include <pcx/indexed_range.h>
@@ -61,6 +62,34 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
     auto v = is.all();
 
     os << banner(path);
-    Disassembler::disassemble(c, 0, v.data(), v.size(), os);
+
+    if(c.dm.size())
+    {
+        std::size_t pc = 0;
+
+        for(std::size_t i = 0; i < c.dm.size(); ++i)
+        {
+            auto &e = c.dm[i];
+
+            if(!e.name.empty())
+            {
+                os << banner(e.type, " ", e.name);
+            }
+
+            if(e.type == 'V')
+            {
+            }
+            else if(e.type == 'F')
+            {
+                Disassembler::disassemble(c, i, v.data() + pc, e.size, os);
+            }
+
+            pc += e.size;
+        }
+    }
+    else
+    {
+        Disassembler::disassemble(c, 0, v.data(), v.size(), os);
+    }
 }
 
