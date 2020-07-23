@@ -1,0 +1,49 @@
+#ifndef FILEMAP_H
+#define FILEMAP_H
+
+#include <pcx/optional.h>
+#include <pcx/callback.h>
+#include <pcx/str.h>
+
+#include <vector>
+#include <string>
+#include <iostream>
+
+class FileMap
+{
+public:
+    struct Comment
+    {
+        std::size_t address;
+        std::string comment;
+    };
+
+    struct Entry
+    {
+        char type;
+        std::string name;
+        std::size_t size;
+        std::vector<Comment> comments;
+    };
+
+    FileMap();
+
+    void begin(char type, const std::string &name, pcx::optional<pcx::callback<std::size_t> > callback);
+    void setCurrentSize(std::size_t size);
+
+    template<typename... Args> FileMap &operator()(Args&&... args);
+
+    void write(std::ostream &os) const;
+
+private:
+    std::vector<Entry> v;
+    pcx::optional<pcx::callback<std::size_t> > cb;
+};
+
+template<typename... Args> FileMap &FileMap::operator()(Args&&... args)
+{
+    v.back().comments.push_back({ cb ? (*cb)() : 0, pcx::str(std::forward<Args>(args)...) });
+    return *this;
+}
+
+#endif // FILEMAP_H

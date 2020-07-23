@@ -8,7 +8,8 @@ class Context;
 namespace Generator
 {
 
-void generate(Context &c, const std::string &path);
+void object(Context &c, const std::string &path);
+void map(Context &c, const std::string &path);
 
 }
 

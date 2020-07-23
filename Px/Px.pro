@@ -19,6 +19,7 @@ LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a"
 PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
+    common/FileMap.cpp \
     common/Object.cpp \
     common/OpCodes.cpp \
     common/Primitives.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
     scanner/Token.cpp
 
 HEADERS += \
+    common/FileMap.h \
     common/Object.h \
     common/OpCodes.h \
     common/Primitives.h \

@@ -32,7 +32,9 @@ int main(int argc, char *argv[])
         auto e = Parser::build(c);
 
         Compiler::compile(c, *e);
-        Generator::generate(c, files[1]);
+
+        Generator::object(c, files[1]);
+        Generator::map(c, files[1] + ".pmap");
     }
 
     catch(const Error &error)

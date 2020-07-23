@@ -27,18 +27,29 @@ void compileGlobal(Context &c, Entity &e)
     auto g = new Global(c.syms.add(new Sym(Sym::Type::Global, n)), c.strings.insert(n));
     c.globals.push_back(g);
 
-    g->sym->properties["size"] = e.properties["size"].to<std::size_t>();
+    auto size = e.properties["size"].to<std::size_t>();
+
+    g->sym->properties["size"] = size;
 
     for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
     {
         g->bytes << char(0);
     }
+
+    c.dm.begin('V', n, { });
+    c.dm.setCurrentSize(size);
+
+    c.dm("var \"", n, "\":", size);
 }
 
-template<typename T> void compilePushNumeric(Context &c, Entity &e)
+template<typename T> void compilePushNumeric(Context &c, Primitive::Type type, Entity &e)
 {
+    auto v = e.properties["value"].to<T>();
+
+    c.cm("-push ", Primitive::toString(type), "(", v, ");");
+
     c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << sizeof(T);
-    c.func().bytes << OpCode::Op::CopyAI << OpCode::Reg::Sp << sizeof(T) << e.properties["value"].to<T>();
+    c.func().bytes << OpCode::Op::CopyAI << OpCode::Reg::Sp << sizeof(T) << v;
 }
 
 void compilePush(Context &c, Entity &e)
@@ -47,10 +58,12 @@ void compilePush(Context &c, Entity &e)
 
     if(type == "numeric")
     {
-        switch(e.property("valuetype").to<Primitive::Type>())
+        auto pt = e.property("valuetype").to<Primitive::Type>();
+
+        switch(pt)
         {
-            case Primitive::Type::Char: compilePushNumeric<char>(c, e); break;
-            case Primitive::Type::Int: compilePushNumeric<int>(c, e); break;
+            case Primitive::Type::Char: compilePushNumeric<char>(c, pt, e); break;
+            case Primitive::Type::Int: compilePushNumeric<int>(c, pt, e); break;
 
             default: break;
         }
@@ -59,6 +72,8 @@ void compilePush(Context &c, Entity &e)
     {
         auto target = e.property("target").to<std::string>();
         auto sym = c.syms.find(target);
+
+        c.cm("-push &\"", target, "\";");
 
         if(!sym || sym->type == Sym::Type::Func || sym->type == Sym::Type::Global)
         {
@@ -79,6 +94,8 @@ void compilePush(Context &c, Entity &e)
     else if(type == "value")
     {
         auto target = e.property("target").to<std::string>();
+
+        c.cm("-push \"", target, "\";");
 
         auto sym = c.syms.find(target);
         if(!sym || sym->type == Sym::Type::Global)
@@ -111,11 +128,17 @@ void compilePush(Context &c, Entity &e)
 
 void compilePop(Context &c, Entity &e)
 {
-    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << e.property("amount").to<std::size_t>();
+    auto n = e.property("amount").to<std::size_t>();
+
+    c.cm("-pop ", n, ";");
+
+    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << n;
 }
 
 void compileCall(Context &c, Entity &e)
 {
+    c.cm("-call;");
+
     c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
     c.func().bytes << OpCode::Op::Call << OpCode::Reg::Dx;
 }
@@ -123,6 +146,8 @@ void compileCall(Context &c, Entity &e)
 void compileLoad(Context &c, Entity &e)
 {
     auto amount = e.property("amount").to<std::size_t>();
+
+    c.cm("-load ", amount, ";");
 
     c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
     c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << amount;
@@ -133,18 +158,28 @@ void compileStore(Context &c, Entity &e)
 {
     auto amount = e.property("amount").to<std::size_t>();
 
+    c.cm("-store ", amount, ";");
+
     c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
     c.func().bytes << OpCode::Op::CopyAA << OpCode::Reg::Sp << OpCode::Reg::Dx << amount;
 }
 
 void compileAllocS(Context &c, Entity &e)
 {
-    c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << e.property("amount").to<std::size_t>();
+    auto amount = e.property("amount").to<std::size_t>();
+
+    c.cm("-allocs ", amount, ";");
+
+    c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << amount;
 }
 
 void compileService(Context &c, Entity &e)
 {
-    c.func().bytes << OpCode::Op::Svc << e.property("code").to<int>();
+    auto code = e.property("code").to<int>();
+
+    c.cm("-service ", code, ";");
+
+    c.func().bytes << OpCode::Op::Svc << code;
 }
 
 void compileInstruction(Context &c, Entity &e)
@@ -215,6 +250,13 @@ void compileFunction(Context &c, Entity &e)
 
         c.syms.push();
 
+        c.cm.begin('F', n, pcx::make_callback(&c, Context::currentPosition));
+
+        c.cm("func \"", n, "\":", e.property("size").to<std::size_t>());
+        c.cm("{");
+
+        c.cm("-function prologue");
+
         c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Bp;
         c.func().bytes << OpCode::Op::CopyRR << OpCode::Reg::Sp << OpCode::Reg::Bp;
 
@@ -241,6 +283,7 @@ void compileFunction(Context &c, Entity &e)
         r->properties["size"] = e.property("size").to<std::size_t>();
         r->properties["offset"] = c.func().args + (sizeof(std::size_t) * 2);
 
+        c.cm("-allocate locals");
         c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << c.func().vars;
 
         while(index < e.entities.size())
@@ -248,10 +291,15 @@ void compileFunction(Context &c, Entity &e)
             compileInstruction(c, e.entities[index++]);
         }
 
+        c.cm("-release locals");
         c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << c.func().vars;
 
+        c.cm("-function epilogue");
         c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Bp;
         c.func().bytes << OpCode::Op::Ret << c.func().args;
+
+        c.cm("}");
+        c.cm.setCurrentSize(c.func().bytes.position());
 
         c.syms.pop();
     }

@@ -6,7 +6,7 @@
 
 #include <pcx/datastream.h>
 
-void Generator::generate(Context &c, const std::string &path)
+void Generator::object(Context &c, const std::string &path)
 {
     pcx::data_ofstream os(path);
     if(!os.is_open())
@@ -45,4 +45,16 @@ void Generator::generate(Context &c, const std::string &path)
         os << f.bytes.position();
         os.write(f.bytes.data().data(), f.bytes.position());
     }
+}
+
+void Generator::map(Context &c, const std::string &path)
+{
+    std::ofstream os(path);
+    if(!os.is_open())
+    {
+        throw Error("unable to create - ", path);
+    }
+
+    c.dm.write(os);
+    c.cm.write(os);
 }

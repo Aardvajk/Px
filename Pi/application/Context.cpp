@@ -18,3 +18,8 @@ void Context::open(const std::string &path)
 
     scanner.push(new Source(sources.id(path), is.release()));
 }
+
+std::size_t Context::currentPosition() const
+{
+    return functions.back().bytes.position();
+}

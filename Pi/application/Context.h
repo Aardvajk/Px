@@ -1,6 +1,8 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
 
+#include "common/FileMap.h"
+
 #include "scanner/SourceList.h"
 #include "scanner/Scanner.h"
 
@@ -22,6 +24,8 @@ public:
 
     Function &func(){ return functions.back(); }
 
+    std::size_t currentPosition() const;
+
     pcx::args args;
 
     SourceList sources;
@@ -32,6 +36,9 @@ public:
     pcx::indexed_set<std::string> strings;
     pcx::ptr_vector<Global> globals;
     pcx::ptr_vector<Function> functions;
+
+    FileMap dm;
+    FileMap cm;
 };
 
 #endif // CONTEXT_H
