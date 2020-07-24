@@ -28,12 +28,13 @@ int main(int argc, char *argv[])
             throw Error("no inputs specified");
         }
 
+        auto mp = Prologue::generate(c);
+
         for(std::size_t i = 1; i < files.size(); ++i)
         {
             Loader::load(c, files[i]);
         }
 
-        auto mp = Prologue::generate(c);
         Generator::generate(c);
         Linker::link(c);
 

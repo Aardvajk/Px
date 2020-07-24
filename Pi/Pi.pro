@@ -44,5 +44,4 @@ HEADERS += \
 
 DISTFILES += \
     ../../workspace/source.pi \
-    ../workspace/source.pi \
-    ../workspace/source.po.pmap
+    ../workspace/source.pi
