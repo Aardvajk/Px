@@ -127,6 +127,7 @@ Token Lexer::next(Mode mode, Source &source)
     if(ch == ';') return Token(Token::Type::Semicolon, loc, ch);
     if(ch == '&') return Token(Token::Type::Amp, loc, ch);
     if(ch == '=') return Token(Token::Type::Assign, loc, ch);
+    if(ch == ',') return Token(Token::Type::Comma, loc, ch);
 
     if(ch == '{') return Token(Token::Type::LeftBrace, loc, ch);
     if(ch == '}') return Token(Token::Type::RightBrace, loc, ch);

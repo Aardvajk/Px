@@ -12,7 +12,7 @@ public:
     enum class Type
     {
         Id, StringLiteral, IntLiteral,
-        Colon, Semicolon, Amp, Assign,
+        Colon, Semicolon, Amp, Assign, Comma,
         LeftBrace, RightBrace, LeftParen, RightParen,
         RwFunc, RwVar, RwArg,
         Eof, Invalid

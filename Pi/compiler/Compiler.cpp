@@ -31,9 +31,22 @@ void compileGlobal(Context &c, Entity &e)
 
     g->sym->properties["size"] = size;
 
-    for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
+    auto b = e.property("bytes");
+    if(b)
     {
-        g->bytes << char(0);
+        auto v = b.to<std::vector<char> >();
+
+        for(std::size_t i = 0; i < v.size(); ++i)
+        {
+            g->bytes << v[i];
+        }
+    }
+    else
+    {
+        for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
+        {
+            g->bytes << char(0);
+        }
     }
 
     c.dm.begin('V', n, { });

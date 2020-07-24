@@ -49,7 +49,18 @@ std::string bytes(ByteReader &rm, std::size_t n)
 
 }
 
-void Disassembler::disassemble(Context &c, std::size_t index, const char *data, std::size_t size, std::ostream &os)
+void Disassembler::value(Context &c, std::size_t index, const char *data, std::size_t size, std::ostream &os)
+{
+    std::size_t pc = 0;
+    std::size_t mapIndex = 0;
+    ByteReader rm(data, pc);
+
+    map(c, index, mapIndex, pc, os);
+
+    os << bytes(rm, size) << "\n";
+}
+
+void Disassembler::function(Context &c, std::size_t index, const char *data, std::size_t size, std::ostream &os)
 {
     std::size_t pc = 0;
     std::size_t mapIndex = 0;

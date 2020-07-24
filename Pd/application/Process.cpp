@@ -10,16 +10,6 @@
 
 #include <pcx/indexed_range.h>
 
-namespace
-{
-
-void function(Context &c, Object::Unit &u, std::size_t index, Object::Entity &e, std::ostream &os)
-{
-    Disassembler::disassemble(c, index, e.data.data(), e.data.size(), os);
-}
-
-}
-
 void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, std::ostream &os)
 {
     Object::Unit u(path);
@@ -47,7 +37,8 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
 
         switch(e.value.type)
         {
-            case 'F': function(c, u, e.index, e.value, os); break;
+            case 'V': Disassembler::value(c, e.index, e.value.data.data(), e.value.data.size(), os); break;
+            case 'F': Disassembler::function(c, e.index, e.value.data.data(), e.value.data.size(), os); break;
         }
     }
 }
@@ -71,12 +62,10 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
                 os << banner(e.type, " ", e.name);
             }
 
-            if(e.type == 'V')
+            switch(e.type)
             {
-            }
-            else if(e.type == 'F')
-            {
-                Disassembler::disassemble(c, i, v.data() + pc, e.size, os);
+                case 'V': Disassembler::value(c, i, v.data() + pc, e.size, os); break;
+                case 'F': Disassembler::function(c, i, v.data() + pc, e.size, os); break;
             }
 
             pc += e.size;
@@ -84,7 +73,7 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
     }
     else
     {
-        Disassembler::disassemble(c, 0, v.data(), v.size(), os);
+        Disassembler::function(c, 0, v.data(), v.size(), os);
     }
 }
 

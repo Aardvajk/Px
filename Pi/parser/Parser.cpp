@@ -140,10 +140,41 @@ Entity *headerConstruct(Context &c, Entity *block, Entity::Type type, bool get)
     return e;
 }
 
+void byteConstruct(Context &c, std::vector<char> &v, bool get)
+{
+    auto tok = c.scanner.match(Token::Type::IntLiteral, get);
+    v.push_back(static_cast<char>(pcx::lexical_cast<int>(tok.text())));
+
+    tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Comma)
+    {
+        byteConstruct(c, v, true);
+    }
+}
+
 void varConstruct(Context &c, Entity *block, Entity::Type type, bool get)
 {
-    headerConstruct(c, block, type, get);
-    c.scanner.consume(Token::Type::Semicolon, true);
+    auto e = headerConstruct(c, block, type, get);
+
+    auto tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Assign)
+    {
+        c.scanner.match(Token::Type::LeftBrace, true);
+
+        std::vector<char> v;
+        byteConstruct(c, v, true);
+
+        c.scanner.consume(Token::Type::RightBrace, false);
+
+        if(v.size() != e->property("size").to<std::size_t>())
+        {
+            throw Error(e->location, "mismatched data size - ", e->property("name").to<std::string>());
+        }
+
+        e->properties["bytes"] = v;
+    }
+
+    c.scanner.consume(Token::Type::Semicolon, false);
 }
 
 void funcConstruct(Context &c, Entity *block, bool get)
