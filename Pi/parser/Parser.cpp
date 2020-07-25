@@ -71,6 +71,11 @@ void pushConstruct(Context &c, Entity *e, bool get)
     }
 }
 
+void jumpConstruct(Context &c, Entity *e, bool get)
+{
+    e->properties["target"] = c.scanner.match(Token::Type::StringLiteral, get).text();
+}
+
 void amountConstruct(Context &c, Entity *e, bool get)
 {
     e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
@@ -90,6 +95,7 @@ void codeConstruct(Context &c, Entity *block, bool get)
         block->entities.push_back(e);
 
         e->properties["name"] = tok.text();
+
         c.scanner.consume(Token::Type::Colon, true);
     }
     else
@@ -110,6 +116,7 @@ void codeConstruct(Context &c, Entity *block, bool get)
             case Code::Type::Push: pushConstruct(c, e, true); break;
 
             case Code::Type::Call: break;
+            case Code::Type::Jump: jumpConstruct(c, e, true); break;
 
             case Code::Type::Pop:
             case Code::Type::Load:
@@ -134,8 +141,12 @@ Entity *headerConstruct(Context &c, Entity *block, Entity::Type type, bool get)
 
     e->properties["name"] = name.text();
 
-    c.scanner.match(Token::Type::Colon, true);
-    e->properties["size"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, true).text());
+    auto tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Colon)
+    {
+        e->properties["size"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, true).text());
+        c.scanner.next(true);
+    }
 
     return e;
 }
@@ -156,22 +167,50 @@ void varConstruct(Context &c, Entity *block, Entity::Type type, bool get)
 {
     auto e = headerConstruct(c, block, type, get);
 
-    auto tok = c.scanner.next(true);
+    auto tok = c.scanner.next(false);
     if(tok.type() == Token::Type::Assign)
     {
-        c.scanner.match(Token::Type::LeftBrace, true);
-
         std::vector<char> v;
-        byteConstruct(c, v, true);
 
-        c.scanner.consume(Token::Type::RightBrace, false);
-
-        if(v.size() != e->property("size").to<std::size_t>())
+        tok = c.scanner.next(true);
+        if(tok.type() == Token::Type::StringLiteral)
         {
-            throw Error(e->location, "mismatched data size - ", e->property("name").to<std::string>());
+            auto s = tok.text();
+            for(auto i: s)
+            {
+                v.push_back(i);
+            }
+
+            v.push_back(0);
+            c.scanner.next(true);
+        }
+        else
+        {
+            c.scanner.match(Token::Type::LeftBrace, false);
+
+            byteConstruct(c, v, true);
+
+            c.scanner.consume(Token::Type::RightBrace, false);
+        }
+
+        if(e->property("size"))
+        {
+            if(v.size() != e->property("size").to<std::size_t>())
+            {
+                throw Error(e->location, "mismatched data size - ", e->property("name").to<std::string>());
+            }
+        }
+        else
+        {
+            e->properties["size"] = v.size();
         }
 
         e->properties["bytes"] = v;
+    }
+
+    if(!e->property("size"))
+    {
+        throw Error(e->location, "global missing size - ", e->property("name").to<std::string>());
     }
 
     c.scanner.consume(Token::Type::Semicolon, false);
@@ -181,7 +220,12 @@ void funcConstruct(Context &c, Entity *block, bool get)
 {
     auto f = headerConstruct(c, block, Entity::Type::Func, get);
 
-    auto tok = c.scanner.next(true);
+    if(!f->property("size"))
+    {
+        throw Error(f->location, "function return size missing - ", f->property("name").to<std::string>());
+    }
+
+    auto tok = c.scanner.next(false);
     if(tok.type() == Token::Type::LeftBrace)
     {
         f->properties["defined"] = true;

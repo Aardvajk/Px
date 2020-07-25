@@ -12,6 +12,7 @@ enum class Type
     Pop,
 
     Call,
+    Jump,
 
     Load,
     Store,

@@ -9,6 +9,7 @@ const char *s[] =
     "pop",
 
     "call",
+    "jump",
 
     "load",
     "store",

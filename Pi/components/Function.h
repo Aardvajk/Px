@@ -9,6 +9,7 @@
 #include <vector>
 
 class Sym;
+class Entity;
 
 class Function
 {
@@ -22,6 +23,7 @@ public:
     std::size_t args;
 
     std::vector<Object::Link> links;
+    std::vector<std::pair<Entity*, pcx::data_ostream_patch<std::size_t> > > jumps;
 
     pcx::data_ostringstream bytes;
 };

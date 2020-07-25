@@ -55,6 +55,20 @@ void compileGlobal(Context &c, Entity &e)
     c.dm("var \"", n, "\":", size);
 }
 
+void compileLabel(Context &c, Entity &e)
+{
+    auto n = e.property("name").to<std::string>();
+    if(c.syms.findLocal(n))
+    {
+        throw Error(e.location, "symbol already defined - ", n);
+    }
+
+    auto s = c.syms.add(new Sym(Sym::Type::Label, n));
+    s->properties["position"] = c.func().bytes.position();
+
+    c.cm("-label \"", n, "\":");
+}
+
 template<typename T> void compilePushNumeric(Context &c, Primitive::Type type, Entity &e)
 {
     auto v = e.properties["value"].to<T>();
@@ -156,6 +170,35 @@ void compileCall(Context &c, Entity &e)
     c.func().bytes << OpCode::Op::Call << OpCode::Reg::Dx;
 }
 
+void compileJump(Context &c, Entity &e)
+{
+    auto target = e.property("target").to<std::string>();
+
+    c.cm("-jump \"", target, "\";");
+
+    auto sym = c.syms.find(target);
+    if(sym)
+    {
+        if(sym->type != Sym::Type::Label)
+        {
+            throw Error(e.location, "jump target is not a label - ", target);
+        }
+
+        pcx::data_ostream_patch<std::size_t> p;
+        c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Pc << p;
+
+        auto pos = sym->property("position").to<std::size_t>();
+        p.assign(c.func().bytes, c.func().bytes.position() - pos);
+    }
+    else
+    {
+        pcx::data_ostream_patch<std::size_t> p;
+        c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Pc << p;
+
+        c.func().jumps.push_back(std::make_pair(&e, p));
+    }
+}
+
 void compileLoad(Context &c, Entity &e)
 {
     auto amount = e.property("amount").to<std::size_t>();
@@ -203,6 +246,7 @@ void compileInstruction(Context &c, Entity &e)
         case Code::Type::Pop: compilePop(c, e); break;
 
         case Code::Type::Call: compileCall(c, e); break;
+        case Code::Type::Jump: compileJump(c, e); break;
 
         case Code::Type::Load: compileLoad(c, e); break;
         case Code::Type::Store: compileStore(c, e); break;
@@ -301,7 +345,29 @@ void compileFunction(Context &c, Entity &e)
 
         while(index < e.entities.size())
         {
-            compileInstruction(c, e.entities[index++]);
+            auto &n = e.entities[index++];
+
+            switch(n.type)
+            {
+                case Entity::Type::Label: compileLabel(c, n); break;
+                case Entity::Type::Instruction: compileInstruction(c, n); break;
+
+                default: break;
+            }
+        }
+
+        for(auto &j: c.func().jumps)
+        {
+            auto target = j.first->property("target").to<std::string>();
+
+            auto sym = c.syms.findLocal(target);
+            if(!sym || sym->type != Sym::Type::Label)
+            {
+                throw Error(j.first->location, "label expected - ", target);
+            }
+
+            auto pos = sym->property("position").to<std::size_t>();
+            j.second.assign(c.func().bytes, pos - (j.second.position() + sizeof(std::size_t)));
         }
 
         c.cm("-release locals");
