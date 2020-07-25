@@ -73,7 +73,14 @@ void pushConstruct(Context &c, Entity *e, bool get)
 
 void jumpConstruct(Context &c, Entity *e, bool get)
 {
-    e->properties["target"] = c.scanner.match(Token::Type::StringLiteral, get).text();
+    auto tok = c.scanner.next(get);
+    if(tok.type() == Token::Type::Id && tok.text() == "ifz")
+    {
+        e->properties["ifz"] = true;
+        c.scanner.next(true);
+    }
+
+    e->properties["target"] = c.scanner.match(Token::Type::StringLiteral, false).text();
 }
 
 void amountConstruct(Context &c, Entity *e, bool get)

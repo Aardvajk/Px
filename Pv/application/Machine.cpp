@@ -47,6 +47,8 @@ void Machine::execute()
             case Op::Call: rm(v.r0); s.push(rg.pc()); rg.pc() = rg[v.r0]; break;
             case Op::Ret: rm(v.s0); s.pop(rg.pc()); rg.sp() += v.s0; break;
 
+            case Op::JmpNz: rm(v.s0); s.pop(v.c0); if(v.c0) rg.pc() += v.s0; break;
+
             case Op::Svc: rm(v.i0); sp(v.i0, mm, rg); break;
 
             default: throw Error("invalid opcode");

@@ -40,6 +40,8 @@ enum class Op : std::uint8_t
     Call,
     Ret,
 
+    JmpNz,
+
     Svc,
     Invalid
 };

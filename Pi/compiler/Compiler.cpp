@@ -173,8 +173,14 @@ void compileCall(Context &c, Entity &e)
 void compileJump(Context &c, Entity &e)
 {
     auto target = e.property("target").to<std::string>();
+    auto ifz = e.property("ifz").value<bool>();
 
-    c.cm("-jump \"", target, "\";");
+    c.cm("-jump ", (ifz ? "ifz " : ""), "\"", target, "\";");
+
+    if(ifz)
+    {
+        c.func().bytes << OpCode::Op::JmpNz << std::size_t(10);
+    }
 
     auto sym = c.syms.find(target);
     if(sym)

@@ -37,6 +37,8 @@ const char *OpCode::toString(Op v)
         "call",
         "ret",
 
+        "jmpnz",
+
         "svc",
         "(invalid)"
     };

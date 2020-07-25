@@ -105,6 +105,8 @@ void Disassembler::function(Context &c, std::size_t index, const char *data, std
             case Op::Call: rm(r0); os << toString(r0); break;
             case Op::Ret: rm(s0); os << s0; break;
 
+            case Op::JmpNz: rm(s0); os << s0; break;
+
             case Op::Svc: rm(i0); os << i0; break;
 
             default: throw Error("invalid opcode - ", static_cast<int>(op));
