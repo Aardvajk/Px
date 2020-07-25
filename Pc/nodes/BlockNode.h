@@ -10,6 +10,8 @@ public:
 
     virtual void accept(Visitor &v) override;
     virtual std::string classname() const override;
+
+    NodeList nodes;
 };
 
 #endif // BLOCKNODE_H

@@ -2,6 +2,10 @@
 
 #include "application/Context.h"
 
+#include "parser/Parser.h"
+
+#include "visitors/AstPrinter.h"
+
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -22,6 +26,10 @@ int main(int argc, char *argv[])
         }
 
         c.open(files[0]);
+
+        auto n = Parser::build(c);
+
+        Visitor::visit<AstPrinter>(n.get(), c, std::cout);
     }
 
     catch(const Error &error)

@@ -4,7 +4,7 @@ Visitor::~Visitor()
 {
 }
 
-void Visitor::visit(BlockNode &block)
+void Visitor::visit(BlockNode &node)
 {
 }
 

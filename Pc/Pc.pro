@@ -24,12 +24,16 @@ SOURCES += \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/Node.cpp \
+        parser/Parser.cpp \
+        visitors/AstPrinter.cpp \
         visitors/Visitor.cpp
 
 HEADERS += \
     application/Context.h \
     nodes/BlockNode.h \
     nodes/Node.h \
+    parser/Parser.h \
+    visitors/AstPrinter.h \
     visitors/Visitor.h
 
 DISTFILES += \
