@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
 
                 std::istringstream is(s);
 
-                std::string exe, param;
-                is >> exe >> param;
+                std::string exe;
+                is >> exe;
 
                 if(std::system(pcx::str("C:/Projects/Px/Px/build-", exe, "/release/", s).c_str()))
                 {
