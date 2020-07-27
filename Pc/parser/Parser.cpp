@@ -6,6 +6,8 @@
 
 #include "nodes/BlockNode.h"
 
+#include "parser/DeclarationParser.h"
+
 namespace
 {
 
@@ -14,6 +16,8 @@ void construct(Context &c, BlockNode *block, bool get)
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
+        case Token::Type::RwFunc: DeclarationParser::build(c, block, false); break;
+
         default: throw Error(tok.location(), "construct expected - ", tok.text());
     }
 }

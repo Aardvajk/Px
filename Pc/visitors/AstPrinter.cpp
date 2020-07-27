@@ -1,6 +1,9 @@
 #include "AstPrinter.h"
 
 #include "nodes/BlockNode.h"
+#include "nodes/IdNode.h"
+#include "nodes/FuncNode.h"
+#include "nodes/TypeNode.h"
 
 #include <pcx/scoped_counter.h>
 
@@ -23,6 +26,27 @@ void AstPrinter::visit(BlockNode &node)
     }
 
     tab() << "}\n";
+}
+
+void AstPrinter::visit(IdNode &node)
+{
+    tab() << "id " << node.name << "\n";
+
+    if(node.parent)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.parent->accept(*this);
+    }
+}
+
+void AstPrinter::visit(FuncNode &node)
+{
+    tab() << "func " << node.name->description() << "():" << node.type->description() << "\n";
+}
+
+void AstPrinter::visit(TypeNode &node)
+{
+    tab() << "type " << node.name->description() << "\n";
 }
 
 std::ostream &AstPrinter::tab() const

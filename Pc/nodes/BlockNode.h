@@ -10,6 +10,10 @@ public:
 
     virtual void accept(Visitor &v) override;
     virtual std::string classname() const override;
+    virtual NodePtr cloneDetail() const override;
+
+    void push_back(Node *n);
+    void push_back(NodePtr n);
 
     NodeList nodes;
 };

@@ -1,8 +1,11 @@
 #include "framework/Error.h"
+#include "framework/Console.h"
 
 #include "application/Context.h"
 
 #include "parser/Parser.h"
+
+#include "syms/SymPrinter.h"
 
 #include "visitors/AstPrinter.h"
 
@@ -29,7 +32,13 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
+        std::cout << banner("ast");
         Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+
+        std::cout << banner("tree");
+        SymPrinter::print(c, c.tree.root(), std::cout);
+
+        std::cout << banner();
     }
 
     catch(const Error &error)
