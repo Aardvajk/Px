@@ -12,6 +12,14 @@ void Visitor::visit(IdNode &node)
 {
 }
 
+void Visitor::visit(GenericTagNode &node)
+{
+}
+
+void Visitor::visit(NamespaceNode &node)
+{
+}
+
 void Visitor::visit(FuncNode &node)
 {
 }

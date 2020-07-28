@@ -3,8 +3,11 @@
 
 #include "scanner/Location.h"
 
+#include <pcx/any.h>
+
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class Sym
 {
@@ -20,16 +23,25 @@ public:
 
     Sym *add(Sym *sym);
 
+    Sym *child(const std::string &name);
+
+    void setProperty(const std::string &name, pcx::any value);
+
     Type type() const { return t; }
     Location location() const { return n; }
 
+    std::vector<std::string> names() const;
+
     std::string name() const { return s; }
+    std::string fullname() const;
 
     Sym *parent(){ return ps; }
     const Sym *parent() const { return ps; }
 
     std::vector<Sym*> children(){ return cs; }
     const std::vector<Sym*> children() const { return cs; }
+
+    pcx::any property(const std::string &name) const;
 
     static const char *toString(Type v);
 
@@ -40,6 +52,8 @@ private:
 
     Sym *ps;
     std::vector<Sym*> cs;
+
+    std::unordered_map<std::string, pcx::any> pm;
 };
 
 #endif // SYM_H

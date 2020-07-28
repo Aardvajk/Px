@@ -1,9 +1,8 @@
 #include "DescVisitor.h"
 
-#include "nodes/BlockNode.h"
-#include "nodes/IdNode.h"
-#include "nodes/FuncNode.h"
-#include "nodes/TypeNode.h"
+#include "nodes/Nodes.h"
+
+#include <pcx/join_str.h>
 
 DescVisitor::DescVisitor()
 {
@@ -25,10 +24,32 @@ void DescVisitor::visit(IdNode &node)
     r += node.name;
 }
 
+void DescVisitor::visit(GenericTagNode &node)
+{
+    r += node.name;
+}
+
+void DescVisitor::visit(NamespaceNode &node)
+{
+    r += "namespace ";
+    r += node.name->description();
+}
+
 void DescVisitor::visit(FuncNode &node)
 {
-    r += "func ";
-    r += node.name->description();
+    r += "func";
+
+    if(!node.genericTags.empty())
+    {
+        r += "<" + pcx::join_str(node.genericTags, ", ") + ">";
+    }
+
+    r += " " + node.name->description();
+
+    if(node.type)
+    {
+        r + ":" + node.type->description();
+    }
 }
 
 void DescVisitor::visit(TypeNode &node)

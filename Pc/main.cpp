@@ -5,6 +5,8 @@
 
 #include "parser/Parser.h"
 
+#include "decorator/Decorator.h"
+
 #include "syms/SymPrinter.h"
 
 #include "visitors/AstPrinter.h"
@@ -34,6 +36,8 @@ int main(int argc, char *argv[])
 
         std::cout << banner("ast");
         Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+
+        Visitor::visit<Decorator>(n.get(), c);
 
         std::cout << banner("tree");
         SymPrinter::print(c, c.tree.root(), std::cout);

@@ -21,10 +21,13 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        decorator/Decorator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/FuncNode.cpp \
+        nodes/GenericTagNode.cpp \
         nodes/IdNode.cpp \
+        nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
         nodes/TypeNode.cpp \
         parser/CommonParser.cpp \
@@ -32,30 +35,40 @@ SOURCES += \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
         syms/Sym.cpp \
+        syms/SymFinder.cpp \
         syms/SymGuard.cpp \
         syms/SymPrinter.cpp \
+        syms/SymScopeVisitor.cpp \
         syms/SymTree.cpp \
         visitors/AstPrinter.cpp \
         visitors/DescVisitor.cpp \
+        visitors/NameVisitors.cpp \
         visitors/Visitor.cpp
 
 HEADERS += \
     application/Context.h \
+    decorator/Decorator.h \
     nodes/BlockNode.h \
     nodes/FuncNode.h \
+    nodes/GenericTagNode.h \
     nodes/IdNode.h \
+    nodes/NamespaceNode.h \
     nodes/Node.h \
+    nodes/Nodes.h \
     nodes/TypeNode.h \
     parser/CommonParser.h \
     parser/DeclarationParser.h \
     parser/Parser.h \
     parser/TypeParser.h \
     syms/Sym.h \
+    syms/SymFinder.h \
     syms/SymGuard.h \
     syms/SymPrinter.h \
+    syms/SymScopeVisitor.h \
     syms/SymTree.h \
     visitors/AstPrinter.h \
     visitors/DescVisitor.h \
+    visitors/NameVisitors.h \
     visitors/Visitor.h
 
 DISTFILES += \

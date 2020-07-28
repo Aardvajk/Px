@@ -13,8 +13,9 @@ public:
     {
         Id, StringLiteral, IntLiteral,
         Colon, Semicolon, Amp, Assign, Comma, Dot,
+        Lt, Gt,
         LeftBrace, RightBrace, LeftParen, RightParen,
-        RwFunc, RwVar, RwArg,
+        RwNamespace, RwFunc, RwVar, RwArg,
         Eof, Invalid
     };
 

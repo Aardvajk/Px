@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <iostream>
 
 class Node;
 
@@ -43,5 +44,7 @@ private:
     Location n;
     std::unordered_map<std::string, pcx::any> pm;
 };
+
+inline std::ostream &operator<<(std::ostream &os, const NodePtr &n){ return os << n->description(); }
 
 #endif // NODE_H
