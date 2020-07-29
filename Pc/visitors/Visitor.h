@@ -9,6 +9,7 @@ class GenericTagNode;
 class NamespaceNode;
 class FuncNode;
 class TypeNode;
+class VarNode;
 
 class Visitor
 {
@@ -21,6 +22,7 @@ public:
     virtual void visit(NamespaceNode &node);
     virtual void visit(FuncNode &node);
     virtual void visit(TypeNode &node);
+    virtual void visit(VarNode &node);
 
     template<typename T, typename N, typename... Args> static void visit(N node, Args&&... args)
     {

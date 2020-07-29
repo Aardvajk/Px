@@ -18,6 +18,7 @@ public:
     virtual void visit(NamespaceNode &node) override;
     virtual void visit(FuncNode &node) override;
     virtual void visit(TypeNode &node) override;
+    virtual void visit(VarNode &node) override;
 
 private:
     std::string r;

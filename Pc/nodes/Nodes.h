@@ -7,5 +7,6 @@
 #include "nodes/NamespaceNode.h"
 #include "nodes/FuncNode.h"
 #include "nodes/TypeNode.h"
+#include "nodes/VarNode.h"
 
 #endif // NODES_H

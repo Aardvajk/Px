@@ -32,6 +32,29 @@ void buildGenericTags(Context &c, NodeList &container, bool get)
     }
 }
 
+void buildArgs(Context &c, NodeList &container, bool get)
+{
+    std::string name;
+
+    auto tok = c.scanner.next(get);
+    if(tok.type() == Token::Type::Id)
+    {
+        name = tok.text();
+        c.scanner.next(true);
+    }
+
+    auto v = new VarNode(tok.location(), new IdNode(tok.location(), { }, name));
+    container.push_back(v);
+
+    c.scanner.match(Token::Type::Colon, false);
+    v->type = TypeParser::build(c, true);
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        buildArgs(c, container, true);
+    }
+}
+
 void buildFunction(Context &c, BlockNode *block, bool get)
 {
     NodeList generics;
@@ -51,8 +74,14 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     n->genericTags = generics;
 
     c.scanner.match(Token::Type::LeftParen, false);
-    c.scanner.match(Token::Type::RightParen, true);
 
+    tok = c.scanner.next(true);
+    if(tok.type() != Token::Type::RightParen)
+    {
+        buildArgs(c, n->args, false);
+    }
+
+    c.scanner.match(Token::Type::RightParen, false);
     c.scanner.match(Token::Type::Colon, true);
 
     n->type = TypeParser::build(c, true);

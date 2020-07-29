@@ -11,6 +11,9 @@
 #include "visitors/NameVisitors.h"
 
 #include "types/TypeBuilder.h"
+#include "types/TypeQuery.h"
+
+#include "decorator/ArgDecorator.h"
 
 namespace
 {
@@ -29,6 +32,28 @@ Sym *search(Context &c, Sym::Type type, Node *node)
 
         return s;
     }
+
+    return nullptr;
+}
+
+Sym *searchFunction(Context &c, Node *node, Type *type)
+{
+    std::vector<Sym*> sv;
+    SymFinder::find(c, SymFinder::Type::Local, c.tree.current(), node, sv);
+
+    for(auto s: sv)
+    {
+        if(s->type() != Sym::Type::Func)
+        {
+            throw Error(node->location(), "function expected - ", s->fullname());
+        }
+
+        if(Type::exact(type->args, s->property("type").to<Type*>()->args))
+        {
+            return s;
+        }
+    }
+
 
     return nullptr;
 }
@@ -52,7 +77,7 @@ void Decorator::visit(NamespaceNode &node)
     auto sym = search(c, Sym::Type::Namespace, node.name.get());
     if(!sym)
     {
-        auto name = NameVisitors::assertSimpleUniqueName(c, node.name.get());
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
         sym = c.tree.current()->add(new Sym(Sym::Type::Namespace, node.location(), name));
     }
 
@@ -62,4 +87,23 @@ void Decorator::visit(NamespaceNode &node)
 
 void Decorator::visit(FuncNode &node)
 {
+    std::vector<Type*> args;
+    for(auto &a: node.args)
+    {
+        Visitor::visit<ArgDecorator>(a.get(), c);
+        args.push_back(TypeQuery::assert(c, a.get()));
+    }
+
+    node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
+
+    auto type = c.types.insert(Type::function(TypeQuery::assert(c, node.type.get()), args));
+
+    auto sym = searchFunction(c, node.name.get(), type);
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimple(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
+
+        sym->setProperty("type", type);
+    }
 }

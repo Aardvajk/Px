@@ -21,6 +21,7 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        decorator/ArgDecorator.cpp \
         decorator/Decorator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
         nodes/TypeNode.cpp \
+        nodes/VarNode.cpp \
         parser/CommonParser.cpp \
         parser/DeclarationParser.cpp \
         parser/Parser.cpp \
@@ -44,6 +46,7 @@ SOURCES += \
         types/Type.cpp \
         types/TypeBuilder.cpp \
         types/TypeCache.cpp \
+        types/TypeQuery.cpp \
         visitors/AstPrinter.cpp \
         visitors/DescVisitor.cpp \
         visitors/NameVisitors.cpp \
@@ -51,6 +54,7 @@ SOURCES += \
 
 HEADERS += \
     application/Context.h \
+    decorator/ArgDecorator.h \
     decorator/Decorator.h \
     nodes/BlockNode.h \
     nodes/FuncNode.h \
@@ -60,6 +64,7 @@ HEADERS += \
     nodes/Node.h \
     nodes/Nodes.h \
     nodes/TypeNode.h \
+    nodes/VarNode.h \
     parser/CommonParser.h \
     parser/DeclarationParser.h \
     parser/Parser.h \
@@ -74,6 +79,7 @@ HEADERS += \
     types/Type.h \
     types/TypeBuilder.h \
     types/TypeCache.h \
+    types/TypeQuery.h \
     visitors/AstPrinter.h \
     visitors/DescVisitor.h \
     visitors/NameVisitors.h \

@@ -17,6 +17,7 @@ public:
     static Type function(Type *returnType, const std::vector<Type*> &args = { });
 
     static bool exact(const Type *a, const Type *b);
+    static bool exact(const std::vector<Type*> &a, const std::vector<Type*> &b);
 
     Sym *sym;
 

@@ -97,3 +97,21 @@ bool Type::exact(const Type *a, const Type *b)
 {
     return compareTypes(a, b);
 }
+
+bool Type::exact(const std::vector<Type*> &a, const std::vector<Type*> &b)
+{
+    if(a.size() != b.size())
+    {
+        return false;
+    }
+
+    for(std::size_t i = 0; i < a.size(); ++i)
+    {
+        if(!exact(a[i], b[i]))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}

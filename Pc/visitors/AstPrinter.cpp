@@ -58,6 +58,11 @@ void AstPrinter::visit(TypeNode &node)
     tab() << "type " << node.name->description() << "\n";
 }
 
+void AstPrinter::visit(VarNode &node)
+{
+    tab() << node.description() << "\n";
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

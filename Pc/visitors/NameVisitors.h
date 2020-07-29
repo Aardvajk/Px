@@ -37,7 +37,8 @@ private:
     std::string r;
 };
 
-std::string assertSimpleUniqueName(Context &c, Node *node);
+std::string assertSimple(Context &c, Node *node);
+std::string assertSimpleUnique(Context &c, Node *node);
 
 }
 
