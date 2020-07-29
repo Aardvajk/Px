@@ -80,6 +80,8 @@ const char *Sym::toString(Type v)
     static const char *s[] =
     {
         "namespace",
+        "func",
+        "class",
         "invalid"
     };
 

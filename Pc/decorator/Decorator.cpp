@@ -10,6 +10,8 @@
 
 #include "visitors/NameVisitors.h"
 
+#include "types/TypeBuilder.h"
+
 namespace
 {
 

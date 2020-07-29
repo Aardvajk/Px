@@ -6,6 +6,8 @@
 
 #include "syms/SymTree.h"
 
+#include "types/TypeCache.h"
+
 #include <pcx/args.h>
 
 class Context
@@ -21,6 +23,7 @@ public:
     Scanner scanner;
 
     SymTree tree;
+    TypeCache types;
 };
 
 #endif // CONTEXT_H

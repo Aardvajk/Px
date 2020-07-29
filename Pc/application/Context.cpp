@@ -2,12 +2,15 @@
 
 #include "framework/Error.h"
 
+#include "types/PrimitiveTypes.h"
+
 #include <pcx/scoped_ptr.h>
 
 #include <fstream>
 
 Context::Context(int argc, char *argv[], std::vector<std::string> &files) : args(argc, argv, files), scanner(Lexer::Mode::Pc)
 {
+    PrimitiveTypes::create(*this);
 }
 
 void Context::open(const std::string &path)

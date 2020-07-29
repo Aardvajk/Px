@@ -15,6 +15,8 @@ public:
     enum class Type
     {
         Namespace,
+        Func,
+        Class,
         Invalid
     };
 

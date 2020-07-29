@@ -40,6 +40,10 @@ SOURCES += \
         syms/SymPrinter.cpp \
         syms/SymScopeVisitor.cpp \
         syms/SymTree.cpp \
+        types/PrimitiveTypes.cpp \
+        types/Type.cpp \
+        types/TypeBuilder.cpp \
+        types/TypeCache.cpp \
         visitors/AstPrinter.cpp \
         visitors/DescVisitor.cpp \
         visitors/NameVisitors.cpp \
@@ -66,6 +70,10 @@ HEADERS += \
     syms/SymPrinter.h \
     syms/SymScopeVisitor.h \
     syms/SymTree.h \
+    types/PrimitiveTypes.h \
+    types/Type.h \
+    types/TypeBuilder.h \
+    types/TypeCache.h \
     visitors/AstPrinter.h \
     visitors/DescVisitor.h \
     visitors/NameVisitors.h \
