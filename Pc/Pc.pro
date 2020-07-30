@@ -23,10 +23,13 @@ SOURCES += \
         application/Context.cpp \
         decorator/ArgDecorator.cpp \
         decorator/Decorator.cpp \
+        decorator/FuncDecorator.cpp \
         generator/Generator.cpp \
         generics/GenericStack.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
+        nodes/CallNode.cpp \
+        nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
         nodes/GenericTagNode.cpp \
         nodes/IdNode.cpp \
@@ -37,6 +40,8 @@ SOURCES += \
         nodes/VarNode.cpp \
         parser/CommonParser.cpp \
         parser/DeclarationParser.cpp \
+        parser/ExprParser.cpp \
+        parser/FuncParser.cpp \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
         syms/Sym.cpp \
@@ -59,10 +64,14 @@ HEADERS += \
     application/Context.h \
     decorator/ArgDecorator.h \
     decorator/Decorator.h \
+    decorator/FuncDecorator.h \
     generator/Generator.h \
     generics/GenericRef.h \
     generics/GenericStack.h \
+    infos/ParseInfo.h \
     nodes/BlockNode.h \
+    nodes/CallNode.h \
+    nodes/ExprNode.h \
     nodes/FuncNode.h \
     nodes/GenericTagNode.h \
     nodes/IdNode.h \
@@ -74,6 +83,8 @@ HEADERS += \
     nodes/VarNode.h \
     parser/CommonParser.h \
     parser/DeclarationParser.h \
+    parser/ExprParser.h \
+    parser/FuncParser.h \
     parser/Parser.h \
     parser/TypeParser.h \
     syms/Sym.h \

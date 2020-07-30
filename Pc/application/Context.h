@@ -10,6 +10,8 @@
 
 #include "generics/GenericStack.h"
 
+#include "infos/ParseInfo.h"
+
 #include <pcx/args.h>
 
 class Context
@@ -27,6 +29,8 @@ public:
     SymTree tree;
     TypeCache types;
     GenericStack generics;
+
+    ParseInfo parseInfo;
 };
 
 #endif // CONTEXT_H

@@ -7,6 +7,9 @@
 #include "nodes/BlockNode.h"
 
 #include "parser/DeclarationParser.h"
+#include "parser/FuncParser.h"
+
+#include <pcx/scoped_push.h>
 
 void Parser::construct(Context &c, BlockNode *block, bool get)
 {
@@ -16,7 +19,7 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
         case Token::Type::RwNamespace:
         case Token::Type::RwFunc: DeclarationParser::build(c, block, false); break;
 
-        default: throw Error(tok.location(), "construct expected - ", tok.text());
+        default: FuncParser::build(c, block, false);
     }
 }
 
@@ -24,6 +27,8 @@ NodePtr Parser::build(Context &c)
 {
     auto block = new BlockNode({ });
     NodePtr n(block);
+
+    auto cp = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Namespace);
 
     c.scanner.next(true);
     while(c.scanner.token().type() != Token::Type::Eof)

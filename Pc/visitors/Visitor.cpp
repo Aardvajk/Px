@@ -35,3 +35,11 @@ void Visitor::visit(VarNode &node)
 void Visitor::visit(ScopeNode &node)
 {
 }
+
+void Visitor::visit(ExprNode &node)
+{
+}
+
+void Visitor::visit(CallNode &node)
+{
+}

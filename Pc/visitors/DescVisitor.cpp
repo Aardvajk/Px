@@ -72,3 +72,14 @@ void DescVisitor::visit(ScopeNode &node)
 {
     r += "(scope)";
 }
+
+void DescVisitor::visit(ExprNode &node)
+{
+    node.expr->accept(*this);
+}
+
+void DescVisitor::visit(CallNode &node)
+{
+    node.target->accept(*this);
+    r += "()";
+}

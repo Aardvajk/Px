@@ -9,5 +9,7 @@
 #include "nodes/TypeNode.h"
 #include "nodes/VarNode.h"
 #include "nodes/ScopeNode.h"
+#include "nodes/ExprNode.h"
+#include "nodes/CallNode.h"
 
 #endif // NODES_H

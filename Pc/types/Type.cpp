@@ -21,7 +21,7 @@ std::string describeType(const Type *t)
     }
     else if(t->returnType)
     {
-        os << "(" << pcx::join_str(t->args, ", ", [](const Type *t){ return t->description(); }) << "):" << t->returnType->description();
+        os << "(" << pcx::join_str(t->args, ",", [](const Type *t){ return t->description(); }) << "):" << t->returnType->description();
     }
     else if(t->gref)
     {

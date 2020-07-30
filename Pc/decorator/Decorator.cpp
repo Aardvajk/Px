@@ -14,6 +14,7 @@
 #include "types/TypeQuery.h"
 
 #include "decorator/ArgDecorator.h"
+#include "decorator/FuncDecorator.h"
 
 #include <pcx/scoped_push.h>
 
@@ -120,4 +121,9 @@ void Decorator::visit(FuncNode &node)
     }
 
     node.setProperty("sym", sym);
+
+    if(node.body)
+    {
+        Visitor::visit<FuncDecorator>(node.body.get(), c);
+    }
 }
