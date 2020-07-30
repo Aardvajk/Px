@@ -16,6 +16,7 @@ public:
     NodeList genericTags;
     NodeList args;
     NodePtr type;
+    NodePtr body;
 };
 
 #endif // FUNCNODE_H

@@ -16,15 +16,22 @@ TypeBuilder::TypeBuilder(Context &c) : c(c), r(nullptr)
 
 void TypeBuilder::visit(TypeNode &node)
 {
-    std::vector<Sym*> sv;
-    SymFinder::find(c, SymFinder::Type::Global, c.tree.current(), node.name.get(), sv);
-
-    if(sv.empty() || sv.front()->type() != Sym::Type::Class)
+    if(auto g = c.generics.typeRef(node.name.get()))
     {
-        throw Error(node.location(), "type expected - ", node.description());
+        r = c.types.insert(Type::generic(*g));
     }
+    else
+    {
+        std::vector<Sym*> sv;
+        SymFinder::find(c, SymFinder::Type::Global, c.tree.current(), node.name.get(), sv);
 
-    r = c.types.insert(Type::primary(sv.front()));
+        if(sv.empty() || sv.front()->type() != Sym::Type::Class)
+        {
+            throw Error(node.location(), "type expected - ", node.description());
+        }
+
+        r = c.types.insert(Type::primary(sv.front()));
+    }
 }
 
 Type *TypeBuilder::build(Context &c, Node *node)

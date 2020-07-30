@@ -8,5 +8,6 @@
 #include "nodes/FuncNode.h"
 #include "nodes/TypeNode.h"
 #include "nodes/VarNode.h"
+#include "nodes/ScopeNode.h"
 
 #endif // NODES_H

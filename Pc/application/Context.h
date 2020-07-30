@@ -8,6 +8,8 @@
 
 #include "types/TypeCache.h"
 
+#include "generics/GenericStack.h"
+
 #include <pcx/args.h>
 
 class Context
@@ -24,6 +26,7 @@ public:
 
     SymTree tree;
     TypeCache types;
+    GenericStack generics;
 };
 
 #endif // CONTEXT_H

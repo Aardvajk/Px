@@ -89,12 +89,10 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     tok = c.scanner.next(false);
     if(tok.type() == Token::Type::LeftBrace)
     {
-        c.scanner.next(true);
-        while(c.scanner.token().type() != Token::Type::RightBrace)
-        {
-        }
+        auto scope = new ScopeNode(tok.location());
+        n->body = scope;
 
-        c.scanner.next(true);
+        scope->body = CommonParser::blockContents(c, tok.location(), false);
     }
     else
     {

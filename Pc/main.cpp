@@ -7,11 +7,14 @@
 
 #include "decorator/Decorator.h"
 
+#include "generator/Generator.h"
+
 #include "syms/SymPrinter.h"
 
 #include "visitors/AstPrinter.h"
 
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +44,20 @@ int main(int argc, char *argv[])
 
         std::cout << banner("tree");
         SymPrinter::print(c, c.tree.root(), std::cout);
+
+        std::cout << banner("output");
+        Visitor::visit<Generator>(n.get(), c, std::cout);
+
+        if(true)
+        {
+            std::ofstream os(files[1]);
+            if(!os.is_open())
+            {
+                throw Error("unable to create - ", files[1]);
+            }
+
+            Visitor::visit<Generator>(n.get(), c, os);
+        }
 
         std::cout << banner();
     }

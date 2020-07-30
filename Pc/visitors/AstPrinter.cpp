@@ -51,6 +51,11 @@ void AstPrinter::visit(NamespaceNode &node)
 void AstPrinter::visit(FuncNode &node)
 {
     tab() << node.description() << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
 }
 
 void AstPrinter::visit(TypeNode &node)
@@ -61,6 +66,11 @@ void AstPrinter::visit(TypeNode &node)
 void AstPrinter::visit(VarNode &node)
 {
     tab() << node.description() << "\n";
+}
+
+void AstPrinter::visit(ScopeNode &node)
+{
+    node.body->accept(*this);
 }
 
 std::ostream &AstPrinter::tab() const

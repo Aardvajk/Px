@@ -15,6 +15,8 @@
 
 #include "decorator/ArgDecorator.h"
 
+#include <pcx/scoped_push.h>
+
 namespace
 {
 
@@ -81,12 +83,22 @@ void Decorator::visit(NamespaceNode &node)
         sym = c.tree.current()->add(new Sym(Sym::Type::Namespace, node.location(), name));
     }
 
+    node.setProperty("sym", sym);
+
     auto g = c.tree.open(sym);
     node.body->accept(*this);
 }
 
 void Decorator::visit(FuncNode &node)
 {
+    GenericParamList generics;
+    for(auto &n: node.genericTags)
+    {
+        generics.push_back(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()));
+    }
+
+    auto gp = pcx::scoped_push(c.generics, generics);
+
     std::vector<Type*> args;
     for(auto &a: node.args)
     {
@@ -106,4 +118,6 @@ void Decorator::visit(FuncNode &node)
 
         sym->setProperty("type", type);
     }
+
+    node.setProperty("sym", sym);
 }

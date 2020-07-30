@@ -67,3 +67,8 @@ void DescVisitor::visit(VarNode &node)
         r += ":" + node.type->description();
     }
 }
+
+void DescVisitor::visit(ScopeNode &node)
+{
+    r += "(scope)";
+}

@@ -10,6 +10,7 @@ class NamespaceNode;
 class FuncNode;
 class TypeNode;
 class VarNode;
+class ScopeNode;
 
 class Visitor
 {
@@ -23,6 +24,7 @@ public:
     virtual void visit(FuncNode &node);
     virtual void visit(TypeNode &node);
     virtual void visit(VarNode &node);
+    virtual void visit(ScopeNode &node);
 
     template<typename T, typename N, typename... Args> static void visit(N node, Args&&... args)
     {

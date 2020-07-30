@@ -37,3 +37,8 @@ std::string NameVisitors::assertSimpleUnique(Context &c, Node *node)
 
     return n;
 }
+
+void NameVisitors::GenericTagName::visit(GenericTagNode &node)
+{
+    r = node.name;
+}
