@@ -82,6 +82,23 @@ Source::Char translateEscapeChar(Source::Char ch)
     }
 }
 
+Token charConstant(Source &source, Location location)
+{
+    auto v = source.get();
+    if(v == '\\')
+    {
+        v = translateEscapeChar(source.get());
+    }
+
+    auto ch = source.get();
+    if(ch != '\'')
+    {
+        throw Error(location, "non-terminated character");
+    }
+
+    return Token(Token::Type::CharLiteral, location, v);
+}
+
 Token stringConstant(Source &source, Location location, std::string &s)
 {
     auto ch = source.get();
@@ -145,6 +162,11 @@ Token Lexer::next(Mode mode, Source &source)
     if(ch == '}') return Token(Token::Type::RightBrace, loc, ch);
     if(ch == '(') return Token(Token::Type::LeftParen, loc, ch);
     if(ch == ')') return Token(Token::Type::RightParen, loc, ch);
+
+    if(ch == '\'')
+    {
+        return charConstant(source, loc);
+    }
 
     if(ch == '\"')
     {

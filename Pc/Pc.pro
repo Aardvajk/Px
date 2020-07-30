@@ -23,7 +23,10 @@ SOURCES += \
         application/Context.cpp \
         decorator/ArgDecorator.cpp \
         decorator/Decorator.cpp \
+        decorator/ExprDecorator.cpp \
         decorator/FuncDecorator.cpp \
+        generator/ExprGenerator.cpp \
+        generator/FuncGenerator.cpp \
         generator/Generator.cpp \
         generics/GenericStack.cpp \
         main.cpp \
@@ -33,6 +36,7 @@ SOURCES += \
         nodes/FuncNode.cpp \
         nodes/GenericTagNode.cpp \
         nodes/IdNode.cpp \
+        nodes/LiteralNodes.cpp \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
         nodes/ScopeNode.cpp \
@@ -64,7 +68,10 @@ HEADERS += \
     application/Context.h \
     decorator/ArgDecorator.h \
     decorator/Decorator.h \
+    decorator/ExprDecorator.h \
     decorator/FuncDecorator.h \
+    generator/ExprGenerator.h \
+    generator/FuncGenerator.h \
     generator/Generator.h \
     generics/GenericRef.h \
     generics/GenericStack.h \
@@ -75,6 +82,7 @@ HEADERS += \
     nodes/FuncNode.h \
     nodes/GenericTagNode.h \
     nodes/IdNode.h \
+    nodes/LiteralNodes.h \
     nodes/NamespaceNode.h \
     nodes/Node.h \
     nodes/Nodes.h \

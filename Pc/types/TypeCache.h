@@ -12,6 +12,10 @@ public:
 
     Type *insert(const Type &type);
 
+    Type *nullType();
+    Type *charType();
+    Type *intType();
+
 private:
     pcx::ptr_vector<Type> v;
 };

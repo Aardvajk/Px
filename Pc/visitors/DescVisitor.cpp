@@ -3,6 +3,7 @@
 #include "nodes/Nodes.h"
 
 #include <pcx/join_str.h>
+#include <pcx/lexical_cast.h>
 
 DescVisitor::DescVisitor()
 {
@@ -82,4 +83,14 @@ void DescVisitor::visit(CallNode &node)
 {
     node.target->accept(*this);
     r += "()";
+}
+
+void DescVisitor::visit(CharLiteralNode &node)
+{
+    r += node.value;
+}
+
+void DescVisitor::visit(IntLiteralNode &node)
+{
+    r += pcx::lexical_cast<std::string>(node.value);
 }

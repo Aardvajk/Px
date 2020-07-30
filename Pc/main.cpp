@@ -37,10 +37,10 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
+        Visitor::visit<Decorator>(n.get(), c);
+
         std::cout << banner("ast");
         Visitor::visit<AstPrinter>(n.get(), c, std::cout);
-
-        Visitor::visit<Decorator>(n.get(), c);
 
         std::cout << banner("tree");
         SymPrinter::print(c, c.tree.root(), std::cout);

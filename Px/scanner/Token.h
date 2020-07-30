@@ -11,7 +11,7 @@ class Token
 public:
     enum class Type
     {
-        Id, StringLiteral, IntLiteral,
+        Id, StringLiteral, IntLiteral, CharLiteral,
         Colon, Semicolon, Amp, Assign, Comma, Dot,
         Lt, Gt,
         LeftBrace, RightBrace, LeftParen, RightParen,

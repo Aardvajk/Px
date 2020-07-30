@@ -8,6 +8,8 @@
 
 #include "types/Type.h"
 
+#include "generator/FuncGenerator.h"
+
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
 }
@@ -33,8 +35,10 @@ void Generator::visit(FuncNode &node)
         auto sym = node.property("sym").to<Sym*>();
         auto type = sym->property("type").to<Type*>();
 
-        os << "func \"" << sym->fullname() << type->description() << "\":" << Type::assertSize(node.location(), type->returnType) << "\n";
+        os << "func \"" << sym->funcname() << "\":" << Type::assertSize(node.location(), type->returnType) << "\n";
         os << "{\n";
+
+        Visitor::visit<FuncGenerator>(node.body.get(), c, os);
 
         os << "}\n";
     }

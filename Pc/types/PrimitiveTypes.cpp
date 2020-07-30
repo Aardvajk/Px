@@ -24,5 +24,6 @@ void PrimitiveTypes::create(Context &c)
     auto ns = c.tree.current()->add(new Sym(Sym::Type::Namespace, { }, "std"));
 
     ns->add(createPrimitive(c, "null",  0));
+    ns->add(createPrimitive(c, "char", 1));
     ns->add(createPrimitive(c, "int", 4));
 }

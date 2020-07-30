@@ -1,5 +1,10 @@
 #include "Sym.h"
 
+#include "framework/Error.h"
+
+#include "types/Type.h"
+
+#include <pcx/str.h>
 #include <pcx/join_str.h>
 
 Sym::Sym(Type type, Location location, std::string name) : t(type), n(location), s(std::move(name)), ps(nullptr)
@@ -64,6 +69,11 @@ std::string Sym::fullname() const
     return pcx::join_str(names(), ".");
 }
 
+std::string Sym::funcname() const
+{
+    return pcx::str(fullname(), assertProperty("type").to<::Type*>()->description());
+}
+
 pcx::any Sym::property(const std::string &name) const
 {
     auto i = pm.find(name);
@@ -73,6 +83,17 @@ pcx::any Sym::property(const std::string &name) const
     }
 
     return { };
+}
+
+pcx::any Sym::assertProperty(const std::string &name) const
+{
+    auto a = property(name);
+    if(!a)
+    {
+        throw Error(location(), "Sym::assertProperty failed - ", name, " ", fullname());
+    }
+
+    return a;
 }
 
 const char *Sym::toString(Type v)

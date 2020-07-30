@@ -36,6 +36,7 @@ public:
 
     std::string name() const { return s; }
     std::string fullname() const;
+    std::string funcname() const;
 
     Sym *parent(){ return ps; }
     const Sym *parent() const { return ps; }
@@ -44,6 +45,7 @@ public:
     const std::vector<Sym*> children() const { return cs; }
 
     pcx::any property(const std::string &name) const;
+    pcx::any assertProperty(const std::string &name) const;
 
     static const char *toString(Type v);
 

@@ -156,6 +156,11 @@ bool Type::exact(const std::vector<Type*> &a, const std::vector<Type*> &b)
 
 std::size_t Type::assertSize(Location location, const Type *type)
 {
+    if(!type)
+    {
+        throw Error(location, "Type::assertSize null type");
+    }
+
     if(auto s = type->size())
     {
         return *s;

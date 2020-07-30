@@ -1,5 +1,7 @@
 #include "Node.h"
 
+#include "framework/Error.h"
+
 #include "visitors/DescVisitor.h"
 
 Node::Node(Location location) : n(location)
@@ -37,6 +39,17 @@ pcx::any Node::property(const std::string &name) const
     }
 
     return { };
+}
+
+pcx::any Node::assertProperty(const std::string &name) const
+{
+    auto a = property(name);
+    if(!a)
+    {
+        throw Error(location(), "Node::assertProperty failed - ", name, " ", description());
+    }
+
+    return a;
 }
 
 NodePtr Node::safeClone(const NodePtr &n)

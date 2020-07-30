@@ -34,6 +34,7 @@ public:
 
     std::string description() const;
     pcx::any property(const std::string &name) const;
+    pcx::any assertProperty(const std::string &name) const;
 
     Location location() const { return n; }
 

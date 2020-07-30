@@ -2,8 +2,29 @@
 
 #include "nodes/Nodes.h"
 
+#include "syms/Sym.h"
+
 #include <pcx/scoped_counter.h>
 #include <pcx/join_str.h>
+
+#include <sstream>
+
+namespace
+{
+
+std::string info(Node *node)
+{
+    std::ostringstream os;
+
+    if(auto s = node->property("sym"))
+    {
+        os << " -> " << Sym::toString(s.to<Sym*>()->type()) << " " << s.to<Sym*>()->fullname();
+    }
+
+    return os.str();
+}
+
+}
 
 AstPrinter::AstPrinter(Context &c, std::ostream &os) : c(c), os(os), tc(0)
 {
@@ -27,7 +48,7 @@ void AstPrinter::visit(BlockNode &node)
 
 void AstPrinter::visit(IdNode &node)
 {
-    tab() << "id " << node.name << "\n";
+    tab() << "id " << node.name << info(&node) << "\n";
 
     if(node.parent)
     {
@@ -43,14 +64,14 @@ void AstPrinter::visit(GenericTagNode &node)
 
 void AstPrinter::visit(NamespaceNode &node)
 {
-    tab() << "namespace " << node.name->description() << "\n";
+    tab() << "namespace " << node.name->description() << info(&node) << "\n";
 
     node.body->accept(*this);
 }
 
 void AstPrinter::visit(FuncNode &node)
 {
-    tab() << node.description() << "\n";
+    tab() << node.description() << info(&node) << "\n";
 
     if(node.body)
     {
@@ -92,4 +113,14 @@ void AstPrinter::visit(CallNode &node)
 
     auto g = pcx::scoped_counter(tc);
     node.target->accept(*this);
+}
+
+void AstPrinter::visit(CharLiteralNode &node)
+{
+    tab() << "char literal " << int(node.value) << "\n";
+}
+
+void AstPrinter::visit(IntLiteralNode &node)
+{
+    tab() << "int literal " << node.value << "\n";
 }
