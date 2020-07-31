@@ -29,6 +29,7 @@ SOURCES += \
         generator/ExprGenerator.cpp \
         generator/FuncGenerator.cpp \
         generator/Generator.cpp \
+        generator/LocalsGenerator.cpp \
         generics/GenericStack.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
@@ -75,6 +76,7 @@ HEADERS += \
     generator/ExprGenerator.h \
     generator/FuncGenerator.h \
     generator/Generator.h \
+    generator/LocalsGenerator.h \
     generics/GenericRef.h \
     generics/GenericStack.h \
     infos/FuncInfo.h \

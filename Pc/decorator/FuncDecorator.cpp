@@ -4,6 +4,7 @@
 
 #include "nodes/Nodes.h"
 
+#include "decorator/VarDecorator.h"
 #include "decorator/ExprDecorator.h"
 
 #include <pcx/str.h>
@@ -18,6 +19,11 @@ void FuncDecorator::visit(BlockNode &node)
     {
         n->accept(*this);
     }
+}
+
+void FuncDecorator::visit(VarNode &node)
+{
+    Visitor::visit<VarDecorator>(&node, c);
 }
 
 void FuncDecorator::visit(ScopeNode &node)
