@@ -34,6 +34,11 @@ void ExprDecorator::visit(IdNode &node)
 void ExprDecorator::visit(CallNode &node)
 {
     node.target->accept(*this);
+
+    for(auto &a: node.args)
+    {
+        a = decorate(c, a);
+    }
 }
 
 NodePtr ExprDecorator::decorate(Context &c, NodePtr node)

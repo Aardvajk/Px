@@ -40,6 +40,25 @@ Sym *Sym::child(const std::string &name)
     return nullptr;
 }
 
+Sym *Sym::container()
+{
+    auto s = this;
+
+    while(s)
+    {
+        switch(s->type())
+        {
+            case Type::Namespace:
+            case Type::Class:
+            case Type::Func: return s;
+
+            default: s = s->parent();
+        }
+    }
+
+    return nullptr;
+}
+
 void Sym::setProperty(const std::string &name, pcx::any value)
 {
     pm[name] = value;
@@ -103,6 +122,8 @@ const char *Sym::toString(Type v)
         "namespace",
         "func",
         "class",
+        "scope",
+        "var",
         "invalid"
     };
 

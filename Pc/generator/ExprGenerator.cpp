@@ -32,6 +32,12 @@ void ExprGenerator::visit(CallNode &node)
     auto size = Type::assertSize(node.location(), type->returnType);
 
     os << "    allocs " << size << ";\n";
+
+    for(auto &a: node.args)
+    {
+        generate(c, a.get(), os);
+    }
+
     generate(c, node.target.get(), os);
     os << "    call;\n";
 

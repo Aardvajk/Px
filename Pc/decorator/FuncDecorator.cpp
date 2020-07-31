@@ -6,6 +6,8 @@
 
 #include "decorator/ExprDecorator.h"
 
+#include <pcx/str.h>
+
 FuncDecorator::FuncDecorator(Context &c) : c(c)
 {
 }
@@ -20,6 +22,12 @@ void FuncDecorator::visit(BlockNode &node)
 
 void FuncDecorator::visit(ScopeNode &node)
 {
+    auto info = c.tree.current()->container()->assertProperty("info").to<FuncInfo*>();
+
+    auto sym = c.tree.current()->add(new Sym(Sym::Type::Scope, node.location(), pcx::str("#scope", info->scopes++)));
+    node.setProperty("sym", sym);
+
+    auto g = c.tree.open(sym);
     node.body->accept(*this);
 }
 

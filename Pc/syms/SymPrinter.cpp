@@ -9,14 +9,14 @@ namespace
 
 bool hasScope(const Sym *sym)
 {
-    return sym->type() == Sym::Type::Namespace;
+    return sym->type() == Sym::Type::Namespace || sym->type() == Sym::Type::Func || sym->type() == Sym::Type::Scope;
 }
 
 void dump(Context &c, int tab, const Sym *sym, std::ostream &os)
 {
     auto ts = std::string(std::size_t(tab * 4), ' ');
 
-    os << ts << Sym::toString(sym->type()) << " " << sym->name();
+    os << ts << Sym::toString(sym->type()) << " " << sym->fullname();
 
     if(auto p = sym->property("type"))
     {

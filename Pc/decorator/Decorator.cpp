@@ -15,6 +15,7 @@
 
 #include "decorator/ArgDecorator.h"
 #include "decorator/FuncDecorator.h"
+#include "decorator/VarDecorator.h"
 
 #include <pcx/scoped_push.h>
 
@@ -124,6 +125,16 @@ void Decorator::visit(FuncNode &node)
 
     if(node.body)
     {
+        c.funcInfos.push_back(new FuncInfo());
+        sym->setProperty("info", c.funcInfos.back_ptr());
+
+        auto g = c.tree.open(sym);
+
+        for(auto &a: node.args)
+        {
+            Visitor::visit<VarDecorator>(a.get(), c);
+        }
+
         Visitor::visit<FuncDecorator>(node.body.get(), c);
     }
 }

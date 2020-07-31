@@ -82,7 +82,7 @@ void DescVisitor::visit(ExprNode &node)
 void DescVisitor::visit(CallNode &node)
 {
     node.target->accept(*this);
-    r += "()";
+    r += "(" + pcx::join_str(node.args, ", ") + ")";
 }
 
 void DescVisitor::visit(CharLiteralNode &node)

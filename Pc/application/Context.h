@@ -11,8 +11,10 @@
 #include "generics/GenericStack.h"
 
 #include "infos/ParseInfo.h"
+#include "infos/FuncInfo.h"
 
 #include <pcx/args.h>
+#include <pcx/ptr_vector.h>
 
 class Context
 {
@@ -31,6 +33,7 @@ public:
     GenericStack generics;
 
     ParseInfo parseInfo;
+    pcx::ptr_vector<FuncInfo> funcInfos;
 };
 
 #endif // CONTEXT_H

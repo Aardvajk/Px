@@ -25,6 +25,7 @@ SOURCES += \
         decorator/Decorator.cpp \
         decorator/ExprDecorator.cpp \
         decorator/FuncDecorator.cpp \
+        decorator/VarDecorator.cpp \
         generator/ExprGenerator.cpp \
         generator/FuncGenerator.cpp \
         generator/Generator.cpp \
@@ -70,11 +71,13 @@ HEADERS += \
     decorator/Decorator.h \
     decorator/ExprDecorator.h \
     decorator/FuncDecorator.h \
+    decorator/VarDecorator.h \
     generator/ExprGenerator.h \
     generator/FuncGenerator.h \
     generator/Generator.h \
     generics/GenericRef.h \
     generics/GenericStack.h \
+    infos/FuncInfo.h \
     infos/ParseInfo.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \

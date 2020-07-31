@@ -38,6 +38,12 @@ void Generator::visit(FuncNode &node)
         os << "func \"" << sym->funcname() << "\":" << Type::assertSize(node.location(), type->returnType) << "\n";
         os << "{\n";
 
+        for(auto &a: node.args)
+        {
+            auto sym = a->assertProperty("sym").to<Sym*>();
+            os << "    arg \"" << sym->fullname() << "\":" << Type::assertSize(a->location(), sym->assertProperty("type").to<Type*>()) << ";\n";
+        }
+
         Visitor::visit<FuncGenerator>(node.body.get(), c, os);
 
         os << "}\n";

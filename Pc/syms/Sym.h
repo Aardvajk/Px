@@ -17,6 +17,8 @@ public:
         Namespace,
         Func,
         Class,
+        Scope,
+        Var,
         Invalid
     };
 
@@ -26,6 +28,7 @@ public:
     Sym *add(Sym *sym);
 
     Sym *child(const std::string &name);
+    Sym *container();
 
     void setProperty(const std::string &name, pcx::any value);
 

@@ -113,6 +113,15 @@ void AstPrinter::visit(CallNode &node)
 
     auto g = pcx::scoped_counter(tc);
     node.target->accept(*this);
+
+    if(!node.args.empty())
+    {
+        auto g = pcx::scoped_counter(tc);
+        for(auto &a: node.args)
+        {
+            a->accept(*this);
+        }
+    }
 }
 
 void AstPrinter::visit(CharLiteralNode &node)
