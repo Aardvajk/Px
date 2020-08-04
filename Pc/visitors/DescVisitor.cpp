@@ -23,6 +23,11 @@ void DescVisitor::visit(IdNode &node)
     }
 
     r += node.name;
+
+    if(!node.generics.empty())
+    {
+        r += "<" + pcx::join_str(node.generics, ", ") + ">";
+    }
 }
 
 void DescVisitor::visit(GenericTagNode &node)

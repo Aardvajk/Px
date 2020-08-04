@@ -11,7 +11,20 @@
 namespace
 {
 
-std::string describeType(const Type *t)
+std::string describeType(const Type *t, const std::vector<Type*> &generics);
+
+class Functor
+{
+public:
+    Functor(const std::vector<Type*> &v) : v(v) { }
+
+    std::string operator()(const Type *t) const { return describeType(t, v); }
+
+private:
+    const std::vector<Type*> &v;
+};
+
+std::string describeType(const Type *t, const std::vector<Type*> &generics)
 {
     std::ostringstream os;
 
@@ -21,11 +34,18 @@ std::string describeType(const Type *t)
     }
     else if(t->returnType)
     {
-        os << "(" << pcx::join_str(t->args, ",", [](const Type *t){ return t->description(); }) << "):" << t->returnType->description();
+        os << "(" << pcx::join_str(t->args, ",", Functor(generics)) << "):" << t->returnType->convertedDescription(generics);
     }
     else if(t->gref)
     {
-        os << "<" << t->gref->index << ">";
+        if(t->gref->index < generics.size())
+        {
+            os << describeType(generics[t->gref->index], { });
+        }
+        else
+        {
+            os << "<" << t->gref->index << ">";
+        }
     }
 
     return os.str();
@@ -82,7 +102,12 @@ Type::Type() : sym(nullptr), returnType(nullptr)
 
 std::string Type::description() const
 {
-    return describeType(this);
+    return describeType(this, { });
+}
+
+std::string Type::convertedDescription(const std::vector<Type*> &types) const
+{
+    return describeType(this, types);
 }
 
 pcx::optional<std::size_t> Type::size() const

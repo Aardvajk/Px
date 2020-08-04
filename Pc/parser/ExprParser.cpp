@@ -6,12 +6,25 @@
 
 #include "nodes/Nodes.h"
 
+#include "parser/TypeParser.h"
+
 #include <pcx/lexical_cast.h>
 
 namespace
 {
 
 NodePtr expression(Context &c, bool get);
+
+void generics(Context &c, NodeList &container, bool get)
+{
+    auto type = TypeParser::build(c, get);
+    container.push_back(type);
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        generics(c, container, true);
+    }
+}
 
 NodePtr id(Context &c, NodePtr parent, bool get)
 {
@@ -20,7 +33,13 @@ NodePtr id(Context &c, NodePtr parent, bool get)
     auto node = new IdNode(tok.location(), parent, tok.text());
     NodePtr n(node);
 
-    c.scanner.next(true);
+    tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Lt)
+    {
+        generics(c, node->generics, true);
+        c.scanner.consume(Token::Type::Gt, false);
+    }
+
     return n;
 }
 

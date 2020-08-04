@@ -40,6 +40,7 @@ public:
 
 protected:
     static NodePtr safeClone(const NodePtr &n);
+    static NodeList safeClone(const NodeList &n);
 
 private:
     Location n;

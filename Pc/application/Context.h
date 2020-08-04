@@ -9,6 +9,7 @@
 #include "types/TypeCache.h"
 
 #include "generics/GenericStack.h"
+#include "generics/GenericRequestSet.h"
 
 #include "infos/ParseInfo.h"
 #include "infos/FuncInfo.h"
@@ -30,7 +31,9 @@ public:
 
     SymTree tree;
     TypeCache types;
+
     GenericStack generics;
+    GenericRequestSet genericRequests;
 
     ParseInfo parseInfo;
     pcx::ptr_vector<FuncInfo> funcInfos;

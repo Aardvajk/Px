@@ -8,6 +8,8 @@
 
 #include "syms/SymFinder.h"
 
+#include "types/TypeBuilder.h"
+
 ExprDecorator::ExprDecorator(Context &c) : c(c)
 {
 }
@@ -28,7 +30,22 @@ void ExprDecorator::visit(IdNode &node)
         throw Error(node.location(), "symbol not found - ", node.description());
     }
 
-    node.setProperty("sym", sv.front());
+    auto sym = sv.front();
+
+    node.setProperty("sym", sym);
+
+    if(!node.generics.empty())
+    {
+        std::vector<Type*> types;
+        for(auto &g: node.generics)
+        {
+            types.push_back(TypeBuilder::build(c, g.get()));
+        }
+
+        node.setProperty("generics", types);
+
+        c.genericRequests.insert(GenericRequest(sym, types));
+    }
 }
 
 void ExprDecorator::visit(CallNode &node)

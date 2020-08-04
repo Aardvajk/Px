@@ -18,6 +18,8 @@ public:
     Type();
 
     std::string description() const;
+    std::string convertedDescription(const std::vector<Type*> &types) const;
+
     pcx::optional<std::size_t> size() const;
 
     static Type primary(Sym *sym);

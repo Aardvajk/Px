@@ -13,6 +13,8 @@
 
 #include "visitors/AstPrinter.h"
 
+#include <pcx/join_str.h>
+
 #include <iostream>
 #include <fstream>
 
@@ -44,6 +46,12 @@ int main(int argc, char *argv[])
 
         std::cout << banner("tree");
         SymPrinter::print(c, c.tree.root(), std::cout);
+
+        std::cout << banner("requests");
+        for(auto &g: c.genericRequests)
+        {
+            std::cout << g.sym->fullname() << "<" << pcx::join_str(g.types, ",", [](const Type *t){ return t->description(); }) << ">\n";
+        }
 
         std::cout << banner("output");
         Visitor::visit<Generator>(n.get(), c, std::cout);

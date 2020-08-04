@@ -48,7 +48,14 @@ void AstPrinter::visit(BlockNode &node)
 
 void AstPrinter::visit(IdNode &node)
 {
-    tab() << "id " << node.name << info(&node) << "\n";
+    tab() << "id " << node.name;
+
+    if(!node.generics.empty())
+    {
+        os << "<" << pcx::join_str(node.generics, ", ") << ">";
+    }
+
+    os << info(&node) << "\n";
 
     if(node.parent)
     {

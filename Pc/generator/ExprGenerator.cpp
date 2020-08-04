@@ -8,6 +8,8 @@
 
 #include "syms/Sym.h"
 
+#include "generics/Generics.h"
+
 #include "types/Type.h"
 #include "types/TypeQuery.h"
 
@@ -21,15 +23,31 @@ void ExprGenerator::visit(IdNode &node)
 
     if(sym->type() == Sym::Type::Func)
     {
-        os << "    push &\"" << sym->funcname() << "\";\n";
+        if(auto p = node.property("generics"))
+        {
+            os << "    push &\"" << Generics::funcname(sym, p.to<std::vector<Type*> >()) << "\";\n";
+        }
+        else
+        {
+            os << "    push &\"" << sym->funcname() << "\";\n";
+        }
+
         r = sizeof(std::size_t);
     }
 }
 
 void ExprGenerator::visit(CallNode &node)
 {
-    auto type = TypeQuery::assert(c, node.target.get());
-    auto size = Type::assertSize(node.location(), type->returnType);
+    auto type = TypeQuery::assertCallable(c, node.target.get())->returnType;
+    if(type->gref)
+    {
+        if(auto p = node.target->property("generics"))
+        {
+            type = p.to<std::vector<Type*> >()[type->gref->index];
+        }
+    }
+
+    auto size = Type::assertSize(node.location(), type);
 
     os << "    allocs " << size << ";\n";
 

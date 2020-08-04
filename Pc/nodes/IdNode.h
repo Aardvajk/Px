@@ -14,6 +14,7 @@ public:
 
     NodePtr parent;
     std::string name;
+    NodeList generics;
 };
 
 #endif // IDNODE_H

@@ -30,7 +30,9 @@ SOURCES += \
         generator/FuncGenerator.cpp \
         generator/Generator.cpp \
         generator/LocalsGenerator.cpp \
+        generics/GenericRequestSet.cpp \
         generics/GenericStack.cpp \
+        generics/Generics.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
@@ -78,7 +80,10 @@ HEADERS += \
     generator/Generator.h \
     generator/LocalsGenerator.h \
     generics/GenericRef.h \
+    generics/GenericRequest.h \
+    generics/GenericRequestSet.h \
     generics/GenericStack.h \
+    generics/Generics.h \
     infos/FuncInfo.h \
     infos/ParseInfo.h \
     nodes/BlockNode.h \

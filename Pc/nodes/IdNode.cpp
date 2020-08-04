@@ -14,5 +14,10 @@ std::string IdNode::classname() const
 
 NodePtr IdNode::cloneDetail() const
 {
-    return new IdNode(location(), safeClone(parent), name);
+    auto id = new IdNode(location(), safeClone(parent), name);
+    NodePtr n(id);
+
+    id->generics = safeClone(generics);
+
+    return n;
 }
