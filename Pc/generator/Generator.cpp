@@ -31,7 +31,7 @@ void Generator::visit(NamespaceNode &node)
 
 void Generator::visit(FuncNode &node)
 {
-    if(node.body)
+    if(node.body && node.genericTags.empty())
     {
         auto sym = node.property("sym").to<Sym*>();
         auto type = sym->property("type").to<Type*>();

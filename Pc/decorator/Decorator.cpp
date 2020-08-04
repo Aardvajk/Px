@@ -123,7 +123,7 @@ void Decorator::visit(FuncNode &node)
 
     node.setProperty("sym", sym);
 
-    if(node.body)
+    if(node.body && generics.empty())
     {
         c.funcInfos.push_back(new FuncInfo());
         sym->setProperty("info", c.funcInfos.back_ptr());
