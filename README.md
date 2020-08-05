@@ -19,9 +19,14 @@ func print(:std.char):std.null;
 
 }
 
+func<T> woo(a:T):T
+{
+    return a;
+}
+
 func<T> foo(a:T):std.null
 {
-    std.print(a);
+    std.print(woo<T>(a));
 }
 
 func<T> bar(a:T):T
@@ -34,4 +39,5 @@ func main():std.null
     foo<std.int>(bar<std.int>(123));
     foo<std.char>(bar<std.char>('S'));
 }
+
 ```

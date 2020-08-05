@@ -6,7 +6,7 @@
 #include "components/Stack.h"
 #include "components/Vars.h"
 
-Machine::Machine(const std::vector<char> &v, ServiceProc sp) : mm(1024), sp(sp)
+Machine::Machine(const std::vector<char> &v, ServiceProc sp) : mm(1024 * 10), sp(sp)
 {
     std::memcpy(mm(0), v.data(), v.size());
 
