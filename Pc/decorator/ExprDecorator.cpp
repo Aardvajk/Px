@@ -39,7 +39,8 @@ void ExprDecorator::visit(IdNode &node)
         std::vector<Type*> types;
         for(auto &g: node.generics)
         {
-            types.push_back(TypeBuilder::build(c, g.get()));
+            auto type = c.generics.updateType(TypeBuilder::build(c, g.get()));
+            types.push_back(type);
         }
 
         node.setProperty("generics", types);

@@ -59,8 +59,10 @@ int main(int argc, char *argv[])
             }
 
             Generics::fulfil(c, os);
-std::cout << banner("tree");
-SymPrinter::print(c, c.tree.root(), std::cout);
+
+            std::cout << banner("tree after fulfil");
+            SymPrinter::print(c, c.tree.root(), std::cout);
+
             Visitor::visit<Generator>(n.get(), c, os);
         }
 

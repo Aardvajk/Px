@@ -99,3 +99,13 @@ void DescVisitor::visit(IntLiteralNode &node)
 {
     r += pcx::lexical_cast<std::string>(node.value);
 }
+
+void DescVisitor::visit(ReturnNode &node)
+{
+    r += "return";
+
+    if(node.expr)
+    {
+        r += " " + node.expr->description();
+    }
+}

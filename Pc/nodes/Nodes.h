@@ -12,5 +12,6 @@
 #include "nodes/ExprNode.h"
 #include "nodes/CallNode.h"
 #include "nodes/LiteralNodes.h"
+#include "nodes/ReturnNode.h"
 
 #endif // NODES_H

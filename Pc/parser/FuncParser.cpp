@@ -33,6 +33,21 @@ void buildVar(Context &c, BlockNode *block, bool get)
     }
 }
 
+void buildReturn(Context &c, BlockNode *block, bool get)
+{
+    auto tok = c.scanner.next(get);
+
+    auto node = new ReturnNode(tok.location());
+    block->push_back(node);
+
+    if(tok.type() != Token::Type::Semicolon)
+    {
+        node->expr = ExprParser::build(c, false);
+    }
+
+    c.scanner.consume(Token::Type::Semicolon, false);
+}
+
 void buildExpr(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.next(get);
@@ -59,6 +74,7 @@ void FuncParser::build(Context &c, BlockNode *block, bool get)
     switch(tok.type())
     {
         case Token::Type::RwVar: buildVar(c, block, true); break;
+        case Token::Type::RwReturn: buildReturn(c, block, true); break;
 
         default: buildExpr(c, block, false);
     }

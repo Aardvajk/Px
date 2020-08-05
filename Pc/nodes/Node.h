@@ -29,7 +29,6 @@ public:
     void setProperty(const std::string &name, pcx::any value);
 
     virtual void accept(Visitor &v) = 0;
-    virtual std::string classname() const = 0;
     virtual NodePtr cloneDetail() const = 0;
 
     std::string description() const;

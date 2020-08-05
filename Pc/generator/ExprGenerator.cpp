@@ -34,6 +34,11 @@ void ExprGenerator::visit(IdNode &node)
 
         r = sizeof(std::size_t);
     }
+    else
+    {
+        os << "    push \"" << sym->fullname() << "\";\n";
+        r = Type::assertSize(node.location(), sym->assertProperty("type").to<Type*>());
+    }
 }
 
 void ExprGenerator::visit(CallNode &node)

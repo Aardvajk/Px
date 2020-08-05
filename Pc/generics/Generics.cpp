@@ -10,31 +10,34 @@
 
 #include "types/Type.h"
 
-#include "visitors/AstPrinter.h"
+#include "visitors/NameVisitors.h"
 
+#include "decorator/VarDecorator.h"
 #include "decorator/FuncDecorator.h"
 
 #include "generator/Generator.h"
 
 #include <pcx/str.h>
 #include <pcx/join_str.h>
+#include <pcx/indexed_range.h>
+#include <pcx/scoped_push.h>
 
 namespace
 {
 
-Type *updateType(Type *type, const std::vector<Type*> &generics)
-{
-    if(type->gref)
-    {
-        type = generics[type->gref->index];
-    }
-
-    return type;
-}
-
 void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
 {
-    auto clone = request.sym->assertProperty("funcnode").to<FuncNode*>()->clone();
+    auto original = request.sym->assertProperty("funcnode").to<FuncNode*>();
+
+    GenericParamList generics;
+    for(auto n: pcx::indexed_range(original->genericTags))
+    {
+        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericTagName, std::string>(n.value.get()), request.types[n.index]));
+    }
+
+    auto gp = pcx::scoped_push(c.generics, generics);
+
+    auto clone = original->clone();
     auto node = static_cast<FuncNode*>(clone.get());
 
     auto sym = c.tree.current()->add(new Sym(Sym::Type::Func, node->location(), pcx::str(request.sym->fullname(), "<", pcx::join_str(request.types, ",", [](const Type *t){ return t->description(); }), ">")));
@@ -43,10 +46,10 @@ void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
 
     for(auto &a: type.args)
     {
-        a = updateType(a, request.types);
+        a = c.generics.updateType(a);
     }
 
-    type.returnType = updateType(type.returnType, request.types);
+    type.returnType = c.generics.updateType(type.returnType);
 
     sym->setProperty("type", c.types.insert(type));
     sym->setProperty("funcnode", node);
@@ -58,6 +61,11 @@ void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
     sym->setProperty("info", c.funcInfos.back_ptr());
 
     auto g = c.tree.open(sym);
+
+    for(auto &a: node->args)
+    {
+        Visitor::visit<VarDecorator>(a.get(), c);
+    }
 
     Visitor::visit<FuncDecorator>(node->body.get(), c);
 

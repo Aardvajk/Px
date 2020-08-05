@@ -9,7 +9,6 @@ public:
     CallNode(Location location, NodePtr target) : Node(location), target(target) { }
 
     virtual void accept(Visitor &v) override;
-    virtual std::string classname() const override;
     virtual NodePtr cloneDetail() const override;
 
     NodePtr target;

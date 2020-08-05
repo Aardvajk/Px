@@ -7,11 +7,6 @@ void BlockNode::accept(Visitor &v)
     v.visit(*this);
 }
 
-std::string BlockNode::classname() const
-{
-    return "block";
-}
-
 NodePtr BlockNode::cloneDetail() const
 {
     auto block = new BlockNode(location());

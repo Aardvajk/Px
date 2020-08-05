@@ -9,8 +9,18 @@
 #include <string>
 
 class Node;
+class Type;
 
-using GenericParamList = std::vector<std::string>;
+class GenericParam
+{
+public:
+    GenericParam(std::string name, Type *type) : name(std::move(name)), type(type) { }
+
+    std::string name;
+    Type *type;
+};
+
+using GenericParamList = std::vector<GenericParam>;
 
 class GenericStack
 {
@@ -23,6 +33,8 @@ public:
     void pop_back(){ v.pop_back(); }
 
     pcx::optional<GenericRef> typeRef(Node *name) const;
+
+    Type *updateType(Type *type) const;
 
 private:
     std::vector<GenericParamList> v;

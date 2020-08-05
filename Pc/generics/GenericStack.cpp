@@ -18,7 +18,7 @@ pcx::optional<GenericRef> GenericStack::typeRef(Node *name) const
         {
             for(auto g: pcx::indexed_range(gs))
             {
-                if(g.value == n)
+                if(g.value.name == n)
                 {
                     return GenericRef(g.index);
                 }
@@ -27,4 +27,17 @@ pcx::optional<GenericRef> GenericStack::typeRef(Node *name) const
     }
 
     return { };
+}
+
+Type *GenericStack::updateType(Type *type) const
+{
+    if(type->gref)
+    {
+        if(auto t = v.back()[type->gref->index].type)
+        {
+            return t;
+        }
+    }
+
+    return type;
 }

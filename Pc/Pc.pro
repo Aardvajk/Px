@@ -43,6 +43,7 @@ SOURCES += \
         nodes/LiteralNodes.cpp \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
+        nodes/ReturnNode.cpp \
         nodes/ScopeNode.cpp \
         nodes/TypeNode.cpp \
         nodes/VarNode.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     nodes/NamespaceNode.h \
     nodes/Node.h \
     nodes/Nodes.h \
+    nodes/ReturnNode.h \
     nodes/ScopeNode.h \
     nodes/TypeNode.h \
     nodes/VarNode.h \

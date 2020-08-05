@@ -31,6 +31,7 @@ static const std::vector<Reserved> pcReserved =
     { "namespace", Token::Type::RwNamespace },
     { "func", Token::Type::RwFunc },
     { "var", Token::Type::RwVar },
+    { "return", Token::Type::RwReturn }
 };
 
 Source::Char skip(Source &source)

@@ -96,7 +96,7 @@ void Decorator::visit(FuncNode &node)
     GenericParamList generics;
     for(auto &n: node.genericTags)
     {
-        generics.push_back(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()));
+        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()), nullptr));
     }
 
     auto gp = pcx::scoped_push(c.generics, generics);

@@ -27,5 +27,7 @@ void VarDecorator::visit(VarNode &node)
         node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
     }
 
-    sym->setProperty("type", TypeQuery::assert(c, node.type.get()));
+    node.type->setProperty("type", c.generics.updateType(node.type->property("type").to<Type*>()));
+
+    sym->setProperty("type", node.type->assertProperty("type").to<Type*>());
 }
