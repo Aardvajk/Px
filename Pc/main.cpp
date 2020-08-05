@@ -42,6 +42,9 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
+        std::cout << banner("ast");
+        Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+
         Visitor::visit<Decorator>(n.get(), c);
 
         std::cout << banner("ast");
@@ -76,6 +79,13 @@ int main(int argc, char *argv[])
             {
                 std::cout << s << "\n";
             }
+        }
+
+        if(c.args.contains("execute"))
+        {
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/Pi source.pi source.po").c_str())) return -1;
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/Pl -entrypoint=\"main():std.null\" out.px source.po stdlib.po").c_str())) return -1;
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/Pv out.px").c_str())) return -1;
         }
 
         std::cout << banner();

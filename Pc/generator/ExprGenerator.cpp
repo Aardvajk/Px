@@ -70,16 +70,12 @@ void ExprGenerator::visit(CallNode &node)
 void ExprGenerator::visit(CharLiteralNode &node)
 {
     os << "    push char(" << int(node.value) << ");\n";
-    os << "    service 2;\n";
-
     r = sizeof(char);
 }
 
 void ExprGenerator::visit(IntLiteralNode &node)
 {
     os << "    push int(" << node.value << ");\n";
-    os << "    service 1;\n";
-
     r = sizeof(int);
 }
 

@@ -31,7 +31,7 @@ pcx::optional<GenericRef> GenericStack::typeRef(Node *name) const
 
 Type *GenericStack::updateType(Type *type) const
 {
-    if(type->gref)
+    if(type->gref && !v.empty() && type->gref->index < v.back().size())
     {
         if(auto t = v.back()[type->gref->index].type)
         {

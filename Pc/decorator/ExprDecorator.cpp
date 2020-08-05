@@ -9,11 +9,44 @@
 #include "syms/SymFinder.h"
 
 #include "types/TypeBuilder.h"
+#include "types/TypeQuery.h"
 
-ExprDecorator::ExprDecorator(Context &c) : c(c)
+namespace
 {
+
+bool compatible(const Type *expected, const Type *candidate)
+{
+    if(candidate->gref)
+    {
+        return true;
+    }
+
+    return Type::exact(expected, candidate);
 }
 
+bool compatible(const std::vector<Type*> &expected, const std::vector<Type*> &candidate)
+{
+    if(expected.size() != candidate.size())
+    {
+        return false;
+    }
+
+    for(std::size_t i = 0; i < expected.size(); ++i)
+    {
+        if(!compatible(expected[i], candidate[i]))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+}
+
+ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
+{
+}
 
 void ExprDecorator::visit(IdNode &node)
 {
@@ -25,9 +58,28 @@ void ExprDecorator::visit(IdNode &node)
     std::vector<Sym*> sv;
     SymFinder::find(c, SymFinder::Type::Global, c.tree.current(), &node, sv);
 
+    if(expected && expected->function())
+    {
+        std::vector<Sym*> v;
+        for(auto s: sv)
+        {
+            if(compatible(expected->args, s->assertProperty("type").to<Type*>()->args))
+            {
+                v.push_back(s);
+            }
+        }
+
+        sv = v;
+    }
+
     if(sv.empty())
     {
         throw Error(node.location(), "symbol not found - ", node.description());
+    }
+
+    if(sv.size() > 1)
+    {
+        throw Error(node.location(), "ambiguous - ", node.description());
     }
 
     auto sym = sv.front();
@@ -51,17 +103,21 @@ void ExprDecorator::visit(IdNode &node)
 
 void ExprDecorator::visit(CallNode &node)
 {
-    node.target->accept(*this);
-
+    std::vector<Type*> args;
     for(auto &a: node.args)
     {
         a = decorate(c, a);
+        args.push_back(c.generics.updateType(TypeQuery::assert(c, a.get())));
     }
+
+    auto type = c.types.insert(Type::function(c.types.nullType(), args));
+
+    node.target = ExprDecorator::decorate(c, node.target, type);
 }
 
-NodePtr ExprDecorator::decorate(Context &c, NodePtr node)
+NodePtr ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
 {
-    ExprDecorator ed(c);
+    ExprDecorator ed(c, expected);
     node->accept(ed);
 
     return ed.result() ? ed.result() : node;
