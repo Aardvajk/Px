@@ -18,6 +18,8 @@ public:
     iterator begin(){ return v.begin(); }
     iterator end(){ return v.end(); }
 
+    bool empty() const { return v.empty(); }
+
 private:
     std::vector<GenericRequest> v;
 };

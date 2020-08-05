@@ -119,6 +119,7 @@ void Decorator::visit(FuncNode &node)
         sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
 
         sym->setProperty("type", type);
+        sym->setProperty("funcnode", &node);
     }
 
     node.setProperty("sym", sym);

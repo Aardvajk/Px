@@ -17,7 +17,10 @@ NodePtr FuncNode::cloneDetail() const
     auto func = new FuncNode(location(), safeClone(name));
     NodePtr n(func);
 
+    func->genericTags = safeClone(genericTags);
+    func->args = safeClone(args);
     func->type = safeClone(type);
+    func->body = safeClone(body);
 
     return n;
 }

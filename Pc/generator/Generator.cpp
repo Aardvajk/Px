@@ -11,6 +11,8 @@
 #include "generator/LocalsGenerator.h"
 #include "generator/FuncGenerator.h"
 
+bool temp = false;
+
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
 }
@@ -31,7 +33,7 @@ void Generator::visit(NamespaceNode &node)
 
 void Generator::visit(FuncNode &node)
 {
-    if(node.body && node.genericTags.empty())
+    if(node.body && (node.genericTags.empty() || temp))
     {
         auto sym = node.property("sym").to<Sym*>();
         auto type = sym->property("type").to<Type*>();

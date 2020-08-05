@@ -13,7 +13,10 @@
 
 #include "visitors/AstPrinter.h"
 
+#include "generics/Generics.h"
+
 #include <pcx/join_str.h>
+#include <pcx/textfile.h>
 
 #include <iostream>
 #include <fstream>
@@ -47,15 +50,6 @@ int main(int argc, char *argv[])
         std::cout << banner("tree");
         SymPrinter::print(c, c.tree.root(), std::cout);
 
-        std::cout << banner("requests");
-        for(auto &g: c.genericRequests)
-        {
-            std::cout << g.sym->fullname() << "<" << pcx::join_str(g.types, ",", [](const Type *t){ return t->description(); }) << ">\n";
-        }
-
-        std::cout << banner("output");
-        Visitor::visit<Generator>(n.get(), c, std::cout);
-
         if(true)
         {
             std::ofstream os(files[1]);
@@ -64,7 +58,22 @@ int main(int argc, char *argv[])
                 throw Error("unable to create - ", files[1]);
             }
 
+            Generics::fulfil(c, os);
+std::cout << banner("tree");
+SymPrinter::print(c, c.tree.root(), std::cout);
             Visitor::visit<Generator>(n.get(), c, os);
+        }
+
+        if(true)
+        {
+            std::vector<std::string> t;
+            pcx::textfile::read(files[1], t);
+
+            std::cout << banner("output");
+            for(auto &s: t)
+            {
+                std::cout << s << "\n";
+            }
         }
 
         std::cout << banner();

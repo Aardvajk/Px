@@ -7,6 +7,8 @@
 
 class Context;
 
+extern bool temp;
+
 class Generator : public Visitor
 {
 public:

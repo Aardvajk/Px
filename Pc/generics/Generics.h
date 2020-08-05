@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
+class Context;
 class Sym;
 class Type;
 
@@ -11,6 +13,8 @@ namespace Generics
 {
 
 std::string funcname(const Sym *sym, const std::vector<Type*> &types);
+
+void fulfil(Context &c, std::ostream &os);
 
 }
 
