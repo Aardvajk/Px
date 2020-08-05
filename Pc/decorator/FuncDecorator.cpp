@@ -39,13 +39,13 @@ void FuncDecorator::visit(ScopeNode &node)
 
 void FuncDecorator::visit(ExprNode &node)
 {
-    node.expr = ExprDecorator::decorate(c, node.expr);
+    ExprDecorator::decorate(c, node.expr);
 }
 
 void FuncDecorator::visit(ReturnNode &node)
 {
     if(node.expr)
     {
-        node.expr = ExprDecorator::decorate(c, node.expr);
+        ExprDecorator::decorate(c, node.expr);
     }
 }

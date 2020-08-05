@@ -52,7 +52,7 @@ void ExprDecorator::visit(IdNode &node)
 {
     if(node.parent)
     {
-        node.parent = decorate(c, node.parent);
+        decorate(c, node.parent);
     }
 
     std::vector<Sym*> sv;
@@ -106,19 +106,17 @@ void ExprDecorator::visit(CallNode &node)
     std::vector<Type*> args;
     for(auto &a: node.args)
     {
-        a = decorate(c, a);
+        decorate(c, a);
         args.push_back(c.generics.updateType(TypeQuery::assert(c, a.get())));
     }
 
     auto type = c.types.insert(Type::function(c.types.nullType(), args));
 
-    node.target = ExprDecorator::decorate(c, node.target, type);
+    ExprDecorator::decorate(c, node.target, type);
 }
 
-NodePtr ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
+void ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
 {
     ExprDecorator ed(c, expected);
     node->accept(ed);
-
-    return ed.result() ? ed.result() : node;
 }
