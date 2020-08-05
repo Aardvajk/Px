@@ -11,7 +11,6 @@
 #include "generics/GenericStack.h"
 #include "generics/GenericRequestSet.h"
 
-#include "infos/ParseInfo.h"
 #include "infos/FuncInfo.h"
 
 #include <pcx/args.h>
@@ -35,7 +34,6 @@ public:
     GenericStack generics;
     GenericRequestSet genericRequests;
 
-    ParseInfo parseInfo;
     pcx::ptr_vector<FuncInfo> funcInfos;
 };
 

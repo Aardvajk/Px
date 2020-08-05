@@ -86,7 +86,6 @@ HEADERS += \
     generics/GenericStack.h \
     generics/Generics.h \
     infos/FuncInfo.h \
-    infos/ParseInfo.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
     nodes/ExprNode.h \

@@ -18,15 +18,8 @@ void buildNamespace(Context &c, BlockNode *block, bool get)
 {
     auto name = CommonParser::name(c, get);
 
-    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
-    {
-        throw Error(name->location(), "namespace invalid - ", name->description());
-    }
-
     auto n = new NamespaceNode(name->location(), name);
     block->push_back(n);
-
-    auto cp = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Namespace);
 
     n->body = CommonParser::blockContents(c, c.scanner.token().location(), false);
 }
@@ -79,11 +72,6 @@ void buildFunction(Context &c, BlockNode *block, bool get)
 
     auto name = CommonParser::name(c, false);
 
-    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
-    {
-        throw Error(name->location(), "function invalid - ", name->description());
-    }
-
     auto n = new FuncNode(name->location(), name);
     block->push_back(n);
 
@@ -107,8 +95,6 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     {
         auto scope = new ScopeNode(tok.location());
         n->body = scope;
-
-        auto cp = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Func);
 
         scope->body = CommonParser::blockContents(c, tok.location(), false);
     }
