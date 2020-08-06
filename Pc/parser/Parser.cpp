@@ -6,6 +6,7 @@
 
 #include "nodes/BlockNode.h"
 
+#include "parser/DirectiveParser.h"
 #include "parser/DeclarationParser.h"
 #include "parser/FuncParser.h"
 
@@ -16,6 +17,8 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
+        case Token::Type::RwInclude: DirectiveParser::buildInclude(c, block, true); break;
+
         case Token::Type::RwNamespace:
         case Token::Type::RwFunc: DeclarationParser::build(c, block, false); break;
 

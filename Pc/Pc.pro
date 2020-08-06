@@ -49,6 +49,7 @@ SOURCES += \
         nodes/VarNode.cpp \
         parser/CommonParser.cpp \
         parser/DeclarationParser.cpp \
+        parser/DirectiveParser.cpp \
         parser/ExprParser.cpp \
         parser/FuncParser.cpp \
         parser/Parser.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     nodes/VarNode.h \
     parser/CommonParser.h \
     parser/DeclarationParser.h \
+    parser/DirectiveParser.h \
     parser/ExprParser.h \
     parser/FuncParser.h \
     parser/Parser.h \
