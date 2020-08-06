@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         auto ep = c.args["entrypoint"];
         if(ep.empty())
         {
-            throw Error("no entrypoint specified");
+            ep.push_back("main():std.null");
         }
 
         auto m = c.find(ep[0]);
