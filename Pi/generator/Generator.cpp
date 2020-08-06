@@ -24,7 +24,7 @@ void Generator::object(Context &c, const std::string &path)
 
     for(auto &g: c.globals)
     {
-        os << 'V' << g.id;
+        os << 'V' << static_cast<std::uint32_t>(g.flags) << g.id;
 
         os << std::size_t(0);
 
@@ -34,7 +34,7 @@ void Generator::object(Context &c, const std::string &path)
 
     for(auto &f: c.functions)
     {
-        os << 'F' << f.id;
+        os << 'F' << static_cast<std::uint32_t>(f.flags) <<  f.id;
 
         os << f.links.size();
         for(auto &n: f.links)

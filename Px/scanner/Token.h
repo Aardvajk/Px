@@ -14,7 +14,7 @@ public:
         Id, StringLiteral, IntLiteral, CharLiteral,
         Colon, Semicolon, Amp, Assign, Comma, Dot,
         Lt, Gt,
-        LeftBrace, RightBrace, LeftParen, RightParen,
+        LeftBrace, RightBrace, LeftParen, RightParen, LeftSub, RightSub,
         RwNamespace, RwFunc, RwVar, RwArg,
         RwInclude,
         RwReturn,

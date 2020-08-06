@@ -121,6 +121,13 @@ void Decorator::visit(FuncNode &node)
         sym->setProperty("type", type);
         sym->setProperty("funcnode", &node);
     }
+    else
+    {
+        if(node.body)
+        {
+            sym->setProperty("funcnode", &node);
+        }
+    }
 
     node.setProperty("sym", sym);
 

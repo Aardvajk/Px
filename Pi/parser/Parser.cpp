@@ -139,16 +139,46 @@ void codeConstruct(Context &c, Entity *block, bool get)
     }
 }
 
+void flagsConstruct(Context &c, Object::Entity::Flags &flags, bool get)
+{
+    auto tok = c.scanner.next(true);
+
+    if(tok.text() == "autogen")
+    {
+        flags |= Object::Entity::Flag::Autogen;
+    }
+    else
+    {
+        throw Error(tok.location(), "invalid flag - ", tok.text());
+    }
+
+    tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Comma)
+    {
+        flagsConstruct(c, flags, true);
+    }
+}
+
 Entity *headerConstruct(Context &c, Entity *block, Entity::Type type, bool get)
 {
-    auto name = c.scanner.match(Token::Type::StringLiteral, get);
+    Object::Entity::Flags flags;
+
+    auto tok = c.scanner.next(get);
+    if(tok.type() == Token::Type::LeftSub)
+    {
+        flagsConstruct(c, flags, true);
+        c.scanner.consume(Token::Type::RightSub, false);
+    }
+
+    auto name = c.scanner.match(Token::Type::StringLiteral, false);
 
     auto e = new Entity(type, name.location());
     block->entities.push_back(e);
 
     e->properties["name"] = name.text();
+    e->properties["flags"] = flags;
 
-    auto tok = c.scanner.next(true);
+    tok = c.scanner.next(true);
     if(tok.type() == Token::Type::Colon)
     {
         e->properties["size"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, true).text());

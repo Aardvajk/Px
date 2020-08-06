@@ -14,9 +14,10 @@ class Entity;
 class Function
 {
 public:
-    Function(Sym *sym, std::size_t id) : sym(sym), id(id), vars(0), args(0) { }
+    Function(Sym *sym, Object::Entity::Flags flags, std::size_t id) : sym(sym), flags(flags), id(id), vars(0), args(0) { }
 
     Sym *sym;
+    Object::Entity::Flags flags;
     std::size_t id;
 
     std::size_t vars;

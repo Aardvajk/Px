@@ -1,5 +1,6 @@
 #include "Generics.h"
 
+#include "framework/Error.h"
 #include "framework/Console.h"
 
 #include "application/Context.h"
@@ -29,6 +30,11 @@ void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
 {
     auto original = request.sym->assertProperty("funcnode").to<FuncNode*>();
 
+    if(!original->body)
+    {
+        throw Error(original->location(), "generic function missing body - ", Generics::funcname(request.sym, request.types));
+    }
+
     GenericParamList generics;
     for(auto n: pcx::indexed_range(original->genericTags))
     {
@@ -55,6 +61,7 @@ void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
     sym->setProperty("funcnode", node);
 
     node->setProperty("sym", sym);
+    node->setProperty("autogen", true);
     node->genericTags.clear();
 
     c.funcInfos.push_back(new FuncInfo());

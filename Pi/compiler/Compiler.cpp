@@ -24,7 +24,7 @@ void compileGlobal(Context &c, Entity &e)
         throw Error(e.location, "symbol already defined - ", n);
     }
 
-    auto g = new Global(c.syms.add(new Sym(Sym::Type::Global, n)), c.strings.insert(n));
+    auto g = new Global(c.syms.add(new Sym(Sym::Type::Global, n)), e.property("flags").value<Object::Entity::Flags>(), c.strings.insert(n));
     c.globals.push_back(g);
 
     auto size = e.properties["size"].to<std::size_t>();
@@ -308,7 +308,7 @@ void compileFunction(Context &c, Entity &e)
             throw Error(e.location, "symbol already defined - ", n);
         }
 
-        auto f = new Function(c.syms.add(new Sym(Sym::Type::Func, n)), c.strings.insert(n));
+        auto f = new Function(c.syms.add(new Sym(Sym::Type::Func, n)), e.property("flags").value<Object::Entity::Flags>(), c.strings.insert(n));
         c.functions.push_back(f);
 
         c.syms.push();

@@ -33,7 +33,7 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
 
     for(auto e: pcx::indexed_range(u.entities))
     {
-        os << banner(e.value.type, " ", u.strings[e.value.id]);
+        os << banner(e.value.type, " ", static_cast<std::uint32_t>(e.value.flags), " ", u.strings[e.value.id]);
 
         switch(e.value.type)
         {

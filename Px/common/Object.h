@@ -3,6 +3,7 @@
 
 #include <pcx/ptr_vector.h>
 #include <pcx/datastream.h>
+#include <pcx/flags.h>
 
 #include <string>
 #include <vector>
@@ -23,8 +24,18 @@ public:
 class Entity
 {
 public:
+    enum class Flag
+    {
+        Autogen = 1
+    };
+
+    using Flags = pcx::flags<Flag>;
+
     char type;
+    Flags flags;
+
     std::size_t id;
+
     std::size_t offset;
     std::vector<Link> links;
     std::vector<char> data;
@@ -43,5 +54,7 @@ public:
 void load(pcx::data_istream &is, Entity &e);
 
 }
+
+template<> struct pcx_is_flag_enum<Object::Entity::Flag> : std::true_type { };
 
 #endif // OBJECT_H
