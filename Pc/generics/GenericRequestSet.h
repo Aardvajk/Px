@@ -3,6 +3,10 @@
 
 #include "generics/GenericRequest.h"
 
+#include <vector>
+#include <string>
+#include <unordered_set>
+
 class GenericRequestSet
 {
 public:
@@ -22,6 +26,7 @@ public:
 
 private:
     std::vector<GenericRequest> v;
+    std::unordered_set<std::string> sc;
 };
 
 #endif // GENERICREQUESTSET_H
