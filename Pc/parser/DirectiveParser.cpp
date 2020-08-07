@@ -1,14 +1,48 @@
 #include "DirectiveParser.h"
 
+#include "framework/Error.h"
+
 #include "application/Context.h"
 
 #include "parser/Parser.h"
+
+#include <pcx/str.h>
+#include <pcx/filesys.h>
+
+namespace
+{
+
+std::string search(const std::vector<std::string> &search, const std::string &path)
+{
+    for(auto s: search)
+    {
+        auto p = pcx::str(s, '/', path);
+        if(pcx::filesys::exists(p))
+        {
+            return p;
+        }
+    }
+
+    return { };
+}
+
+}
 
 void DirectiveParser::buildInclude(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.match(Token::Type::StringLiteral, get);
 
     auto path = tok.text();
+
+    if(!pcx::filesys::exists(path))
+    {
+        path = search(c.args["I"], path);
+        if(path.empty())
+        {
+            throw Error(tok.location(), "unable to locate - \"", tok.text(), "\"");
+        }
+    }
+
     if(!c.sources.contains(path))
     {
         c.open(path);

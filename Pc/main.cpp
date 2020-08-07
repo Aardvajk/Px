@@ -42,16 +42,22 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
-        std::cout << banner("ast");
-        Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+        if(!c.args.contains("q"))
+        {
+            std::cout << banner("ast");
+            Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+        }
 
         Visitor::visit<Decorator>(n.get(), c);
 
-        std::cout << banner("ast");
-        Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+        if(!c.args.contains("q"))
+        {
+            std::cout << banner("ast");
+            Visitor::visit<AstPrinter>(n.get(), c, std::cout);
 
-        std::cout << banner("tree");
-        SymPrinter::print(c, c.tree.root(), std::cout);
+            std::cout << banner("tree");
+            SymPrinter::print(c, c.tree.root(), std::cout);
+        }
 
         if(true)
         {
@@ -63,13 +69,16 @@ int main(int argc, char *argv[])
 
             Generics::fulfil(c, os);
 
-            std::cout << banner("tree after fulfil");
-            SymPrinter::print(c, c.tree.root(), std::cout);
+            if(!c.args.contains("q"))
+            {
+                std::cout << banner("tree after fulfil");
+                SymPrinter::print(c, c.tree.root(), std::cout);
+            }
 
             Visitor::visit<Generator>(n.get(), c, os);
         }
 
-        if(true)
+        if(!c.args.contains("q"))
         {
             std::vector<std::string> t;
             pcx::textfile::read(files[1], t);
@@ -84,7 +93,7 @@ int main(int argc, char *argv[])
         if(c.args.contains("execute"))
         {
             if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/Pi source.pi source.po").c_str())) return -1;
-            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/Pl -entrypoint=\"main():std.null\" out.px source.po stdlib.po").c_str())) return -1;
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/Pl -entrypoint=\"main():std.null\" out.px source.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
             if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/Pv out.px").c_str())) return -1;
         }
 

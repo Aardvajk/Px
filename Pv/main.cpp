@@ -26,6 +26,26 @@ void serviceProc(int code, Memory &mm, Registers &rg)
     {
         std::cout << "char " << rm.get<char>() << "\n";
     }
+    else if(code == 100)
+    {
+        auto a = rm.get<int>();
+        auto b = rm.get<int>();
+
+        if(a != b)
+        {
+            throw Error("std.test.same(std.int,std.int) failed with ", a, " and ", b);
+        }
+    }
+    else if(code == 101)
+    {
+        auto a = rm.get<char>();
+        auto b = rm.get<char>();
+
+        if(a != b)
+        {
+            throw Error("std.test.same(std.char,std.char) failed with ", int(a), " and ", int(b));
+        }
+    }
     else
     {
         std::cout << "service " << code << "\n";

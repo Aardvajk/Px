@@ -15,6 +15,17 @@ void TypeQuery::visit(IdNode &node)
     if(auto sym = node.property("sym"))
     {
         r = sym.to<Sym*>()->assertProperty("type").to<Type*>();
+
+        if(auto p = node.property("generics"))
+        {
+            if(r->function() && r->returnType->gref)
+            {
+                auto t = *r;
+                t.returnType = p.to<std::vector<Type*> >()[t.returnType->gref->index];
+
+                r = c.types.insert(t);
+            }
+        }
     }
 }
 

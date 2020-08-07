@@ -1,0 +1,14 @@
+func "std.print(std.char):std.null":0
+{
+    arg "std.print.a":1;
+    push "std.print.a";
+    service 2;
+    pop 1;
+}
+func "std.print(std.int):std.null":0
+{
+    arg "std.print.a":4;
+    push "std.print.a";
+    service 1;
+    pop 4;
+}

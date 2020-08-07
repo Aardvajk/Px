@@ -125,4 +125,6 @@ HEADERS += \
     visitors/Visitor.h
 
 DISTFILES += \
-    ../workspace/source.pc
+    ../workspace/source.pc \
+    ../workspace/stdtest.ph \
+    ../workspace/stdtest.pi

@@ -74,12 +74,12 @@ void ExprDecorator::visit(IdNode &node)
 
     if(sv.empty())
     {
-        throw Error(node.location(), "symbol not found - ", node.description());
+        throw Error(node.location(), "symbol not found - ", node.description(), expected ? expected->description() : "");
     }
 
     if(sv.size() > 1)
     {
-        throw Error(node.location(), "ambiguous - ", node.description());
+        throw Error(node.location(), "ambiguous - ", node.description(), expected ? expected->description() : "");
     }
 
     auto sym = sv.front();

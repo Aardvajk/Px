@@ -93,10 +93,13 @@ void Generics::fulfil(Context &c, std::ostream &os)
         auto curr = c.genericRequests.current();
         c.genericRequests.clearPending();
 
-        std::cout << banner("requests");
-        for(auto &r: curr)
+        if(!c.args.contains("q"))
         {
-            std::cout << r.sym->fullname() << "<" << pcx::join_str(r.types, ",", [](const Type *t){ return t->description(); }) << ">\n";
+            std::cout << banner("requests");
+            for(auto &r: curr)
+            {
+                std::cout << r.sym->fullname() << "<" << pcx::join_str(r.types, ",", [](const Type *t){ return t->description(); }) << ">\n";
+            }
         }
 
         for(auto &r: curr)
