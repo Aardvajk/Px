@@ -1,0 +1,23 @@
+include "stdtest.ph";
+
+func<T> foo(a:T):T
+{
+    return a;
+}
+
+func<T> bar(a:T):T
+{
+    return foo<T>(a);
+}
+
+func<T> value():T;
+
+func main():std.null
+{
+    std.test.same(123, bar<std.int>(value<std.int>()));
+}
+
+func<T> value():T
+{
+    return 123;
+}
