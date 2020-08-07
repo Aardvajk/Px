@@ -28,5 +28,6 @@ SOURCES += \
         main.cpp
 
 DISTFILES += \
+    ../tests/generics.pc \
     ../workspace/other.pc \
     ../workspace/pb.bat
