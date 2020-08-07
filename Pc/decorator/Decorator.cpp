@@ -113,20 +113,25 @@ void Decorator::visit(FuncNode &node)
     auto type = c.types.insert(Type::function(TypeQuery::assert(c, node.type.get()), args));
 
     auto sym = searchFunction(c, node.name.get(), type);
-    if(!sym)
+    if(sym)
+    {
+        if(!Type::exact(sym->property("type").to<Type*>()->returnType, type->returnType))
+        {
+            throw Error(node.location(), "mismatched return type - ", node.description());
+        }
+
+        if(node.body)
+        {
+            sym->setProperty("funcnode", &node);
+        }
+    }
+    else
     {
         auto name = NameVisitors::assertSimple(c, node.name.get());
         sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
 
         sym->setProperty("type", type);
         sym->setProperty("funcnode", &node);
-    }
-    else
-    {
-        if(node.body)
-        {
-            sym->setProperty("funcnode", &node);
-        }
     }
 
     node.setProperty("sym", sym);
