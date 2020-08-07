@@ -6,7 +6,7 @@
 #include "components/Stack.h"
 #include "components/Vars.h"
 
-Machine::Machine(const std::vector<char> &v, ServiceProc sp) : mm(1024 * 10), sp(sp)
+Machine::Machine(pcx::args &args, const std::vector<char> &v, ServiceProc sp) : args(args), mm(1024 * 10), sp(sp)
 {
     std::memcpy(mm(0), v.data(), v.size());
 
@@ -63,5 +63,8 @@ void Machine::shutdown()
         throw Error("stack not empty at shutdown");
     }
 
-    std::cout << "shutdown ok\n";
+    if(!args.contains("q"))
+    {
+        std::cout << "shutdown ok\n";
+    }
 }

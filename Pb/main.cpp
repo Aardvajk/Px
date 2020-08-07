@@ -2,10 +2,26 @@
 #include "framework/Console.h"
 
 #include <pcx/args.h>
+#include <pcx/str.h>
 #include <pcx/textfile.h>
 
 #include <iostream>
 #include <cctype>
+
+namespace
+{
+
+int test(const std::string &name)
+{
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pc/release/pc -q -I+=\"../lib\" ../tests/", name, ".pc test.pi").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/pi test.pi test.po").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/pl -entrypoint=\"main():std.null\" test.px test.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/pv -q test.px").c_str())) return -1;
+
+    return 0;
+}
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -38,9 +54,22 @@ int main(int argc, char *argv[])
                 std::string exe;
                 is >> exe;
 
-                if(std::system(pcx::str("C:/Projects/Px/Px/build-", exe, "/release/", s).c_str()))
+                if(exe == "test")
                 {
-                    return -1;
+                    std::string name;
+                    is >> name;
+
+                    if(test(name))
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    if(std::system(pcx::str("C:/Projects/Px/Px/build-", exe, "/release/", s).c_str()))
+                    {
+                        return -1;
+                    }
                 }
             }
         }

@@ -72,12 +72,20 @@ int main(int argc, char *argv[])
             throw Error("unable to open - ", files[0]);
         }
 
-        Machine m({ std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>() }, serviceProc);
+        Machine m(args, { std::istreambuf_iterator<char>(is), std::istreambuf_iterator<char>() }, serviceProc);
 
-        std::cout << banner("executing");
+        if(!args.contains("q"))
+        {
+            std::cout << banner("executing");
+        }
+
         m.execute();
 
-        std::cout << banner("shutdown");
+        if(!args.contains("q"))
+        {
+            std::cout << banner("shutdown");
+        }
+
         m.shutdown();
     }
 

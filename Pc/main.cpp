@@ -97,7 +97,10 @@ int main(int argc, char *argv[])
             if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/Pv out.px").c_str())) return -1;
         }
 
-        std::cout << banner();
+        if(!c.args.contains("q"))
+        {
+            std::cout << banner();
+        }
     }
 
     catch(const Error &error)
