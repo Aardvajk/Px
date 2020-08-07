@@ -13,6 +13,26 @@
 #include "types/Type.h"
 #include "types/TypeQuery.h"
 
+#include <pcx/indexed_range.h>
+
+namespace
+{
+
+Type *updateType(Type *type, Node *target)
+{
+    if(type->gref)
+    {
+        if(auto p = target->property("generics"))
+        {
+            type = p.to<std::vector<Type*> >()[type->gref->index];
+        }
+    }
+
+    return type;
+}
+
+}
+
 ExprGenerator::ExprGenerator(Context &c, std::ostream &os) : c(c), os(os)
 {
 }
@@ -43,22 +63,23 @@ void ExprGenerator::visit(IdNode &node)
 
 void ExprGenerator::visit(CallNode &node)
 {
-    auto type = TypeQuery::assertCallable(c, node.target.get())->returnType;
-    if(type->gref)
-    {
-        if(auto p = node.target->property("generics"))
-        {
-            type = p.to<std::vector<Type*> >()[type->gref->index];
-        }
-    }
+    auto type = TypeQuery::assertCallable(c, node.target.get());
+    auto returnType = updateType(type->returnType, node.target.get());
 
-    auto size = Type::assertSize(node.location(), type);
+    auto size = Type::assertSize(node.location(), returnType);
 
     os << "    allocs " << size << ";\n";
 
-    for(auto &a: node.args)
+    for(auto a: pcx::indexed_range(node.args))
     {
-        generate(c, a.get(), os);
+        auto argType = updateType(type->args[a.index], node.target.get());
+
+        if(!Type::exact(TypeQuery::assert(c, a.value.get()), argType))
+        {
+            throw Error(a.value->location(), argType->description(), " expected - ", a.value->description());
+        }
+
+        generate(c, a.value.get(), os);
     }
 
     generate(c, node.target.get(), os);

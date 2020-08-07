@@ -32,6 +32,11 @@ void DirectiveParser::buildInclude(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.match(Token::Type::StringLiteral, get);
 
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    {
+        throw Error(tok.location(), "invalid include - ", tok.text());
+    }
+
     auto path = tok.text();
 
     if(!pcx::filesys::exists(path))

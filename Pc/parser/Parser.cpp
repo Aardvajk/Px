@@ -31,6 +31,8 @@ NodePtr Parser::build(Context &c)
     auto block = new BlockNode({ });
     NodePtr n(block);
 
+    auto cg = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Namespace);
+
     c.scanner.next(true);
     while(c.scanner.token().type() != Token::Type::Eof)
     {

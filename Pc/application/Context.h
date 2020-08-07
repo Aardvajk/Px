@@ -11,6 +11,7 @@
 #include "generics/GenericStack.h"
 #include "generics/GenericRequestSet.h"
 
+#include "infos/ParseInfo.h"
 #include "infos/FuncInfo.h"
 
 #include <pcx/args.h>
@@ -27,6 +28,8 @@ public:
 
     SourceList sources;
     Scanner scanner;
+
+    ParseInfo parseInfo;
 
     SymTree tree;
     TypeCache types;

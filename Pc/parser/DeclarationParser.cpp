@@ -18,8 +18,15 @@ void buildNamespace(Context &c, BlockNode *block, bool get)
 {
     auto name = CommonParser::name(c, get);
 
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    {
+        throw Error(name->location(), "invalid namespace - ", name->description());
+    }
+
     auto n = new NamespaceNode(name->location(), name);
     block->push_back(n);
+
+    auto cg = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Namespace);
 
     n->body = CommonParser::blockContents(c, c.scanner.token().location(), false);
 }
@@ -64,6 +71,12 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     NodeList generics;
 
     auto tok = c.scanner.next(get);
+
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    {
+        throw Error(tok.location(), "invalid function - ", tok.text());
+    }
+
     if(tok.type() == Token::Type::Lt)
     {
         buildGenericTags(c, generics, true);
@@ -95,6 +108,8 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     {
         auto scope = new ScopeNode(tok.location());
         n->body = scope;
+
+        auto cg = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Func);
 
         scope->body = CommonParser::blockContents(c, tok.location(), false);
     }
