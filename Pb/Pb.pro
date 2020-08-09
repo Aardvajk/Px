@@ -30,5 +30,6 @@ SOURCES += \
 DISTFILES += \
     ../tests/deduce_generics.pc \
     ../tests/generics.pc \
+    ../tests/overload_generic.pc \
     ../workspace/other.pc \
     ../workspace/pb.bat

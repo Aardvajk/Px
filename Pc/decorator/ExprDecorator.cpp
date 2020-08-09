@@ -21,9 +21,22 @@
 namespace
 {
 
-pcx::optional<std::size_t> locateArg(Type *type, std::size_t index)
+bool isCandidate(const IdNode &node, const Sym *candidate)
 {
-    for(auto a: pcx::indexed_range(type->args))
+    if(!node.generics.empty())
+    {
+        if(!candidate->property("generics"))
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+pcx::optional<std::size_t> locateGenericArg(const std::vector<Type*> &args, std::size_t index)
+{
+    for(auto a: pcx::indexed_range(args))
     {
         if(a.value->gref && a.value->gref->index == index)
         {
@@ -56,10 +69,13 @@ void ExprDecorator::visit(IdNode &node)
 
         for(auto s: sv)
         {
-            auto m = Match::create(expected, s->assertProperty("type").to<Type*>());
-            if(m.total() == expected->args.size())
+            if(isCandidate(node, s))
             {
-                map[m].push_back(s);
+                auto m = Match::create(expected, s->assertProperty("type").to<Type*>());
+                if(m.total() == expected->args.size())
+                {
+                    map[m].push_back(s);
+                }
             }
         }
 
@@ -85,6 +101,11 @@ void ExprDecorator::visit(IdNode &node)
 
     auto sym = sv.front();
 
+    if(!node.generics.empty() && sym->type() != Sym::Type::Func)
+    {
+        throw Error(node.location(), "invalid generics - ", node.description());
+    }
+
     node.setProperty("sym", sym);
 
     std::vector<Type*> deduced;
@@ -97,7 +118,7 @@ void ExprDecorator::visit(IdNode &node)
         {
             auto index = node.generics.size() + deduced.size();
 
-            auto found = locateArg(type, index);
+            auto found = locateGenericArg(type->args, index);
             if(!found)
             {
                 throw Error(node.location(), "cannot deduce generic - ", candidate[index].name);

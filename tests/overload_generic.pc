@@ -1,0 +1,18 @@
+include "stdtest.ph";
+
+func<T> foo(a:T):std.int
+{
+    return 123;
+}
+
+func foo(a:std.int):std.char
+{
+    return 'a';
+}
+
+func main():std.null
+{
+    std.test.same('a', foo(123));
+    std.test.same(123, foo('a'));
+    std.test.same(123, foo<std.int>(123));
+}
