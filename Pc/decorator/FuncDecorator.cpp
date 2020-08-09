@@ -65,4 +65,6 @@ void FuncDecorator::visit(ReturnNode &node)
     {
         throw Error(node.location(), expected->description(), " return expected - ", actual->description());
     }
+
+    c.tree.current()->setProperty("returned", true);
 }

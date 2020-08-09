@@ -162,5 +162,15 @@ void Decorator::visit(FuncNode &node)
         }
 
         Visitor::visit<FuncDecorator>(node.body.get(), c);
+        checkFunctionReturned(c, node);
+    }
+}
+
+void Decorator::checkFunctionReturned(Context &c, FuncNode &node)
+{
+    auto type = node.assertProperty("sym").to<Sym*>()->assertProperty("type").to<Type*>();
+    if(type->returnType != c.types.nullType() && !node.body->assertProperty("sym").to<Sym*>()->property("returned"))
+    {
+        throw Error(node.location(), "function missing return - ", node.description());
     }
 }

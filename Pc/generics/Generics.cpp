@@ -13,6 +13,7 @@
 
 #include "visitors/NameVisitors.h"
 
+#include "decorator/Decorator.h"
 #include "decorator/VarDecorator.h"
 #include "decorator/FuncDecorator.h"
 
@@ -75,6 +76,7 @@ void fulfilRequest(Context &c, const GenericRequest &request, std::ostream &os)
     }
 
     Visitor::visit<FuncDecorator>(node->body.get(), c);
+    Decorator::checkFunctionReturned(c, *node);
 
     Visitor::visit<Generator>(node, c, os);
 }

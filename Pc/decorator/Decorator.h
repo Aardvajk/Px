@@ -14,6 +14,8 @@ public:
     virtual void visit(NamespaceNode &node) override;
     virtual void visit(FuncNode &node) override;
 
+    static void checkFunctionReturned(Context &c, FuncNode &node);
+
 private:
     Context &c;
 };
