@@ -13,6 +13,8 @@ NodePtr TypeNode::cloneDetail() const
     NodePtr n(type);
 
     type->name = safeClone(name);
+    type->args = safeClone(args);
+    type->returnType = safeClone(returnType);
 
     return n;
 }

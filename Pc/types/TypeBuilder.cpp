@@ -16,7 +16,17 @@ TypeBuilder::TypeBuilder(Context &c) : c(c), r(nullptr)
 
 void TypeBuilder::visit(TypeNode &node)
 {
-    if(auto g = c.generics.typeRef(node.name.get()))
+    if(node.returnType)
+    {
+        auto t = Type::function(build(c, node.returnType.get()));
+        for(auto &a: node.args)
+        {
+            t.args.push_back(build(c, a.get()));
+        }
+
+        r = c.types.insert(t);
+    }
+    else if(auto g = c.generics.typeRef(node.name.get()))
     {
         r = c.types.insert(Type::generic(*g));
     }

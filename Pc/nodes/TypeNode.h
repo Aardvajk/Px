@@ -12,6 +12,8 @@ public:
     virtual NodePtr cloneDetail() const override;
 
     NodePtr name;
+    NodeList args;
+    NodePtr returnType;
 };
 
 #endif // TYPENODE_H

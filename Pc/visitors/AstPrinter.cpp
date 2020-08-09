@@ -94,7 +94,7 @@ void AstPrinter::visit(TypeNode &node)
 
 void AstPrinter::visit(VarNode &node)
 {
-    tab() << node.description() << "\n";
+    tab() << "var " << node.description() << "\n";
 }
 
 void AstPrinter::visit(ScopeNode &node)
