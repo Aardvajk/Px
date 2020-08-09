@@ -29,6 +29,7 @@ SOURCES += \
 
 DISTFILES += \
     ../tests/deduce_generics.pc \
+    ../tests/function_types.pc \
     ../tests/generics.pc \
     ../tests/overload_generic.pc \
     ../workspace/other.pc \

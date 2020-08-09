@@ -1,0 +1,16 @@
+include "stdtest.ph";
+
+func foo(a:(std.int):std.int):std.null
+{
+    std.test.same(123, a(123));
+}
+
+func bar(a:std.int):std.int
+{
+    return a;
+}
+
+func main():std.null
+{
+    foo(bar);
+}

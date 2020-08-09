@@ -39,13 +39,33 @@ static const std::vector<Reserved> pcReserved =
 
 Source::Char skip(Source &source)
 {
-    auto c = source.get();
-    while(std::isspace(c))
+    auto ch = source.get();
+    while(std::isspace(ch))
     {
-        c = source.get();
+        ch = source.get();
     }
 
-    return c;
+    if(ch == '/')
+    {
+        ch = source.get();
+        if(ch == '/')
+        {
+            ch = source.get();
+            while(ch && ch != '\n')
+            {
+                ch = source.get();
+            }
+
+            return skip(source);
+        }
+        else
+        {
+            source.unget(ch);
+            return '/';
+        }
+    }
+
+    return ch;
 }
 
 Token::Type reserved(const std::vector<Reserved> &words, const std::string &text)
