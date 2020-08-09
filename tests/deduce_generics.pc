@@ -1,0 +1,26 @@
+include "stdtest.ph";
+
+func<T> one(a:T):T
+{
+    return a;
+}
+
+func<A, B> two(a:A, b:B):B
+{
+    std.test.same(a, 123);
+    return b;
+}
+
+func<A, B> partial(b:B):A
+{
+    std.test.same('a', b);
+    return 123;
+}
+
+func main():std.null
+{
+    std.test.same(123, one(123));
+    std.test.same('a', two(123, 'a'));
+
+    std.test.same(123, partial<std.int>('a'));
+}

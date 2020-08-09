@@ -21,6 +21,7 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        components/Match.cpp \
         decorator/ArgDecorator.cpp \
         decorator/Decorator.cpp \
         decorator/ExprDecorator.cpp \
@@ -72,6 +73,7 @@ SOURCES += \
 
 HEADERS += \
     application/Context.h \
+    components/Match.h \
     decorator/ArgDecorator.h \
     decorator/Decorator.h \
     decorator/ExprDecorator.h \
@@ -86,8 +88,8 @@ HEADERS += \
     generics/GenericRequestSet.h \
     generics/GenericStack.h \
     generics/Generics.h \
-    infos/FuncInfo.h \
-    infos/ParseInfo.h \
+    components/FuncInfo.h \
+    components/ParseInfo.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
     nodes/ExprNode.h \

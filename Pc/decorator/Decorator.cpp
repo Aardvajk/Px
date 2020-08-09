@@ -120,6 +120,14 @@ void Decorator::visit(FuncNode &node)
             throw Error(node.location(), "mismatched return type - ", node.description());
         }
 
+        if(auto p = sym->property("generics"))
+        {
+            if(generics.size() != p.to<GenericParamList>().size())
+            {
+                throw Error(node.location(), "mismatched generics - ", node.description());
+            }
+        }
+
         if(node.body)
         {
             sym->setProperty("funcnode", &node);
@@ -132,6 +140,11 @@ void Decorator::visit(FuncNode &node)
 
         sym->setProperty("type", type);
         sym->setProperty("funcnode", &node);
+
+        if(!generics.empty())
+        {
+            sym->setProperty("generics", generics);
+        }
     }
 
     node.setProperty("sym", sym);

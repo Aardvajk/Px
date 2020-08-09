@@ -28,6 +28,7 @@ SOURCES += \
         main.cpp
 
 DISTFILES += \
+    ../tests/deduce_generics.pc \
     ../tests/generics.pc \
     ../workspace/other.pc \
     ../workspace/pb.bat

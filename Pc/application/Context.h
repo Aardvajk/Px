@@ -11,8 +11,8 @@
 #include "generics/GenericStack.h"
 #include "generics/GenericRequestSet.h"
 
-#include "infos/ParseInfo.h"
-#include "infos/FuncInfo.h"
+#include "components/ParseInfo.h"
+#include "components/FuncInfo.h"
 
 #include <pcx/args.h>
 #include <pcx/ptr_vector.h>

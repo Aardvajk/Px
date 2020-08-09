@@ -11,35 +11,27 @@
 #include "types/TypeBuilder.h"
 #include "types/TypeQuery.h"
 
+#include "components/Match.h"
+
+#include <pcx/indexed_range.h>
+#include <pcx/optional.h>
+
+#include <map>
+
 namespace
 {
 
-bool compatible(const Type *expected, const Type *candidate)
+pcx::optional<std::size_t> locateArg(Type *type, std::size_t index)
 {
-    if(candidate->gref)
+    for(auto a: pcx::indexed_range(type->args))
     {
-        return true;
-    }
-
-    return Type::exact(expected, candidate);
-}
-
-bool compatible(const std::vector<Type*> &expected, const std::vector<Type*> &candidate)
-{
-    if(expected.size() != candidate.size())
-    {
-        return false;
-    }
-
-    for(std::size_t i = 0; i < expected.size(); ++i)
-    {
-        if(!compatible(expected[i], candidate[i]))
+        if(a.value->gref && a.value->gref->index == index)
         {
-            return false;
+            return a.index;
         }
     }
 
-    return true;
+    return { };
 }
 
 }
@@ -60,16 +52,25 @@ void ExprDecorator::visit(IdNode &node)
 
     if(expected && expected->function())
     {
-        std::vector<Sym*> v;
+        std::map<Match, std::vector<Sym*> > map;
+
         for(auto s: sv)
         {
-            if(compatible(expected->args, s->assertProperty("type").to<Type*>()->args))
+            auto m = Match::create(expected, s->assertProperty("type").to<Type*>());
+            if(m.total() == expected->args.size())
             {
-                v.push_back(s);
+                map[m].push_back(s);
             }
         }
 
-        sv = v;
+        sv.clear();
+        if(!map.empty())
+        {
+            for(auto s: map.rbegin()->second)
+            {
+                sv.push_back(s);
+            }
+        }
     }
 
     if(sv.empty())
@@ -86,13 +87,38 @@ void ExprDecorator::visit(IdNode &node)
 
     node.setProperty("sym", sym);
 
-    if(!node.generics.empty())
+    std::vector<Type*> deduced;
+    if(auto p = sym->property("generics"))
+    {
+        auto candidate = p.to<GenericParamList>();
+        auto type = sym->assertProperty("type").to<Type*>();
+
+        while(node.generics.size() + deduced.size() < candidate.size())
+        {
+            auto index = node.generics.size() + deduced.size();
+
+            auto found = locateArg(type, index);
+            if(!found)
+            {
+                throw Error(node.location(), "cannot deduce generic - ", candidate[index].name);
+            }
+
+            deduced.push_back(expected->args[*found]);
+        }
+    }
+
+    if(!node.generics.empty() || !deduced.empty())
     {
         std::vector<Type*> types;
         for(auto &g: node.generics)
         {
             auto type = c.generics.updateType(TypeBuilder::build(c, g.get()));
             types.push_back(type);
+        }
+
+        for(auto t: deduced)
+        {
+            types.push_back(t);
         }
 
         node.setProperty("generics", types);

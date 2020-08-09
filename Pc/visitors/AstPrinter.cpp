@@ -16,9 +16,10 @@ std::string info(Node *node)
 {
     std::ostringstream os;
 
-    if(auto s = node->property("sym"))
+    if(auto p = node->property("sym"))
     {
-        os << " -> " << Sym::toString(s.to<Sym*>()->type()) << " " << s.to<Sym*>()->fullname();
+        auto s = p.to<Sym*>();
+        os << " -> " << Sym::toString(s->type()) << " " << (s->type() == Sym::Type::Func ? s->funcname() : s->fullname());
     }
 
     return os.str();
