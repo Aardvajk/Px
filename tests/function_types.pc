@@ -10,7 +10,19 @@ func bar(a:std.int):std.int
     return a;
 }
 
+func ret():(std.int):std.int
+{
+    return bar;
+}
+
+func retf(a:(std.int):std.int):(std.int):std.int
+{
+    return a;
+}
+
 func main():std.null
 {
     foo(bar);
+    foo(ret());
+    foo(retf(bar));
 }
