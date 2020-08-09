@@ -25,4 +25,15 @@ public:
     int value;
 };
 
+class BoolLiteralNode : public Node
+{
+public:
+    BoolLiteralNode(Location location, bool value) : Node(location), value(value) { }
+
+    virtual void accept(Visitor &v) override;
+    virtual NodePtr cloneDetail() const override;
+
+    bool value;
+};
+
 #endif // LITERALNODES_H

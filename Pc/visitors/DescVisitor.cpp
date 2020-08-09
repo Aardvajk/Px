@@ -100,6 +100,11 @@ void DescVisitor::visit(IntLiteralNode &node)
     r += pcx::lexical_cast<std::string>(node.value);
 }
 
+void DescVisitor::visit(BoolLiteralNode &node)
+{
+    r += node.value ? "true" : "false";
+}
+
 void DescVisitor::visit(ReturnNode &node)
 {
     r += "return";

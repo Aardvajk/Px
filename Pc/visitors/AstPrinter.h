@@ -24,6 +24,7 @@ public:
     virtual void visit(CallNode &node) override;
     virtual void visit(CharLiteralNode &node) override;
     virtual void visit(IntLiteralNode &node) override;
+    virtual void visit(BoolLiteralNode &node) override;
     virtual void visit(ReturnNode &node) override;
 
 private:

@@ -21,3 +21,13 @@ NodePtr IntLiteralNode::cloneDetail() const
 {
     return new IntLiteralNode(location(), value);
 }
+
+void BoolLiteralNode::accept(Visitor &v)
+{
+    v.visit(*this);
+}
+
+NodePtr BoolLiteralNode::cloneDetail() const
+{
+    return new BoolLiteralNode(location(), value);
+}

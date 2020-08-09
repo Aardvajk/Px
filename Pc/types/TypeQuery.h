@@ -20,6 +20,7 @@ public:
     virtual void visit(CallNode &node) override;
     virtual void visit(CharLiteralNode &node) override;
     virtual void visit(IntLiteralNode &node) override;
+    virtual void visit(BoolLiteralNode &node) override;
 
     static Type *query(Context &c, Node *node);
     static Type *assert(Context &c, Node *node);

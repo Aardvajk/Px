@@ -12,3 +12,10 @@ func "std.print(std.int):std.null":0
     service 1;
     pop 4;
 }
+func "std.print(std.bool):std.null":0
+{
+    arg "std.print.a":1;
+    push "std.print.a";
+    service 3;
+    pop 1;
+}

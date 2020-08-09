@@ -32,7 +32,9 @@ static const std::vector<Reserved> pcReserved =
     { "func", Token::Type::RwFunc },
     { "var", Token::Type::RwVar },
     { "return", Token::Type::RwReturn },
-    { "include", Token::Type::RwInclude }
+    { "include", Token::Type::RwInclude },
+    { "true", Token::Type::RwTrue },
+    { "false", Token::Type::RwFalse }
 };
 
 Source::Char skip(Source &source)

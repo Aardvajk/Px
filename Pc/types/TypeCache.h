@@ -15,6 +15,7 @@ public:
     Type *nullType();
     Type *charType();
     Type *intType();
+    Type *boolType();
 
 private:
     pcx::ptr_vector<Type> v;

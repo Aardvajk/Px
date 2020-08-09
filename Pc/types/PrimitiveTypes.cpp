@@ -26,4 +26,5 @@ void PrimitiveTypes::create(Context &c)
     ns->add(createPrimitive(c, "null",  0));
     ns->add(createPrimitive(c, "char", 1));
     ns->add(createPrimitive(c, "int", 4));
+    ns->add(createPrimitive(c, "bool", 1));
 }

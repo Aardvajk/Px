@@ -15,4 +15,5 @@ func main():std.null
     std.test.same('a', foo(123));
     std.test.same(123, foo('a'));
     std.test.same(123, foo<std.int>(123));
+    std.test.same(123, foo(true));
 }

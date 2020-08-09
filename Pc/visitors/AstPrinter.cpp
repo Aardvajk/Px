@@ -142,6 +142,11 @@ void AstPrinter::visit(IntLiteralNode &node)
     tab() << "int literal " << node.value << "\n";
 }
 
+void AstPrinter::visit(BoolLiteralNode &node)
+{
+    tab() << "bool literal " << (node.value ? "true" : "false") << "\n";
+}
+
 void AstPrinter::visit(ReturnNode &node)
 {
     tab() << "return\n";

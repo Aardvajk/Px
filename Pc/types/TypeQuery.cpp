@@ -54,6 +54,11 @@ void TypeQuery::visit(IntLiteralNode &node)
     r = c.types.intType();
 }
 
+void TypeQuery::visit(BoolLiteralNode &node)
+{
+    r = c.types.boolType();
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

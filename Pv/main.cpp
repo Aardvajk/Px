@@ -13,6 +13,11 @@
 namespace
 {
 
+std::string boolstr(bool value)
+{
+    return value ? "true" : "false";
+}
+
 void serviceProc(int code, Memory &mm, Registers &rg)
 {
     auto sp = rg.sp();
@@ -25,6 +30,10 @@ void serviceProc(int code, Memory &mm, Registers &rg)
     else if(code == 2)
     {
         std::cout << "char " << rm.get<char>() << "\n";
+    }
+    else if(code == 3)
+    {
+        std::cout << "bool " << boolstr(rm.get<char>()) << "\n";
     }
     else if(code == 100)
     {
@@ -44,6 +53,16 @@ void serviceProc(int code, Memory &mm, Registers &rg)
         if(a != b)
         {
             throw Error("std.test.same(std.char,std.char) failed with ", int(a), " and ", int(b));
+        }
+    }
+    else if(code == 102)
+    {
+        auto a = rm.get<char>();
+        auto b = rm.get<char>();
+
+        if(a != b)
+        {
+            throw Error("std.test.same(std.bool,std.bool) failed with ", boolstr(a), boolstr(b));
         }
     }
     else

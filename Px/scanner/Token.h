@@ -18,6 +18,7 @@ public:
         RwNamespace, RwFunc, RwVar, RwArg,
         RwInclude,
         RwReturn,
+        RwTrue, RwFalse,
         Eof, Invalid
     };
 
