@@ -22,11 +22,13 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Machine.cpp \
-        main.cpp
+        main.cpp \
+        operations/ConvertOps.cpp
 
 HEADERS += \
     application/Machine.h \
     components/Memory.h \
     components/Registers.h \
     components/Stack.h \
-    components/Vars.h
+    components/Vars.h \
+    operations/ConvertOps.h

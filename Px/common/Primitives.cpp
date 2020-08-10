@@ -5,6 +5,7 @@ namespace
 
 const char *s[] =
 {
+    "null",
     "char",
     "int",
     ""

@@ -1,6 +1,7 @@
 #include "Disassembler.h"
 
 #include "common/OpCodes.h"
+#include "common/Primitives.h"
 
 #include "framework/ByteReader.h"
 #include "framework/Console.h"
@@ -76,6 +77,7 @@ void Disassembler::function(Context &c, std::size_t index, const char *data, std
         Reg r0, r1;
         std::size_t s0;
         int i0;
+        Primitive::Type p0, p1;
 
         map(c, index, mapIndex, pc, os);
 
@@ -106,6 +108,8 @@ void Disassembler::function(Context &c, std::size_t index, const char *data, std
             case Op::Ret: rm(s0); os << s0; break;
 
             case Op::JmpNz: rm(s0); os << s0; break;
+
+            case Op::Conv: rm(p0, p1); os << toString(p0) << " " << toString(p1); break;
 
             case Op::Svc: rm(i0); os << i0; break;
 

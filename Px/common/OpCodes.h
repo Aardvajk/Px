@@ -42,6 +42,8 @@ enum class Op : std::uint8_t
 
     JmpNz,
 
+    Conv,
+
     Svc,
     Invalid
 };

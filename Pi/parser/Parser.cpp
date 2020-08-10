@@ -12,6 +12,19 @@
 namespace
 {
 
+Primitive::Type scanPrimitive(Scanner &scanner, bool get)
+{
+    auto tok = scanner.next(get);
+
+    auto type = Primitive::fromString(tok.text());
+    if(type == Primitive::Type::Invalid)
+    {
+        throw Error(tok.location(), "primitive type expected - ", tok.text());
+    }
+
+    return type;
+}
+
 void pushNumericLiteralConstruct(Context &c, Primitive::Type type, Entity *e, bool get)
 {
     c.scanner.match(Token::Type::LeftParen, get);
@@ -55,7 +68,7 @@ void pushConstruct(Context &c, Entity *e, bool get)
     if(tok.type() == Token::Type::Id)
     {
         auto type = Primitive::fromString(tok.text());
-        if(type != Primitive::Type::Invalid)
+        if(type != Primitive::Type::Null && type != Primitive::Type::Invalid)
         {
             pushNumericLiteralConstruct(c, type, e, true);
             return;
@@ -86,6 +99,12 @@ void jumpConstruct(Context &c, Entity *e, bool get)
 void amountConstruct(Context &c, Entity *e, bool get)
 {
     e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
+}
+
+void convertConstruct(Context &c, Entity *e, bool get)
+{
+    e->properties["from"] = scanPrimitive(c.scanner, get);
+    e->properties["to"] = scanPrimitive(c.scanner, true);
 }
 
 void serviceConstruct(Context &c, Entity *e, bool get)
@@ -129,6 +148,8 @@ void codeConstruct(Context &c, Entity *block, bool get)
             case Code::Type::Load:
             case Code::Type::Store:
             case Code::Type::AllocS: amountConstruct(c, e, true); break;
+
+            case Code::Type::Convert: convertConstruct(c, e, true); break;
 
             case Code::Type::Service: serviceConstruct(c, e, true); break;
 

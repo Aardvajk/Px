@@ -19,6 +19,8 @@ enum class Type
 
     AllocS,
 
+    Convert,
+
     Service,
 
     Invalid

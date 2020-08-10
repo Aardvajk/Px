@@ -31,8 +31,9 @@ static const std::vector<Reserved> pcReserved =
     { "namespace", Token::Type::RwNamespace },
     { "func", Token::Type::RwFunc },
     { "var", Token::Type::RwVar },
-    { "return", Token::Type::RwReturn },
+    { "class", Token::Type::RwClass },
     { "include", Token::Type::RwInclude },
+    { "return", Token::Type::RwReturn },
     { "true", Token::Type::RwTrue },
     { "false", Token::Type::RwFalse }
 };
