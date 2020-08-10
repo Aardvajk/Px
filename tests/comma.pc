@@ -1,0 +1,22 @@
+include "stdtest.ph";
+
+func<T> woo():std.int
+{
+    return 321;
+}
+
+func<T> foo(a:T):std.int
+{
+    if(woo<T>(), false, a)
+    {
+        return 123;
+    }
+
+    return 321;
+}
+
+func main():std.null
+{
+    std.test.same(123, foo(true));
+    std.test.same(321, foo(false));
+}

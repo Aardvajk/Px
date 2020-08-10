@@ -28,6 +28,7 @@ SOURCES += \
         main.cpp
 
 DISTFILES += \
+    ../tests/comma.pc \
     ../tests/deduce_generics.pc \
     ../tests/function_types.pc \
     ../tests/generics.pc \
