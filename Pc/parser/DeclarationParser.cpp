@@ -101,7 +101,7 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     c.scanner.match(Token::Type::RightParen, false);
     c.scanner.match(Token::Type::Colon, true);
 
-    n->type = TypeParser::build(c, true);
+    n->returnType = TypeParser::build(c, true);
 
     tok = c.scanner.next(false);
     if(tok.type() == Token::Type::LeftBrace)

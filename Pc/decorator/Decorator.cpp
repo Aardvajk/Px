@@ -108,9 +108,9 @@ void Decorator::visit(FuncNode &node)
         args.push_back(TypeQuery::assert(c, a.get()));
     }
 
-    node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
+    node.returnType->setProperty("type", TypeBuilder::build(c, node.returnType.get()));
 
-    auto type = c.types.insert(Type::function(TypeQuery::assert(c, node.type.get()), args));
+    auto type = c.types.insert(Type::function(TypeQuery::assert(c, node.returnType.get()), args));
 
     auto sym = searchFunction(c, node.name.get(), type);
     if(sym)

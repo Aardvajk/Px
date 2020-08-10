@@ -53,9 +53,9 @@ void DescVisitor::visit(FuncNode &node)
     r += " " + node.name->description();
     r += "(" + pcx::join_str(node.args, ", ") + ")";
 
-    if(node.type)
+    if(node.returnType)
     {
-        r += ":" + node.type->description();
+        r += ":" + node.returnType->description();
     }
 }
 

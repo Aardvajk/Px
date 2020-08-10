@@ -14,7 +14,7 @@ NodePtr FuncNode::cloneDetail() const
 
     func->genericTags = safeClone(genericTags);
     func->args = safeClone(args);
-    func->type = safeClone(type);
+    func->returnType = safeClone(returnType);
     func->body = safeClone(body);
 
     return n;

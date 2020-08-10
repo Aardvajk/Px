@@ -14,7 +14,7 @@ public:
     NodePtr name;
     NodeList genericTags;
     NodeList args;
-    NodePtr type;
+    NodePtr returnType;
     NodePtr body;
 };
 
