@@ -173,3 +173,12 @@ void AstPrinter::visit(IfNode &node)
         node.elseBody->accept(*this);
     }
 }
+
+void AstPrinter::visit(CommaNode &node)
+{
+    tab() << "comma\n";
+
+    auto g = pcx::scoped_counter(tc);
+    node.left->accept(*this);
+    node.right->accept(*this);
+}

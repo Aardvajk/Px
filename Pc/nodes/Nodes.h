@@ -14,5 +14,6 @@
 #include "nodes/LiteralNodes.h"
 #include "nodes/ReturnNode.h"
 #include "nodes/IfNode.h"
+#include "nodes/CommaNode.h"
 
 #endif // NODES_H

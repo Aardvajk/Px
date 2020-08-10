@@ -13,6 +13,7 @@
 namespace
 {
 
+NodePtr expressionList(Context &c, bool get);
 NodePtr expression(Context &c, bool get);
 
 void generics(Context &c, NodeList &container, bool get)
@@ -107,6 +108,18 @@ NodePtr entity(Context &c, bool get)
     }
 }
 
+NodePtr expressionList(Context &c, bool get)
+{
+    auto n = expression(c, get);
+
+    while(c.scanner.token().type() == Token::Type::Comma)
+    {
+        n = new CommaNode(c.scanner.token().location(), n, expressionList(c, true));
+    }
+
+    return n;
+}
+
 NodePtr expression(Context &c, bool get)
 {
     return entity(c, get);
@@ -117,4 +130,9 @@ NodePtr expression(Context &c, bool get)
 NodePtr ExprParser::build(Context &c, bool get)
 {
     return expression(c, get);
+}
+
+NodePtr ExprParser::buildList(Context &c, bool get)
+{
+    return expressionList(c, get);
 }

@@ -106,6 +106,14 @@ void ExprGenerator::visit(BoolLiteralNode &node)
     r = sizeof(char);
 }
 
+void ExprGenerator::visit(CommaNode &node)
+{
+    auto size = generate(c, node.left.get(), os);
+    os << "    pop " << size << ";\n";
+
+    r = generate(c, node.right.get(), os);
+}
+
 std::size_t ExprGenerator::generate(Context &c, Node *node, std::ostream &os)
 {
     ExprGenerator eg(c, os);

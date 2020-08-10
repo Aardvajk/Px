@@ -59,6 +59,11 @@ void TypeQuery::visit(BoolLiteralNode &node)
     r = c.types.boolType();
 }
 
+void TypeQuery::visit(CommaNode &node)
+{
+    node.right->accept(*this);
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

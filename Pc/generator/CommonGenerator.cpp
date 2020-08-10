@@ -11,11 +11,6 @@
 
 void CommonGenerator::generateBooleanExpr(Context &c, std::ostream &os, Node *expr)
 {
-    auto type = TypeQuery::assert(c, expr);
-
     ExprGenerator::generate(c, expr, os);
-    if(!Type::exact(type, c.types.boolType()) && !Type::exact(type, c.types.charType()))
-    {
-        os << "    convert " << Primitive::toString(type->primitiveType()) << " char;\n";
-    }
+    os << "    convert " << Primitive::toString(TypeQuery::assert(c, expr)->primitiveType()) << " char;\n";
 }

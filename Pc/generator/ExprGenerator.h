@@ -22,6 +22,7 @@ public:
     virtual void visit(CharLiteralNode &node) override;
     virtual void visit(IntLiteralNode &node) override;
     virtual void visit(BoolLiteralNode &node) override;
+    virtual void visit(CommaNode &node) override;
 
     static std::size_t generate(Context &c, Node *node, std::ostream &os);
 

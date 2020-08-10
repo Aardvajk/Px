@@ -162,6 +162,12 @@ void ExprDecorator::visit(CallNode &node)
     ExprDecorator::decorate(c, node.target, type);
 }
 
+void ExprDecorator::visit(CommaNode &node)
+{
+    ExprDecorator::decorate(c, node.left);
+    ExprDecorator::decorate(c, node.right);
+}
+
 void ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
 {
     ExprDecorator ed(c, expected);

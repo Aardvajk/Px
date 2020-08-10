@@ -57,7 +57,7 @@ void buildIf(Context &c, BlockNode *block, bool get)
     block->push_back(node);
 
     c.scanner.match(Token::Type::LeftParen, false);
-    node->expr = ExprParser::build(c, true);
+    node->expr = ExprParser::buildList(c, true);
     c.scanner.match(Token::Type::RightParen, false);
 
     node->body = CommonParser::scopeContents(c, c.scanner.token().location(), true);

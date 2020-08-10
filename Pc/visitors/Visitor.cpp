@@ -63,3 +63,7 @@ void Visitor::visit(ReturnNode &node)
 void Visitor::visit(IfNode &node)
 {
 }
+
+void Visitor::visit(CommaNode &node)
+{
+}

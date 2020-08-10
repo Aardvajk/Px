@@ -18,6 +18,7 @@ class IntLiteralNode;
 class BoolLiteralNode;
 class ReturnNode;
 class IfNode;
+class CommaNode;
 
 class Visitor
 {
@@ -39,6 +40,7 @@ public:
     virtual void visit(BoolLiteralNode &node);
     virtual void visit(ReturnNode &node);
     virtual void visit(IfNode &node);
+    virtual void visit(CommaNode &node);
 
     template<typename T, typename N, typename... Args> static void visit(N node, Args&&... args)
     {

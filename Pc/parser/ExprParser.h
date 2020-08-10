@@ -9,6 +9,7 @@ namespace ExprParser
 {
 
 NodePtr build(Context &c, bool get);
+NodePtr buildList(Context &c, bool get);
 
 }
 

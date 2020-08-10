@@ -39,6 +39,7 @@ SOURCES += \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
+        nodes/CommaNode.cpp \
         nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
         nodes/GenericTagNode.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     components/ParseInfo.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
+    nodes/CommaNode.h \
     nodes/ExprNode.h \
     nodes/FuncNode.h \
     nodes/GenericTagNode.h \
