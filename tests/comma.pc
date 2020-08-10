@@ -1,13 +1,14 @@
 include "stdtest.ph";
 
-func<T> woo():std.int
+func<T> woo(a:std.int):std.int
 {
+    std.test.same(a, 999);
     return 321;
 }
 
 func<T> foo(a:T):std.int
 {
-    if(woo<T>(), false, a)
+    if(woo<T>(999), false, a)
     {
         return 123;
     }
