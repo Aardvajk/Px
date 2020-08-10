@@ -112,13 +112,3 @@ void DescVisitor::visit(BoolLiteralNode &node)
 {
     r += node.value ? "true" : "false";
 }
-
-void DescVisitor::visit(ReturnNode &node)
-{
-    r += "return";
-
-    if(node.expr)
-    {
-        r += " " + node.expr->description();
-    }
-}

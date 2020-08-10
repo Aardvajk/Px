@@ -21,12 +21,14 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        components/FuncInfo.cpp \
         components/Match.cpp \
         decorator/ArgDecorator.cpp \
         decorator/Decorator.cpp \
         decorator/ExprDecorator.cpp \
         decorator/FuncDecorator.cpp \
         decorator/VarDecorator.cpp \
+        generator/CommonGenerator.cpp \
         generator/ExprGenerator.cpp \
         generator/FuncGenerator.cpp \
         generator/Generator.cpp \
@@ -41,6 +43,7 @@ SOURCES += \
         nodes/FuncNode.cpp \
         nodes/GenericTagNode.cpp \
         nodes/IdNode.cpp \
+        nodes/IfNode.cpp \
         nodes/LiteralNodes.cpp \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
@@ -79,6 +82,7 @@ HEADERS += \
     decorator/ExprDecorator.h \
     decorator/FuncDecorator.h \
     decorator/VarDecorator.h \
+    generator/CommonGenerator.h \
     generator/ExprGenerator.h \
     generator/FuncGenerator.h \
     generator/Generator.h \
@@ -96,6 +100,7 @@ HEADERS += \
     nodes/FuncNode.h \
     nodes/GenericTagNode.h \
     nodes/IdNode.h \
+    nodes/IfNode.h \
     nodes/LiteralNodes.h \
     nodes/NamespaceNode.h \
     nodes/Node.h \

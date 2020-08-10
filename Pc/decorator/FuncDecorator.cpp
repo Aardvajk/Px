@@ -68,3 +68,14 @@ void FuncDecorator::visit(ReturnNode &node)
 
     c.tree.current()->setProperty("returned", true);
 }
+
+void FuncDecorator::visit(IfNode &node)
+{
+    ExprDecorator::decorate(c, node.expr);
+    node.body->accept(*this);
+
+    if(node.elseBody)
+    {
+        node.elseBody->accept(*this);
+    }
+}

@@ -32,9 +32,10 @@ void ConvertOps::convert(ByteReader &rm, Stack &s)
         {
             switch(p1)
             {
-                case Type::Int: process<char, int>(s); break;
+                case Type::Int: process<char, int>(s); return;
+                case Type::ULong: process<char, std::size_t>(s); return;
 
-                default: break;
+                default: return;
             }
         }
 
@@ -42,12 +43,24 @@ void ConvertOps::convert(ByteReader &rm, Stack &s)
         {
             switch(p1)
             {
-                case Type::Char: process<int, char>(s); break;
+                case Type::Char: process<int, char>(s); return;
+                case Type::ULong: process<int, std::size_t>(s); return;
 
-                default: break;
+                default: return;
             }
         }
 
-        default: break;
+        case Type::ULong:
+        {
+            switch(p1)
+            {
+                case Type::Char: process<std::size_t, char>(s); return;
+                case Type::Int: process<std::size_t, int>(s); return;
+
+                default: return;
+            }
+        }
+
+        default: return;
     }
 }

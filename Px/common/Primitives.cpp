@@ -8,6 +8,7 @@ const char *s[] =
     "null",
     "char",
     "int",
+    "ulong",
     ""
 };
 

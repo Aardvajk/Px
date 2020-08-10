@@ -52,6 +52,8 @@ void Generator::visit(FuncNode &node)
             os << "    arg \"" << sym->fullname() << "\":" << Type::assertSize(a->location(), sym->assertProperty("type").to<Type*>()) << ";\n";
         }
 
+        auto g = c.tree.open(sym);
+
         Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
         Visitor::visit<FuncGenerator>(node.body.get(), c, os);
 

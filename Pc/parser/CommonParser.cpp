@@ -50,3 +50,25 @@ NodePtr CommonParser::blockContents(Context &c, Location location, bool get)
 
     return n;
 }
+
+NodePtr CommonParser::scopeContents(Context &c, Location location, bool get)
+{
+    auto scope = new ScopeNode(location);
+    NodePtr n(scope);
+
+    auto tok = c.scanner.next(true);
+
+    if(tok.type() == Token::Type::LeftBrace)
+    {
+        scope->body = blockContents(c, location, false);
+    }
+    else
+    {
+        auto block = new BlockNode(location);
+        scope->body = block;
+
+        Parser::construct(c, block, false);
+    }
+
+    return n;
+}

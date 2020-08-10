@@ -59,3 +59,7 @@ void Visitor::visit(BoolLiteralNode &node)
 void Visitor::visit(ReturnNode &node)
 {
 }
+
+void Visitor::visit(IfNode &node)
+{
+}

@@ -110,6 +110,34 @@ std::string Type::convertedDescription(const std::vector<Type*> &types) const
     return describeType(this, types);
 }
 
+bool Type::function() const
+{
+    return returnType;
+}
+
+bool Type::primitive() const
+{
+    return function() || (sym && sym->property("primitive"));
+}
+
+Primitive::Type Type::primitiveType() const
+{
+    if(function())
+    {
+        return Primitive::Type::ULong;
+    }
+
+    if(sym)
+    {
+        if(auto p = sym->property("primitive"))
+        {
+            return p.to<Primitive::Type>();
+        }
+    }
+
+    return Primitive::Type::Invalid;
+}
+
 pcx::optional<std::size_t> Type::size() const
 {
     if(returnType)

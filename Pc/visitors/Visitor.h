@@ -17,6 +17,7 @@ class CharLiteralNode;
 class IntLiteralNode;
 class BoolLiteralNode;
 class ReturnNode;
+class IfNode;
 
 class Visitor
 {
@@ -37,6 +38,7 @@ public:
     virtual void visit(IntLiteralNode &node);
     virtual void visit(BoolLiteralNode &node);
     virtual void visit(ReturnNode &node);
+    virtual void visit(IfNode &node);
 
     template<typename T, typename N, typename... Args> static void visit(N node, Args&&... args)
     {

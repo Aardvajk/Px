@@ -29,3 +29,13 @@ void LocalsGenerator::visit(ScopeNode &node)
     auto g = c.tree.open(sym);
     node.body->accept(*this);
 }
+
+void LocalsGenerator::visit(IfNode &node)
+{
+    node.body->accept(*this);
+
+    if(node.elseBody)
+    {
+        node.elseBody->accept(*this);
+    }
+}

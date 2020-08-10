@@ -13,6 +13,7 @@ enum class Type : std::uint8_t
     Null,
     Char,
     Int,
+    ULong,
     Invalid
 };
 

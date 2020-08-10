@@ -157,3 +157,19 @@ void AstPrinter::visit(ReturnNode &node)
         node.expr->accept(*this);
     }
 }
+
+void AstPrinter::visit(IfNode &node)
+{
+    tab() << "if\n";
+
+    auto g = pcx::scoped_counter(tc);
+
+    node.expr->accept(*this);
+    node.body->accept(*this);
+
+    if(node.elseBody)
+    {
+        tab() << "else\n";
+        node.elseBody->accept(*this);
+    }
+}

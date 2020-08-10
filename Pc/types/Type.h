@@ -1,6 +1,8 @@
 #ifndef TYPE_H
 #define TYPE_H
 
+#include "common/Primitives.h"
+
 #include "scanner/Location.h"
 
 #include "generics/GenericRef.h"
@@ -20,7 +22,10 @@ public:
     std::string description() const;
     std::string convertedDescription(const std::vector<Type*> &types) const;
 
-    bool function() const { return returnType; }
+    bool function() const;
+    bool primitive() const;
+
+    Primitive::Type primitiveType() const;
 
     pcx::optional<std::size_t> size() const;
 

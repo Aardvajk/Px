@@ -8,6 +8,7 @@
 
 #include "parser/TypeParser.h"
 #include "parser/ExprParser.h"
+#include "parser/CommonParser.h"
 
 namespace
 {
@@ -48,6 +49,25 @@ void buildReturn(Context &c, BlockNode *block, bool get)
     c.scanner.consume(Token::Type::Semicolon, false);
 }
 
+void buildIf(Context &c, BlockNode *block, bool get)
+{
+    auto tok = c.scanner.next(get);
+
+    auto node = new IfNode(tok.location());
+    block->push_back(node);
+
+    c.scanner.match(Token::Type::LeftParen, false);
+    node->expr = ExprParser::build(c, true);
+    c.scanner.match(Token::Type::RightParen, false);
+
+    node->body = CommonParser::scopeContents(c, c.scanner.token().location(), true);
+
+    if(c.scanner.token().type() == Token::Type::RwElse)
+    {
+        node->elseBody = CommonParser::scopeContents(c, c.scanner.token().location(), true);
+    }
+}
+
 void buildExpr(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.next(get);
@@ -75,6 +95,7 @@ void FuncParser::build(Context &c, BlockNode *block, bool get)
     {
         case Token::Type::RwVar: buildVar(c, block, true); break;
         case Token::Type::RwReturn: buildReturn(c, block, true); break;
+        case Token::Type::RwIf: buildIf(c, block, true); break;
 
         default: buildExpr(c, block, false);
     }
