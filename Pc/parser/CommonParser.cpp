@@ -5,6 +5,7 @@
 #include "nodes/Nodes.h"
 
 #include "parser/Parser.h"
+#include "parser/ExprParser.h"
 
 namespace
 {
@@ -56,7 +57,7 @@ NodePtr CommonParser::scopeContents(Context &c, Location location, bool get)
     auto scope = new ScopeNode(location);
     NodePtr n(scope);
 
-    auto tok = c.scanner.next(true);
+    auto tok = c.scanner.next(get);
 
     if(tok.type() == Token::Type::LeftBrace)
     {
@@ -72,3 +73,13 @@ NodePtr CommonParser::scopeContents(Context &c, Location location, bool get)
 
     return n;
 }
+
+NodePtr CommonParser::parenthesisedExprList(Context &c, bool get)
+{
+    c.scanner.match(Token::Type::LeftParen, get);
+    auto n = ExprParser::buildList(c, true);
+
+    c.scanner.consume(Token::Type::RightParen, false);
+    return n;
+}
+

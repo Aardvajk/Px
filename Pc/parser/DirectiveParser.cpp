@@ -30,7 +30,9 @@ std::string search(const std::vector<std::string> &search, const std::string &pa
 
 void DirectiveParser::buildInclude(Context &c, BlockNode *block, bool get)
 {
-    auto tok = c.scanner.match(Token::Type::StringLiteral, get);
+    c.scanner.match(Token::Type::RwInclude, get);
+
+    auto tok = c.scanner.match(Token::Type::StringLiteral, true);
 
     if(c.parseInfo.containers.back() != Sym::Type::Namespace)
     {

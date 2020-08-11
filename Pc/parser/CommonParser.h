@@ -13,6 +13,8 @@ NodePtr name(Context &c, bool get);
 NodePtr blockContents(Context &c, Location location, bool get);
 NodePtr scopeContents(Context &c, Location location, bool get);
 
+NodePtr parenthesisedExprList(Context &c, bool get);
+
 }
 
 #endif // COMMONPARSER_H

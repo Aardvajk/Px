@@ -16,14 +16,16 @@ namespace
 
 void buildNamespace(Context &c, BlockNode *block, bool get)
 {
-    auto name = CommonParser::name(c, get);
+    auto tok = c.scanner.match(Token::Type::RwNamespace, get);
+
+    auto name = CommonParser::name(c, true);
 
     if(c.parseInfo.containers.back() != Sym::Type::Namespace)
     {
         throw Error(name->location(), "invalid namespace - ", name->description());
     }
 
-    auto n = new NamespaceNode(name->location(), name);
+    auto n = new NamespaceNode(tok.location(), name);
     block->push_back(n);
 
     auto cg = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Namespace);
@@ -68,14 +70,15 @@ void buildArgs(Context &c, NodeList &container, bool get)
 
 void buildFunction(Context &c, BlockNode *block, bool get)
 {
+    auto tok = c.scanner.match(Token::Type::RwFunc, get);
+
     NodeList generics;
-
-    auto tok = c.scanner.next(get);
-
     if(c.parseInfo.containers.back() != Sym::Type::Namespace)
     {
         throw Error(tok.location(), "invalid function - ", tok.text());
     }
+
+    tok = c.scanner.next(true);
 
     if(tok.type() == Token::Type::Lt)
     {
@@ -126,8 +129,8 @@ void DeclarationParser::build(Context &c, BlockNode *block, bool get)
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
-        case Token::Type::RwNamespace: buildNamespace(c, block, true); break;
-        case Token::Type::RwFunc: buildFunction(c, block, true); break;
+        case Token::Type::RwNamespace: buildNamespace(c, block, false); break;
+        case Token::Type::RwFunc: buildFunction(c, block, false); break;
 
         default: break;
     }

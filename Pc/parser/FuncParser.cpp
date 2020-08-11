@@ -15,7 +15,9 @@ namespace
 
 void buildVar(Context &c, BlockNode *block, bool get)
 {
-    auto name = c.scanner.match(Token::Type::Id, get);
+    c.scanner.match(Token::Type::RwVar, get);
+
+    auto name = c.scanner.match(Token::Type::Id, true);
 
     auto var = new VarNode(name.location(), new IdNode(name.location(), { }, name.text()));
     block->push_back(var);
@@ -36,11 +38,12 @@ void buildVar(Context &c, BlockNode *block, bool get)
 
 void buildReturn(Context &c, BlockNode *block, bool get)
 {
-    auto tok = c.scanner.next(get);
+    auto tok = c.scanner.match(Token::Type::RwReturn, get);
 
     auto node = new ReturnNode(tok.location());
     block->push_back(node);
 
+    tok = c.scanner.next(true);
     if(tok.type() != Token::Type::Semicolon)
     {
         node->expr = ExprParser::build(c, false);
@@ -51,16 +54,13 @@ void buildReturn(Context &c, BlockNode *block, bool get)
 
 void buildIf(Context &c, BlockNode *block, bool get)
 {
-    auto tok = c.scanner.next(get);
+    auto tok = c.scanner.match(Token::Type::RwIf, get);
 
     auto node = new IfNode(tok.location());
     block->push_back(node);
 
-    c.scanner.match(Token::Type::LeftParen, false);
-    node->expr = ExprParser::buildList(c, true);
-    c.scanner.match(Token::Type::RightParen, false);
-
-    node->body = CommonParser::scopeContents(c, c.scanner.token().location(), true);
+    node->expr = CommonParser::parenthesisedExprList(c, true);
+    node->body = CommonParser::scopeContents(c, c.scanner.token().location(), false);
 
     if(c.scanner.token().type() == Token::Type::RwElse)
     {
@@ -93,9 +93,9 @@ void FuncParser::build(Context &c, BlockNode *block, bool get)
 
     switch(tok.type())
     {
-        case Token::Type::RwVar: buildVar(c, block, true); break;
-        case Token::Type::RwReturn: buildReturn(c, block, true); break;
-        case Token::Type::RwIf: buildIf(c, block, true); break;
+        case Token::Type::RwVar: buildVar(c, block, false); break;
+        case Token::Type::RwReturn: buildReturn(c, block, false); break;
+        case Token::Type::RwIf: buildIf(c, block, false); break;
 
         default: buildExpr(c, block, false);
     }
