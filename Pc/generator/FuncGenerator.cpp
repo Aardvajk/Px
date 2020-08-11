@@ -19,6 +19,18 @@ void FuncGenerator::visit(BlockNode &node)
     }
 }
 
+void FuncGenerator::visit(VarNode &node)
+{
+    if(node.value)
+    {
+        auto size = ExprGenerator::generate(c, node.value.get(), os);
+
+        os << "    push &\"" << node.assertProperty("sym").to<Sym*>()->fullname() << "\";\n";
+        os << "    store " << size << ";\n";
+        os << "    pop " << size << ";\n";
+    }
+}
+
 void FuncGenerator::visit(ScopeNode &node)
 {
     node.body->accept(*this);

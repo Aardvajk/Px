@@ -19,12 +19,17 @@ void buildVar(Context &c, BlockNode *block, bool get)
 
     auto name = c.scanner.match(Token::Type::Id, true);
 
-    auto var = new VarNode(name.location(), new IdNode(name.location(), { }, name.text()));
-    block->push_back(var);
+    auto node = new VarNode(name.location(), new IdNode(name.location(), { }, name.text()));
+    block->push_back(node);
 
     c.scanner.match(Token::Type::Colon, true);
 
-    var->type = TypeParser::build(c, true);
+    node->type = TypeParser::build(c, true);
+
+    if(c.scanner.token().type() == Token::Type::Assign)
+    {
+        node->value = ExprParser::build(c, true);
+    }
 
     if(c.scanner.token().type() == Token::Type::Comma)
     {

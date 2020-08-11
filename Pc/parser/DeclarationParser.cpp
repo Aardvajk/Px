@@ -127,11 +127,6 @@ void buildVarImp(Context &c, BlockNode *block, bool get)
 {
     auto name = CommonParser::name(c, get);
 
-    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
-    {
-        throw Error(name->location(), "invalid var - ", name->description());
-    }
-
     auto node = new VarNode(name->location(), name);
     block->push_back(node);
 

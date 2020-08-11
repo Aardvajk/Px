@@ -1,0 +1,20 @@
+include "stdtest.ph";
+
+func foo():std.int
+{
+    return 321;
+}
+
+func main():std.null
+{
+    var a:std.int = foo(), b:std.char = 'x';
+
+    std.test.same(321, a);
+    std.test.same('x', b);
+
+    if(true)
+    {
+        var b:std.bool = true;
+        std.test.same(b, true);
+    }
+}
