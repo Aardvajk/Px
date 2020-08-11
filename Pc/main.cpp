@@ -42,12 +42,6 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
-        if(!c.args.contains("q"))
-        {
-            std::cout << banner("ast");
-            Visitor::visit<AstPrinter>(n.get(), c, std::cout);
-        }
-
         Visitor::visit<Decorator>(n.get(), c);
 
         if(!c.args.contains("q"))

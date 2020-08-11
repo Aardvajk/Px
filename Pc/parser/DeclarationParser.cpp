@@ -8,6 +8,7 @@
 
 #include "parser/CommonParser.h"
 #include "parser/TypeParser.h"
+#include "parser/ExprParser.h"
 
 #include <pcx/scoped_push.h>
 
@@ -137,6 +138,11 @@ void buildVarImp(Context &c, BlockNode *block, bool get)
     c.scanner.match(Token::Type::Colon, false);
 
     node->type = TypeParser::build(c, true);
+
+    if(c.scanner.token().type() == Token::Type::Assign)
+    {
+        node->value = ExprParser::build(c, true);
+    }
 
     if(c.scanner.token().type() == Token::Type::Comma)
     {

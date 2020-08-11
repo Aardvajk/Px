@@ -8,6 +8,7 @@
 #include "application//Code.h"
 
 #include <pcx/lexical_cast.h>
+#include <pcx/datastream.h>
 
 namespace
 {
@@ -25,6 +26,14 @@ Primitive::Type scanPrimitive(Scanner &scanner, bool get)
     return type;
 }
 
+template<typename T> std::vector<char> primitiveToBytes(T value)
+{
+    pcx::data_ostringstream os;
+    os << value;
+
+    return os.data();
+}
+
 void pushNumericLiteralConstruct(Context &c, Primitive::Type type, Entity *e, bool get)
 {
     c.scanner.match(Token::Type::LeftParen, get);
@@ -38,6 +47,7 @@ void pushNumericLiteralConstruct(Context &c, Primitive::Type type, Entity *e, bo
     {
         case Primitive::Type::Char: e->properties["value"] = static_cast<char>(pcx::lexical_cast<int>(val)); break;
         case Primitive::Type::Int: e->properties["value"] = pcx::lexical_cast<int>(val); break;
+        case Primitive::Type::ULong: e->properties["value"] = pcx::lexical_cast<std::size_t>(val); break;
 
         default: break;
     }
@@ -231,7 +241,32 @@ void varConstruct(Context &c, Entity *block, Entity::Type type, bool get)
         std::vector<char> v;
 
         tok = c.scanner.next(true);
-        if(tok.type() == Token::Type::StringLiteral)
+
+        auto primitive = Primitive::Type::Invalid;
+        if(tok.type() == Token::Type::Id)
+        {
+            primitive = Primitive::fromString(tok.text());
+        }
+
+        if(primitive != Primitive::Type::Null && primitive != Primitive::Type::Invalid)
+        {
+            c.scanner.match(Token::Type::LeftParen, true);
+
+            auto val = c.scanner.match(Token::Type::IntLiteral, true);
+
+            switch(primitive)
+            {
+                case Primitive::Type::Char: v = primitiveToBytes(static_cast<char>(pcx::lexical_cast<int>(val.text()))); break;
+                case Primitive::Type::Int: v = primitiveToBytes(pcx::lexical_cast<int>(val.text())); break;
+                case Primitive::Type::ULong: v = primitiveToBytes(static_cast<std::size_t>(pcx::lexical_cast<int>(val.text()))); break;
+
+                default: break;
+            }
+
+
+            c.scanner.consume(Token::Type::RightParen, true);
+        }
+        else if(tok.type() == Token::Type::StringLiteral)
         {
             auto s = tok.text();
             for(auto i: s)

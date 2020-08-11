@@ -13,6 +13,7 @@ NodePtr VarNode::cloneDetail() const
     NodePtr n(var);
 
     var->type = safeClone(type);
+    var->value = safeClone(value);
 
     return n;
 }

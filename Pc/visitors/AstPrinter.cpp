@@ -95,6 +95,12 @@ void AstPrinter::visit(TypeNode &node)
 void AstPrinter::visit(VarNode &node)
 {
     tab() << "var " << node.description() << "\n";
+
+    if(node.value)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.value->accept(*this);
+    }
 }
 
 void AstPrinter::visit(ScopeNode &node)

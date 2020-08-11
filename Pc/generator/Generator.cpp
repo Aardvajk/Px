@@ -1,5 +1,7 @@
 #include "Generator.h"
 
+#include "framework/Error.h"
+
 #include "application/Context.h"
 
 #include "nodes/Nodes.h"
@@ -10,6 +12,7 @@
 
 #include "generator/LocalsGenerator.h"
 #include "generator/FuncGenerator.h"
+#include "generator/GlobalInitGenerator.h"
 
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
@@ -67,5 +70,17 @@ void Generator::visit(VarNode &node)
     auto sym = node.assertProperty("sym").to<Sym*>();
     auto type = sym->assertProperty("type").to<Type*>();
 
-    os << "var \"" << sym->fullname() << "\":" << Type::assertSize(node.location(), type) << ";\n";
+    os << "var \"" << sym->fullname() << "\":" << Type::assertSize(node.location(), type);
+
+    if(node.value)
+    {
+        os << " = ";
+
+        if(!Visitor::query<GlobalInitGenerator, bool>(node.value.get(), c, os))
+        {
+            throw Error(node.value->location(), "unable to generate global init - ", node.value->description());
+        }
+    }
+
+    os << ";\n";
 }
