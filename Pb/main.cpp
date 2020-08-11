@@ -4,6 +4,7 @@
 #include <pcx/args.h>
 #include <pcx/str.h>
 #include <pcx/textfile.h>
+#include <pcx/filesys.h>
 
 #include <iostream>
 #include <cctype>
@@ -13,7 +14,7 @@ namespace
 
 int test(const std::string &name)
 {
-    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pc/release/pc -q -I+=\"../lib\" ../tests/", name, ".pc test.pi").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pc/release/pc -q -I+=\"../lib\" ../tests/", name, " test.pi").c_str())) return -1;
     if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/pi -q test.pi test.po").c_str())) return -1;
     if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/pl -q -trim -entrypoint=\"main():std.null\" test.px test.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
     if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/pv -q test.px").c_str())) return -1;
@@ -79,7 +80,18 @@ int main(int argc, char *argv[])
                     std::string name;
                     is >> name;
 
-                    if(test(name))
+                    if(name == "*")
+                    {
+                        for(const auto &name: pcx::filesys::find_files("../tests/*.pc"))
+                        {
+                            std::cout << name.substr(0, name.length() - 3) << "\n";
+                            if(test(name))
+                            {
+                                return -1;
+                            }
+                        }
+                    }
+                    else if(test(name + ".pc"))
                     {
                         return -1;
                     }
