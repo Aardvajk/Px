@@ -14,8 +14,8 @@ namespace
 int test(const std::string &name)
 {
     if(std::system(pcx::str("C:/Projects/Px/Px/build-Pc/release/pc -q -I+=\"../lib\" ../tests/", name, ".pc test.pi").c_str())) return -1;
-    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/pi test.pi test.po").c_str())) return -1;
-    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/pl -entrypoint=\"main():std.null\" test.px test.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/pi -q test.pi test.po").c_str())) return -1;
+    if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/pl -q -trim -entrypoint=\"main():std.null\" test.px test.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
     if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/pv -q test.px").c_str())) return -1;
 
     return 0;
@@ -43,18 +43,38 @@ int main(int argc, char *argv[])
 
         std::cout << banner();
 
+        bool globalEcho = true;
+
         for(auto s: v)
         {
             if(s.length() > 1 && !std::isspace(s[0]))
             {
-                std::cout << "> " << s << "\n";
+                bool echo = true;
+
+                if(s[0] == '#')
+                {
+                    s = s.substr(1);
+                    echo = false;
+                }
+
+                if(echo && globalEcho)
+                {
+                    std::cout << "> " << s << "\n";
+                }
 
                 std::istringstream is(s);
 
                 std::string exe;
                 is >> exe;
 
-                if(exe == "test")
+                if(exe == "echo")
+                {
+                    std::string param;
+                    is >> param;
+
+                    globalEcho = (param == "on");
+                }
+                else if(exe == "test")
                 {
                     std::string name;
                     is >> name;

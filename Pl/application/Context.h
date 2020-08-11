@@ -9,6 +9,7 @@
 #include <pcx/ptr_vector.h>
 
 #include <vector>
+#include <unordered_set>
 
 class Context
 {
@@ -22,6 +23,7 @@ public:
     pcx::args args;
 
     pcx::ptr_vector<Object::Unit> units;
+    std::unordered_set<std::string> refs;
 
     pcx::data_ostringstream ds;
     pcx::data_ostringstream cs;

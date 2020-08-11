@@ -26,6 +26,7 @@ SOURCES += \
         application/Loader.cpp \
         application/Output.cpp \
         application/Prologue.cpp \
+        application/Trim.cpp \
         main.cpp
 
 HEADERS += \
@@ -34,4 +35,5 @@ HEADERS += \
     application/Linker.h \
     application/Loader.h \
     application/Output.h \
-    application/Prologue.h
+    application/Prologue.h \
+    application/Trim.h

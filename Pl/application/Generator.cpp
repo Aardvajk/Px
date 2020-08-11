@@ -8,10 +8,18 @@ void Generator::generate(Context &c)
     {
         for(auto &e: u.entities)
         {
-            auto &s = (e.type == 'V' ? c.ds : c.cs);
+            if(!c.args.contains("trim") || c.refs.find(u.strings[e.id]) != c.refs.end())
+            {
+                auto &s = (e.type == 'V' ? c.ds : c.cs);
 
-            e.offset = s.position();
-            s.write(e.data.data(), e.data.size());
+                if(!c.args.contains("q"))
+                {
+                    std::cout << "generating " << u.strings[e.id] << "\n";
+                }
+
+                e.offset = s.position();
+                s.write(e.data.data(), e.data.size());
+            }
         }
     }
 }

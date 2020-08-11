@@ -34,6 +34,7 @@ public:
     char type;
     Flags flags;
 
+    std::size_t unit;
     std::size_t id;
 
     std::size_t offset;
@@ -51,7 +52,7 @@ public:
     pcx::ptr_vector<Entity> entities;
 };
 
-void load(pcx::data_istream &is, Entity &e);
+void load(pcx::data_istream &is, std::size_t unit, Entity &e);
 
 }
 

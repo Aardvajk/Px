@@ -20,7 +20,7 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
     for(std::size_t i = 0; i < n; ++i)
     {
         u.entities.push_back(new Object::Entity());
-        Object::load(is, u.entities.back());
+        Object::load(is, 0, u.entities.back());
     }
 
     os << banner(path, " stringtable");

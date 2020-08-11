@@ -3,6 +3,7 @@
 #include "application/Context.h"
 #include "application/Prologue.h"
 #include "application/Loader.h"
+#include "application/Trim.h"
 #include "application/Linker.h"
 #include "application/Generator.h"
 #include "application/Output.h"
@@ -35,9 +36,6 @@ int main(int argc, char *argv[])
             Loader::load(c, files[i]);
         }
 
-        Generator::generate(c);
-        Linker::link(c);
-
         auto ep = c.args["entrypoint"];
         if(ep.empty())
         {
@@ -50,9 +48,25 @@ int main(int argc, char *argv[])
             throw Error("entrypoint not found - ", ep[0]);
         }
 
+        if(c.args.contains("trim"))
+        {
+            c.refs.insert(ep[0]);
+            Trim::generateRefs(c, m);
+        }
+
+        Generator::generate(c);
+        Linker::link(c);
+
         mp.assign(c.ds, m->offset + c.ds.position());
 
         Output::exe(c, files[0]);
+
+        if(c.args.contains("trim"))
+        {
+            Trim::updateFileMap(c, c.dm);
+            Trim::updateFileMap(c, c.cm);
+        }
+
         Output::map(c, files[0] + ".pmap");
     }
 

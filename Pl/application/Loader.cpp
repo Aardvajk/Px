@@ -28,7 +28,7 @@ void Loader::load(Context &c, const std::string &path)
     for(std::size_t i = 0; i < count; ++i)
     {
         pcx::scoped_ptr<Object::Entity> e = new Object::Entity();
-        Object::load(is, *e);
+        Object::load(is, c.units.size() - 1, *e);
 
         bool ignore = false;
 

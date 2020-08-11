@@ -33,6 +33,11 @@ int main(int argc, char *argv[])
 
         Compiler::compile(c, *e);
 
+        if(!c.args.contains("q"))
+        {
+            std::cout << "creating " << files[1] << "\n";
+        }
+
         Generator::object(c, files[1]);
         Generator::map(c, files[1] + ".pmap");
     }
