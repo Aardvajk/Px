@@ -13,6 +13,7 @@ public:
     virtual void visit(BlockNode &node) override;
     virtual void visit(NamespaceNode &node) override;
     virtual void visit(FuncNode &node) override;
+    virtual void visit(VarNode &node) override;
 
     static void checkFunctionReturned(Context &c, FuncNode &node);
 

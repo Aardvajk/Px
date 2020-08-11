@@ -166,6 +166,11 @@ void Decorator::visit(FuncNode &node)
     }
 }
 
+void Decorator::visit(VarNode &node)
+{
+    Visitor::visit<VarDecorator>(&node, c);
+}
+
 void Decorator::checkFunctionReturned(Context &c, FuncNode &node)
 {
     auto type = node.assertProperty("sym").to<Sym*>()->assertProperty("type").to<Type*>();

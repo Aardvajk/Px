@@ -122,6 +122,38 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     }
 }
 
+void buildVarImp(Context &c, BlockNode *block, bool get)
+{
+    auto name = CommonParser::name(c, get);
+
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    {
+        throw Error(name->location(), "invalid var - ", name->description());
+    }
+
+    auto node = new VarNode(name->location(), name);
+    block->push_back(node);
+
+    c.scanner.match(Token::Type::Colon, false);
+
+    node->type = TypeParser::build(c, true);
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        buildVarImp(c, block, true);
+    }
+    else
+    {
+        c.scanner.consume(Token::Type::Semicolon, false);
+    }
+}
+
+void buildVar(Context &c, BlockNode *block, bool get)
+{
+    c.scanner.match(Token::Type::RwVar, get);
+    buildVarImp(c, block, true);
+}
+
 }
 
 void DeclarationParser::build(Context &c, BlockNode *block, bool get)
@@ -131,6 +163,7 @@ void DeclarationParser::build(Context &c, BlockNode *block, bool get)
     {
         case Token::Type::RwNamespace: buildNamespace(c, block, false); break;
         case Token::Type::RwFunc: buildFunction(c, block, false); break;
+        case Token::Type::RwVar: buildVar(c, block, false); break;
 
         default: break;
     }

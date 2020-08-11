@@ -61,3 +61,11 @@ void Generator::visit(FuncNode &node)
         os << "}\n";
     }
 }
+
+void Generator::visit(VarNode &node)
+{
+    auto sym = node.assertProperty("sym").to<Sym*>();
+    auto type = sym->assertProperty("type").to<Type*>();
+
+    os << "var \"" << sym->fullname() << "\":" << Type::assertSize(node.location(), type) << ";\n";
+}

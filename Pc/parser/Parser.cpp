@@ -20,7 +20,8 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
         case Token::Type::RwInclude: DirectiveParser::buildInclude(c, block, false); break;
 
         case Token::Type::RwNamespace:
-        case Token::Type::RwFunc: DeclarationParser::build(c, block, false); break;
+        case Token::Type::RwFunc:
+        case Token::Type::RwVar: DeclarationParser::build(c, block, false); break;
 
         default: FuncParser::build(c, block, false);
     }

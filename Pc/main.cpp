@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 
         if(c.args.contains("execute"))
         {
-            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/Pi source.pi source.po").c_str())) return -1;
-            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/Pl -entrypoint=\"main():std.null\" out.px source.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pi/release/Pi -q source.pi source.po").c_str())) return -1;
+            if(std::system(pcx::str("C:/Projects/Px/Px/build-Pl/release/Pl -q -trim -entrypoint=\"main():std.null\" out.px source.po ../lib/stdlib.po ../lib/stdtest.po").c_str())) return -1;
             if(std::system(pcx::str("C:/Projects/Px/Px/build-Pv/release/Pv out.px").c_str())) return -1;
         }
 
