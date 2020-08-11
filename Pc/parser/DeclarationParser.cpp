@@ -103,12 +103,14 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     }
 
     c.scanner.match(Token::Type::RightParen, false);
-    c.scanner.match(Token::Type::Colon, true);
 
-    n->returnType = TypeParser::build(c, true);
+    tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Colon)
+    {
+        n->returnType = TypeParser::build(c, true);
+    }
 
-    tok = c.scanner.next(false);
-    if(tok.type() == Token::Type::LeftBrace)
+    if(c.scanner.token().type() == Token::Type::LeftBrace)
     {
         auto scope = new ScopeNode(tok.location());
         n->body = scope;

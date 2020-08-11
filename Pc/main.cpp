@@ -63,6 +63,12 @@ int main(int argc, char *argv[])
 
             Visitor::visit<Generator>(n.get(), c, os);
             Generics::fulfil(c, os);
+
+            if(!c.args.contains("q"))
+            {
+                std::cout << banner("tree after fulfil");
+                SymPrinter::print(c, c.tree.root(), std::cout);
+            }
         }
 
         if(!c.args.contains("q"))

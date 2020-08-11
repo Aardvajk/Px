@@ -1,0 +1,23 @@
+include "stdtest.ph";
+
+func foo();
+func<T> bar();
+
+func main()
+{
+    foo();
+    bar<std.int>();
+}
+
+func foo()
+{
+    return;
+}
+
+func<T> bar()
+{
+    if(true)
+    {
+        return;
+    }
+}

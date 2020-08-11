@@ -35,6 +35,7 @@ DISTFILES += \
     ../tests/global_init.pc \
     ../tests/globals.pc \
     ../tests/if_else.pc \
+    ../tests/implicit_return.pc \
     ../tests/local_init.pc \
     ../tests/overload_generic.pc \
     ../workspace/other.pc \
