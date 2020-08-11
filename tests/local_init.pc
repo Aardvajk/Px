@@ -16,5 +16,8 @@ func main():std.null
     {
         var b:std.bool = true;
         std.test.same(b, true);
+
+        var c:():std.int = foo;
+        std.test.same(321, c());
     }
 }
