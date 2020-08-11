@@ -67,15 +67,8 @@ int main(int argc, char *argv[])
                 throw Error("unable to create - ", files[1]);
             }
 
-            Generics::fulfil(c, os);
-
-            if(!c.args.contains("q"))
-            {
-                std::cout << banner("tree after fulfil");
-                SymPrinter::print(c, c.tree.root(), std::cout);
-            }
-
             Visitor::visit<Generator>(n.get(), c, os);
+            Generics::fulfil(c, os);
         }
 
         if(!c.args.contains("q"))
