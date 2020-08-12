@@ -7,12 +7,16 @@ void Trim::generateRefs(Context &c, Object::Entity *e)
     for(auto n: e->links)
     {
         auto r = c.units[e->unit].strings[n.id];
-        c.refs.insert(r);
 
-        auto re = c.find(r);
-        if(re)
+        if(c.refs.find(r) == c.refs.end())
         {
-            generateRefs(c, re);
+            c.refs.insert(r);
+
+            auto re = c.find(r);
+            if(re)
+            {
+                generateRefs(c, re);
+            }
         }
     }
 }

@@ -33,6 +33,8 @@ TypeNodePtr primary(Context &c, bool get)
 
     if(tok.type() == Token::Type::LeftParen)
     {
+        n->function = true;
+
         c.scanner.next(true);
         if(c.scanner.token().type() != Token::Type::RightParen)
         {
@@ -40,9 +42,12 @@ TypeNodePtr primary(Context &c, bool get)
         }
 
         c.scanner.match(Token::Type::RightParen, false);
-        c.scanner.match(Token::Type::Colon, true);
 
-        n->returnType = NodePtr(outer(c, true).release());
+        tok = c.scanner.next(true);
+        if(tok.type() == Token::Type::Colon)
+        {
+            n->returnType = NodePtr(outer(c, true).release());
+        }
     }
     else
     {

@@ -16,9 +16,15 @@ TypeBuilder::TypeBuilder(Context &c) : c(c), r(nullptr)
 
 void TypeBuilder::visit(TypeNode &node)
 {
-    if(node.returnType)
+    if(node.function)
     {
-        auto t = Type::function(build(c, node.returnType.get()));
+        auto type = c.types.nullType();
+        if(node.returnType)
+        {
+            type = build(c, node.returnType.get());
+        }
+
+        auto t = Type::function(type);
         for(auto &a: node.args)
         {
             t.args.push_back(build(c, a.get()));
