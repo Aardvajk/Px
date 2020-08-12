@@ -86,7 +86,7 @@ Type *TypeQuery::assert(Context &c, Node *node)
 Type *TypeQuery::assertCallable(Context &c, Node *node)
 {
     auto t = assert(c, node);
-    if(!t->returnType)
+    if(!t->function())
     {
         throw Error(node->location(), "callable expected - ", node->description());
     }
