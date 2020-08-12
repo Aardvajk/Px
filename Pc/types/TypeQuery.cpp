@@ -36,7 +36,14 @@ void TypeQuery::visit(TypeNode &node)
 
 void TypeQuery::visit(VarNode &node)
 {
-    node.type->accept(*this);
+    if(auto p = node.property("sym"))
+    {
+        r = p.to<Sym*>()->assertProperty("type").to<Type*>();
+    }
+    else if(node.type)
+    {
+        node.type->accept(*this);
+    }
 }
 
 void TypeQuery::visit(CallNode &node)

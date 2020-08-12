@@ -24,23 +24,41 @@ void VarDecorator::visit(VarNode &node)
     auto sym = c.tree.current()->add(new Sym(Sym::Type::Var, node.location(), name));
     node.setProperty("sym", sym);
 
-    if(!node.type->property("type"))
+    Type *type = nullptr;
+
+    if(node.type)
     {
-        node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
+        if(!node.type->property("type"))
+        {
+            node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
+        }
+
+        type = c.generics.updateType(node.type->property("type").to<Type*>());
+        node.type->setProperty("type", type);
     }
-
-    node.type->setProperty("type", c.generics.updateType(node.type->property("type").to<Type*>()));
-
-    auto type = node.type->assertProperty("type").to<Type*>();
-    sym->setProperty("type", type);
 
     if(node.value)
     {
         ExprDecorator::decorate(c, node.value);
 
-        if(!Type::exact(type, TypeQuery::assert(c, node.value.get())))
+        auto valueType = TypeQuery::assert(c, node.value.get());
+        if(type)
         {
-            throw Error(node.value->location(), type->description(), " expected - ", node.value->description());
+            if(!Type::exact(type, valueType))
+            {
+                throw Error(node.value->location(), type->description(), " expected - ", node.value->description());
+            }
+        }
+        else
+        {
+            type = valueType;
         }
     }
+
+    if(!type)
+    {
+        throw Error(node.location(), "no type provided - ", node.description());
+    }
+
+    sym->setProperty("type", type);
 }

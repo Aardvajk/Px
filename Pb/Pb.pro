@@ -30,6 +30,7 @@ SOURCES += \
 DISTFILES += \
     ../tests/comma.pc \
     ../tests/deduce_generics.pc \
+    ../tests/deduce_vars.pc \
     ../tests/function_types.pc \
     ../tests/generics.pc \
     ../tests/global_init.pc \

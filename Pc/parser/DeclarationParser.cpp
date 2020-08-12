@@ -132,9 +132,10 @@ void buildVarImp(Context &c, BlockNode *block, bool get)
     auto node = new VarNode(name->location(), name);
     block->push_back(node);
 
-    c.scanner.match(Token::Type::Colon, false);
-
-    node->type = TypeParser::build(c, true);
+    if(c.scanner.token().type() == Token::Type::Colon)
+    {
+        node->type = TypeParser::build(c, true);
+    }
 
     if(c.scanner.token().type() == Token::Type::Assign)
     {
