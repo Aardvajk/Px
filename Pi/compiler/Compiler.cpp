@@ -18,41 +18,71 @@ namespace
 
 void compileGlobal(Context &c, Entity &e)
 {
+    bool external = e.property("flags").to<Object::Entity::Flags>() & Object::Entity::Flag::External;
+
     auto n = e.property("name").to<std::string>();
-    if(c.syms.findLocal(n))
+
+    auto sym = c.syms.findLocal(n);
+    if(sym)
     {
-        throw Error(e.location, "symbol already defined - ", n);
-    }
-
-    auto g = new Global(c.syms.add(new Sym(Sym::Type::Global, n)), e.property("flags").value<Object::Entity::Flags>(), c.strings.insert(n));
-    c.globals.push_back(g);
-
-    auto size = e.properties["size"].to<std::size_t>();
-
-    g->sym->properties["size"] = size;
-
-    auto b = e.property("bytes");
-    if(b)
-    {
-        auto v = b.to<std::vector<char> >();
-
-        for(std::size_t i = 0; i < v.size(); ++i)
+        if(sym->type != Sym::Type::Global)
         {
-            g->bytes << v[i];
+            throw Error(e.location, "global expected - ", n);
+        }
+
+        if(!external)
+        {
+            if(!sym->property("external").value<bool>())
+            {
+                throw Error(e.location, "symbol already defined - ", n);
+            }
+
+            sym->properties["external"] = false;
+        }
+
+        if(e.property("size").to<std::size_t>() != sym->property("size").to<std::size_t>())
+        {
+            throw Error(e.location, "mismatched size - ", n);
         }
     }
     else
     {
-        for(std::size_t i = 0; i < e.properties["size"].to<std::size_t>(); ++i)
-        {
-            g->bytes << char(0);
-        }
+        sym = c.syms.add(new Sym(Sym::Type::Global, n));
+
+        sym->properties["size"] = e.properties["size"].to<std::size_t>();;
+        sym->properties["external"] = external;
     }
 
-    c.dm.begin('V', n, { });
-    c.dm.setCurrentSize(size);
+    if(!external)
+    {
+        auto g = new Global(sym, e.property("flags").value<Object::Entity::Flags>(), c.strings.insert(n));
+        c.globals.push_back(g);
 
-    c.dm("var \"", n, "\":", size);
+        auto size = e.properties["size"].to<std::size_t>();
+
+        auto b = e.property("bytes");
+        if(b)
+        {
+            auto v = b.to<std::vector<char> >();
+
+            for(std::size_t i = 0; i < v.size(); ++i)
+            {
+                g->bytes << v[i];
+            }
+        }
+        else
+        {
+            for(std::size_t i = 0; i < size; ++i)
+            {
+                g->bytes << char(0);
+            }
+        }
+
+        c.dm.begin('V', n, { });
+        c.dm.setCurrentSize(size);
+
+        c.dm("var \"", n, "\":", size);
+    }
 }
 
 void compileLabel(Context &c, Entity &e)

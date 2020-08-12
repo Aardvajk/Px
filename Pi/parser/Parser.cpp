@@ -178,6 +178,10 @@ void flagsConstruct(Context &c, Object::Entity::Flags &flags, bool get)
     {
         flags |= Object::Entity::Flag::Autogen;
     }
+    else if(tok.text() == "external")
+    {
+        flags |= Object::Entity::Flag::External;
+    }
     else
     {
         throw Error(tok.location(), "invalid flag - ", tok.text());
@@ -238,6 +242,11 @@ void varConstruct(Context &c, Entity *block, Entity::Type type, bool get)
     auto tok = c.scanner.next(false);
     if(tok.type() == Token::Type::Assign)
     {
+        if(e->property("flags").to<Object::Entity::Flags>() & Object::Entity::Flag::External)
+        {
+            throw Error(e->location, "initialising an external - ", e->property("name").to<std::string>());
+        }
+
         std::vector<char> v;
 
         tok = c.scanner.next(true);

@@ -26,7 +26,8 @@ class Entity
 public:
     enum class Flag
     {
-        Autogen = 1
+        Autogen = 1,
+        External = 2
     };
 
     using Flags = pcx::flags<Flag>;
