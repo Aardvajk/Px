@@ -18,6 +18,7 @@ enum class Type
     Store,
 
     AllocS,
+    IncrS,
 
     Convert,
 

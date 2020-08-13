@@ -121,6 +121,7 @@ void compilePush(Context &c, Entity &e)
         {
             case Primitive::Type::Char: compilePushNumeric<char>(c, pt, e); break;
             case Primitive::Type::Int: compilePushNumeric<int>(c, pt, e); break;
+            case Primitive::Type::ULong: compilePushNumeric<std::size_t>(c, pt, e); break;
 
             default: break;
         }
@@ -265,6 +266,17 @@ void compileAllocS(Context &c, Entity &e)
     c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << amount;
 }
 
+void compileIncrS(Context &c, Entity &e)
+{
+    auto amount = e.property("amount").to<std::size_t>();
+
+    c.cm("-incrs ", amount, ";");
+
+    c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Dx;
+    c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Dx << amount;
+    c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Dx;
+}
+
 void compileConvert(Context &c, Entity &e)
 {
     auto from = e.property("from").to<Primitive::Type>();
@@ -298,6 +310,7 @@ void compileInstruction(Context &c, Entity &e)
         case Code::Type::Store: compileStore(c, e); break;
 
         case Code::Type::AllocS: compileAllocS(c, e); break;
+        case Code::Type::IncrS: compileIncrS(c, e); break;
 
         case Code::Type::Convert: compileConvert(c, e); break;
 

@@ -61,4 +61,9 @@ void VarDecorator::visit(VarNode &node)
     }
 
     sym->setProperty("type", type);
+
+    if(c.tree.current()->container()->type() == Sym::Type::Class)
+    {
+        sym->setProperty("member", true);
+    }
 }

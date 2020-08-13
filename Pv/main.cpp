@@ -35,6 +35,10 @@ void serviceProc(int code, Memory &mm, Registers &rg)
     {
         std::cout << "bool " << boolstr(rm.get<char>()) << "\n";
     }
+    else if(code == 4)
+    {
+        std::cout << "ulong " << rm.get<std::size_t>() << "\n";
+    }
     else if(code == 100)
     {
         auto a = rm.get<int>();

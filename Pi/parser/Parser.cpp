@@ -157,7 +157,8 @@ void codeConstruct(Context &c, Entity *block, bool get)
             case Code::Type::Pop:
             case Code::Type::Load:
             case Code::Type::Store:
-            case Code::Type::AllocS: amountConstruct(c, e, true); break;
+            case Code::Type::AllocS:
+            case Code::Type::IncrS: amountConstruct(c, e, true); break;
 
             case Code::Type::Convert: convertConstruct(c, e, true); break;
 

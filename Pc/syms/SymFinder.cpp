@@ -57,6 +57,11 @@ void SymFinder::visit(IdNode &node)
         if(sv.result() == curr)
         {
             SymFinder::find(c, type, curr, node.parent.get(), sc);
+
+            if(!sc.empty() && sc.front()->type() == Sym::Type::Var)
+            {
+                sc = { sc.front()->assertProperty("type").to<::Type*>()->sym };
+            }
         }
         else
         {

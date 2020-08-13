@@ -54,6 +54,9 @@ void ExprGenerator::visit(IdNode &node)
 
         r = sizeof(std::size_t);
     }
+    else if(sym->property("member"))
+    {
+    }
     else
     {
         os << "    push \"" << sym->fullname() << "\";\n";
