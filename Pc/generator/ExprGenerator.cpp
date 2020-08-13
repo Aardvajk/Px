@@ -33,7 +33,7 @@ Type *updateType(Type *type, Node *target)
 
 }
 
-ExprGenerator::ExprGenerator(Context &c, std::ostream &os) : c(c), os(os)
+ExprGenerator::ExprGenerator(Context &c, std::ostream &os, Flags flags) : c(c), os(os), flags(flags)
 {
 }
 
@@ -56,11 +56,34 @@ void ExprGenerator::visit(IdNode &node)
     }
     else if(sym->property("member"))
     {
+        generate(c, node.parent.get(), os, Flag::Addr);
+
+        auto size = Type::assertSize(node.location(), sym->assertProperty("type").to<Type*>());
+
+        os << "    incrs " << sym->assertProperty("offset").to<std::size_t>() << ";\n";
+
+        if(flags & Flag::Addr)
+        {
+            r = sizeof(std::size_t);
+        }
+        else
+        {
+            os << "    load " << size << ";\n";
+            r = size;
+        }
     }
     else
     {
-        os << "    push \"" << sym->fullname() << "\";\n";
-        r = Type::assertSize(node.location(), sym->assertProperty("type").to<Type*>());
+        if(flags & Flag::Addr)
+        {
+            os << "    push &\"" << sym->fullname() << "\";\n";
+            r = sizeof(std::size_t);
+        }
+        else
+        {
+            os << "    push \"" << sym->fullname() << "\";\n";
+            r = Type::assertSize(node.location(), sym->assertProperty("type").to<Type*>());
+        }
     }
 }
 
@@ -117,9 +140,9 @@ void ExprGenerator::visit(CommaNode &node)
     r = generate(c, node.right.get(), os);
 }
 
-std::size_t ExprGenerator::generate(Context &c, Node *node, std::ostream &os)
+std::size_t ExprGenerator::generate(Context &c, Node *node, std::ostream &os, Flags flags)
 {
-    ExprGenerator eg(c, os);
+    ExprGenerator eg(c, os, flags);
     node->accept(eg);
 
     if(!eg.result())
