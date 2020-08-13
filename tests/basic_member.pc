@@ -1,15 +1,20 @@
 include "stdtest.ph";
 
-class foo
+class woo
 {
-    var i:std.int;
-    var c:std.char;
+    class foo
+    {
+        var i:std.int;
+        var c:std.char;
+    }
+
+    var a:std.int;
 }
 
 class bar
 {
     var i:std.int;
-    var f:foo;
+    var f:woo.foo;
 }
 
 var a:bar;

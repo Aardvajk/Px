@@ -70,17 +70,26 @@ void Generator::visit(VarNode &node)
     auto sym = node.assertProperty("sym").to<Sym*>();
     auto type = sym->assertProperty("type").to<Type*>();
 
-    os << "var \"" << sym->fullname() << "\":" << Type::assertSize(node.location(), type);
-
-    if(node.value)
+    if(!sym->property("member"))
     {
-        os << " = ";
+        os << "var \"" << sym->fullname() << "\":" << Type::assertSize(node.location(), type);
 
-        if(!Visitor::query<GlobalInitGenerator, bool>(node.value.get(), c, os))
+        if(node.value)
         {
-            throw Error(node.value->location(), "unable to generate global init - ", node.value->description());
-        }
-    }
+            os << " = ";
 
-    os << ";\n";
+            if(!Visitor::query<GlobalInitGenerator, bool>(node.value.get(), c, os))
+            {
+                throw Error(node.value->location(), "unable to generate global init - ", node.value->description());
+            }
+        }
+
+        os << ";\n";
+    }
+}
+
+void Generator::visit(ClassNode &node)
+{
+    auto g = c.tree.open(node.property("sym").to<Sym*>());
+    node.body->accept(*this);
 }
