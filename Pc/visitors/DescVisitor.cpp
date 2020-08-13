@@ -89,7 +89,14 @@ void DescVisitor::visit(VarNode &node)
 
 void DescVisitor::visit(ClassNode &node)
 {
-    r += "class " + node.name->description();
+    r += "class";
+
+    if(!node.genericTags.empty())
+    {
+        r += "<" + pcx::join_str(node.genericTags, ", ") + ">";
+    }
+
+    r += " " + node.name->description();
 }
 
 void DescVisitor::visit(ScopeNode &node)

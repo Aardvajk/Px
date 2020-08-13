@@ -9,7 +9,12 @@ namespace
 
 bool hasScope(const Sym *sym)
 {
-    return sym->type() == Sym::Type::Namespace || sym->type() == Sym::Type::Func || sym->type() == Sym::Type::Scope;
+    if(sym->type() == Sym::Type::Func || sym->type() == Sym::Type::Class)
+    {
+        return sym->property("defined");
+    }
+
+    return sym->type() == Sym::Type::Namespace || sym->type() == Sym::Type::Scope;
 }
 
 void dump(Context &c, int tab, const Sym *sym, std::ostream &os)

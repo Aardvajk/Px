@@ -12,6 +12,7 @@
 #include "syms/SymPrinter.h"
 
 #include "visitors/AstPrinter.h"
+#include "visitors/Finaliser.h"
 
 #include "generics/Generics.h"
 
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
         auto n = Parser::build(c);
 
         Visitor::visit<Decorator>(n.get(), c);
+        Visitor::visit<Finaliser>(n.get(), c);
 
         if(!c.args.contains("q"))
         {

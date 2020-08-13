@@ -105,7 +105,7 @@ void AstPrinter::visit(VarNode &node)
 
 void AstPrinter::visit(ClassNode &node)
 {
-    tab() << "class " << node.name->description() << "\n";
+    tab() << node.description() << "\n";
 
     if(node.body)
     {

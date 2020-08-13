@@ -74,6 +74,7 @@ SOURCES += \
         types/TypeQuery.cpp \
         visitors/AstPrinter.cpp \
         visitors/DescVisitor.cpp \
+        visitors/Finaliser.cpp \
         visitors/NameVisitors.cpp \
         visitors/Visitor.cpp
 
@@ -135,6 +136,7 @@ HEADERS += \
     types/TypeQuery.h \
     visitors/AstPrinter.h \
     visitors/DescVisitor.h \
+    visitors/Finaliser.h \
     visitors/NameVisitors.h \
     visitors/Visitor.h
 

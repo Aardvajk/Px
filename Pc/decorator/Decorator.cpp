@@ -155,6 +155,16 @@ void Decorator::visit(FuncNode &node)
 
     node.setProperty("sym", sym);
 
+    if(node.body)
+    {
+        if(sym->property("defined"))
+        {
+            throw Error(node.location(), "function already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
+    }
+
     if(node.body && generics.empty())
     {
         c.funcInfos.push_back(new FuncInfo());
@@ -175,6 +185,62 @@ void Decorator::visit(FuncNode &node)
 void Decorator::visit(VarNode &node)
 {
     Visitor::visit<VarDecorator>(&node, c);
+}
+
+void Decorator::visit(ClassNode &node)
+{
+    GenericParamList generics;
+    for(auto &n: node.genericTags)
+    {
+        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()), nullptr));
+    }
+
+    auto sym = search(c, Sym::Type::Class, node.name.get());
+    if(sym)
+    {
+        if(auto p = sym->property("generics"))
+        {
+            if(generics.size() != p.to<GenericParamList>().size())
+            {
+                throw Error(node.location(), "mismatched generics - ", node.description());
+            }
+        }
+
+        if(node.body)
+        {
+            sym->setProperty("classnode", &node);
+        }
+    }
+    else
+    {
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
+
+        sym->setProperty("classnode", &node);
+
+        if(!generics.empty())
+        {
+            sym->setProperty("generics", generics);
+        }
+    }
+
+    node.setProperty("sym", sym);
+
+    if(node.body)
+    {
+        if(sym->property("defined"))
+        {
+            throw Error(node.location(), "class already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
+    }
+
+    if(node.body)
+    {
+        auto g = c.tree.open(sym);
+        node.body->accept(*this);
+    }
 }
 
 void Decorator::checkFunctionReturned(Context &c, FuncNode &node)

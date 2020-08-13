@@ -73,7 +73,6 @@ void buildFunction(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.match(Token::Type::RwFunc, get);
 
-    NodeList generics;
     if(c.parseInfo.containers.back() != Sym::Type::Namespace && c.parseInfo.containers.back() != Sym::Type::Class)
     {
         throw Error(tok.location(), "invalid function - ", tok.text());
@@ -81,6 +80,7 @@ void buildFunction(Context &c, BlockNode *block, bool get)
 
     tok = c.scanner.next(true);
 
+    NodeList generics;
     if(tok.type() == Token::Type::Lt)
     {
         buildGenericTags(c, generics, true);
@@ -167,15 +167,26 @@ void buildClass(Context &c, BlockNode *block, bool get)
 {
     auto tok = c.scanner.match(Token::Type::RwClass, get);
 
-    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace && c.parseInfo.containers.back() != Sym::Type::Class)
     {
         throw Error(tok.location(), "invalid class - ", tok.text());
     }
 
-    auto name = CommonParser::name(c, true);
+    tok = c.scanner.next(true);
+
+    NodeList generics;
+    if(tok.type() == Token::Type::Lt)
+    {
+        buildGenericTags(c, generics, true);
+        c.scanner.consume(Token::Type::Gt, false);
+    }
+
+    auto name = CommonParser::name(c, false);
 
     auto node = new ClassNode(tok.location(), name);
     block->push_back(node);
+
+    node->genericTags = generics;
 
     if(c.scanner.token().type() == Token::Type::LeftBrace)
     {

@@ -20,7 +20,7 @@ std::string NameVisitors::assertSimple(Context &c, Node *node)
 {
     if(!Visitor::query<IsNameSimple, bool>(node))
     {
-        throw Error(node->location(), "simple name expected - ", node->description());
+        throw Error(node->location(), "symbol not found - ", node->description());
     }
 
     return Visitor::query<TrailingId, std::string>(node);
