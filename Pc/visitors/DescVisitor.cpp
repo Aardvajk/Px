@@ -87,6 +87,11 @@ void DescVisitor::visit(VarNode &node)
     }
 }
 
+void DescVisitor::visit(ClassNode &node)
+{
+    r += "class " + node.name->description();
+}
+
 void DescVisitor::visit(ScopeNode &node)
 {
     r += "(scope)";

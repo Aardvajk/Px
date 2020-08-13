@@ -10,6 +10,7 @@ class NamespaceNode;
 class FuncNode;
 class TypeNode;
 class VarNode;
+class ClassNode;
 class ScopeNode;
 class ExprNode;
 class CallNode;
@@ -32,6 +33,7 @@ public:
     virtual void visit(FuncNode &node);
     virtual void visit(TypeNode &node);
     virtual void visit(VarNode &node);
+    virtual void visit(ClassNode &node);
     virtual void visit(ScopeNode &node);
     virtual void visit(ExprNode &node);
     virtual void visit(CallNode &node);

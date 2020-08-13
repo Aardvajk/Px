@@ -103,6 +103,16 @@ void AstPrinter::visit(VarNode &node)
     }
 }
 
+void AstPrinter::visit(ClassNode &node)
+{
+    tab() << "class " << node.name->description() << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+}
+
 void AstPrinter::visit(ScopeNode &node)
 {
     node.body->accept(*this);

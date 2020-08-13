@@ -74,7 +74,7 @@ void buildFunction(Context &c, BlockNode *block, bool get)
     auto tok = c.scanner.match(Token::Type::RwFunc, get);
 
     NodeList generics;
-    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace && c.parseInfo.containers.back() != Sym::Type::Class)
     {
         throw Error(tok.location(), "invalid function - ", tok.text());
     }
@@ -139,6 +139,11 @@ void buildVarImp(Context &c, BlockNode *block, bool get)
 
     if(c.scanner.token().type() == Token::Type::Assign)
     {
+        if(c.parseInfo.containers.back() == Sym::Type::Class)
+        {
+            throw Error(name->location(), "members cannot have initialisers - ", name->description());
+        }
+
         node->value = ExprParser::build(c, true);
     }
 
@@ -158,6 +163,32 @@ void buildVar(Context &c, BlockNode *block, bool get)
     buildVarImp(c, block, true);
 }
 
+void buildClass(Context &c, BlockNode *block, bool get)
+{
+    auto tok = c.scanner.match(Token::Type::RwClass, get);
+
+    if(c.parseInfo.containers.back() != Sym::Type::Namespace)
+    {
+        throw Error(tok.location(), "invalid class - ", tok.text());
+    }
+
+    auto name = CommonParser::name(c, true);
+
+    auto node = new ClassNode(tok.location(), name);
+    block->push_back(node);
+
+    if(c.scanner.token().type() == Token::Type::LeftBrace)
+    {
+        auto cg = pcx::scoped_push(c.parseInfo.containers, Sym::Type::Class);
+
+        node->body = CommonParser::blockContents(c, tok.location(), false);
+    }
+    else
+    {
+        c.scanner.consume(Token::Type::Semicolon, false);
+    }
+}
+
 }
 
 void DeclarationParser::build(Context &c, BlockNode *block, bool get)
@@ -168,6 +199,7 @@ void DeclarationParser::build(Context &c, BlockNode *block, bool get)
         case Token::Type::RwNamespace: buildNamespace(c, block, false); break;
         case Token::Type::RwFunc: buildFunction(c, block, false); break;
         case Token::Type::RwVar: buildVar(c, block, false); break;
+        case Token::Type::RwClass: buildClass(c, block, false); break;
 
         default: break;
     }

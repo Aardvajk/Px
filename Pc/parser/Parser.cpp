@@ -21,7 +21,8 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
 
         case Token::Type::RwNamespace:
         case Token::Type::RwFunc:
-        case Token::Type::RwVar: DeclarationParser::build(c, block, false); break;
+        case Token::Type::RwVar:
+        case Token::Type::RwClass: DeclarationParser::build(c, block, false); break;
 
         default: FuncParser::build(c, block, false);
     }
