@@ -28,6 +28,7 @@ SOURCES += \
         main.cpp
 
 DISTFILES += \
+    ../tests/basic_member.pc \
     ../tests/comma.pc \
     ../tests/deduce_generics.pc \
     ../tests/deduce_vars.pc \

@@ -43,15 +43,13 @@ void ExprGenerator::visit(IdNode &node)
 
     if(sym->type() == Sym::Type::Func)
     {
+        auto name = sym->funcname();
         if(auto p = node.property("generics"))
         {
-            os << "    push &\"" << Generics::funcname(sym, p.to<std::vector<Type*> >()) << "\";\n";
-        }
-        else
-        {
-            os << "    push &\"" << sym->funcname() << "\";\n";
+            name = Generics::funcname(sym, p.to<std::vector<Type*> >());
         }
 
+        os << "    push &\"" << name << "\";\n";
         r = sizeof(std::size_t);
     }
     else if(sym->property("member"))

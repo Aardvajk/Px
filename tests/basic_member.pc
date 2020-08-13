@@ -1,0 +1,21 @@
+include "stdtest.ph";
+
+class foo
+{
+    var i:std.int;
+    var c:std.char;
+}
+
+class bar
+{
+    var i:std.int;
+    var f:foo;
+}
+
+var a:bar;
+
+func main()
+{
+    std.test.same('\0', a.f.c);
+    std.test.same(0, a.f.i);
+}
