@@ -90,6 +90,9 @@ void Generator::visit(VarNode &node)
 
 void Generator::visit(ClassNode &node)
 {
-    auto g = c.tree.open(node.property("sym").to<Sym*>());
-    node.body->accept(*this);
+    if(node.body && node.genericTags.empty())
+    {
+        auto g = c.tree.open(node.property("sym").to<Sym*>());
+        node.body->accept(*this);
+    }
 }

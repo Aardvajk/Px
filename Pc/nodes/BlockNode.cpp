@@ -9,12 +9,12 @@ void BlockNode::accept(Visitor &v)
 
 NodePtr BlockNode::cloneDetail() const
 {
-    auto block = new BlockNode(location());
-    NodePtr n(block);
+    auto node = new BlockNode(location());
+    NodePtr n(node);
 
     for(auto i: nodes)
     {
-        block->nodes.push_back(safeClone(i));
+        node->nodes.push_back(safeClone(i));
     }
 
     return n;

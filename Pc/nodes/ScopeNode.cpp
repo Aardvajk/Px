@@ -9,10 +9,10 @@ void ScopeNode::accept(Visitor &v)
 
 NodePtr ScopeNode::cloneDetail() const
 {
-    auto scope = new ScopeNode(location());
-    NodePtr n(scope);
+    auto node = new ScopeNode(location());
+    NodePtr n(node);
 
-    scope->body = safeClone(body);
+    node->body = safeClone(body);
 
     return n;
 }

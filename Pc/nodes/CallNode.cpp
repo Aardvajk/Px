@@ -9,10 +9,10 @@ void CallNode::accept(Visitor &v)
 
 NodePtr CallNode::cloneDetail() const
 {
-    auto call = new CallNode(location(), safeClone(target));
-    NodePtr n(call);
+    auto node = new CallNode(location(), safeClone(target));
+    NodePtr n(node);
 
-    call->args = safeClone(args);
+    node->args = safeClone(args);
 
     return n;
 }

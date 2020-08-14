@@ -9,11 +9,11 @@ void VarNode::accept(Visitor &v)
 
 NodePtr VarNode::cloneDetail() const
 {
-    auto var = new VarNode(location(), safeClone(name));
-    NodePtr n(var);
+    auto node = new VarNode(location(), safeClone(name));
+    NodePtr n(node);
 
-    var->type = safeClone(type);
-    var->value = safeClone(value);
+    node->type = safeClone(type);
+    node->value = safeClone(value);
 
     return n;
 }

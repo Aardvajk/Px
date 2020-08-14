@@ -236,7 +236,7 @@ void Decorator::visit(ClassNode &node)
         sym->setProperty("defined", true);
     }
 
-    if(node.body)
+    if(node.body && generics.empty())
     {
         auto g = c.tree.open(sym);
         node.body->accept(*this);

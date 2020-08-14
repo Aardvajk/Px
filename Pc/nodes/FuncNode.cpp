@@ -9,13 +9,13 @@ void FuncNode::accept(Visitor &v)
 
 NodePtr FuncNode::cloneDetail() const
 {
-    auto func = new FuncNode(location(), safeClone(name));
-    NodePtr n(func);
+    auto node = new FuncNode(location(), safeClone(name));
+    NodePtr n(node);
 
-    func->genericTags = safeClone(genericTags);
-    func->args = safeClone(args);
-    func->returnType = safeClone(returnType);
-    func->body = safeClone(body);
+    node->genericTags = safeClone(genericTags);
+    node->args = safeClone(args);
+    node->returnType = safeClone(returnType);
+    node->body = safeClone(body);
 
     return n;
 }

@@ -9,10 +9,10 @@ void NamespaceNode::accept(Visitor &v)
 
 NodePtr NamespaceNode::cloneDetail() const
 {
-    auto ns = new NamespaceNode(location(), safeClone(name));
-    NodePtr n(ns);
+    auto node = new NamespaceNode(location(), safeClone(name));
+    NodePtr n(node);
 
-    ns->body = safeClone(body);
+    node->body = safeClone(body);
 
     return n;
 }

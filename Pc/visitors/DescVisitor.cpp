@@ -64,6 +64,11 @@ void DescVisitor::visit(TypeNode &node)
     if(node.name)
     {
         r += node.name->description();
+
+        if(!node.generics.empty())
+        {
+            r += "<" + pcx::join_str(node.generics, ", ") + ">";
+        }
     }
 
     if(node.function)

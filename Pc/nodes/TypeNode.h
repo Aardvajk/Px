@@ -14,6 +14,7 @@ public:
     bool function;
 
     NodePtr name;
+    NodeList generics;
     NodeList args;
     NodePtr returnType;
 };
