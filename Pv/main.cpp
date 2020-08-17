@@ -5,13 +5,25 @@
 #include "application/Machine.h"
 
 #include <pcx/args.h>
+#include <pcx/str.h>
 
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <cctype>
 
 namespace
 {
+
+std::string charstr(char value)
+{
+    if(std::isprint(value))
+    {
+        return std::string(1, value);
+    }
+
+    return pcx::str("(", int(value), ")");
+}
 
 std::string boolstr(bool value)
 {
@@ -29,7 +41,7 @@ void serviceProc(int code, Memory &mm, Registers &rg)
     }
     else if(code == 2)
     {
-        std::cout << "char " << rm.get<char>() << "\n";
+        std::cout << "char " << charstr(rm.get<char>()) << "\n";
     }
     else if(code == 3)
     {
