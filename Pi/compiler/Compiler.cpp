@@ -346,10 +346,12 @@ void compileVar(Context &c, Entity &e)
 
     auto s = c.syms.add(new Sym(Sym::Type::Var, n));
 
-    s->properties["size"] = e.property("size").to<std::size_t>();
-    s->properties["offset"] = c.func().vars + s->property("size").to<std::size_t>();
+    auto size = e.property("size").to<std::size_t>();
 
-    c.func().vars += s->property("size").to<std::size_t>();
+    s->properties["size"] = size;
+    s->properties["offset"] = c.func().vars + size;
+
+    c.func().vars += size;
 }
 
 void compileFunction(Context &c, Entity &e)

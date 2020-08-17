@@ -1,3 +1,5 @@
+include "stdlib.ph";
+
 class<T> foo
 {
     var a:T;
@@ -7,6 +9,8 @@ class<T, K> woo
 {
     var a:T;
     var b:K;
+
+    var c:foo<K>;
 }
 
 func<T, K> bar():foo<woo<T, K> >
@@ -21,4 +25,5 @@ func main()
 
     a.a.a;
     a.a.b.a;
+    a.a.c.a.a;
 }
