@@ -17,7 +17,8 @@ func<T, K> bar():foo<woo<T, K> >
 
 func main()
 {
-    var a = bar<std.int, std.char>();
+    var a = bar<std.int, foo<std.char> >();
+
     a.a.a;
-    a.a.b;
+    a.a.b.a;
 }
