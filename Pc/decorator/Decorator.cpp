@@ -216,6 +216,7 @@ void Decorator::visit(ClassNode &node)
         auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
         sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
 
+        sym->setProperty("type", c.types.insert(Type::primary(sym)));
         sym->setProperty("classnode", &node);
 
         if(!generics.empty())
@@ -245,6 +246,7 @@ void Decorator::visit(ClassNode &node)
 
 void Decorator::checkFunctionReturned(Context &c, FuncNode &node)
 {
+return;
     auto type = node.assertProperty("sym").to<Sym*>()->assertProperty("type").to<Type*>();
     if(type->returnType != c.types.nullType() && !node.body->assertProperty("sym").to<Sym*>()->property("returned"))
     {

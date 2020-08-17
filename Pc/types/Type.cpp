@@ -31,6 +31,11 @@ std::string describeType(const Type *t, const std::vector<Type*> &generics)
     if(t->sym)
     {
         os << t->sym->fullname();
+
+        if(!t->generics.empty() && !t->sym->property("fulfilled"))
+        {
+            os << "<" << pcx::join_str(t->generics, ",", Functor(generics)) << ">";
+        }
     }
     else if(t->returnType)
     {
@@ -40,11 +45,11 @@ std::string describeType(const Type *t, const std::vector<Type*> &generics)
     {
         if(t->gref->index < generics.size())
         {
-            os << describeType(generics[t->gref->index], { });
+            os << describeType(generics[t->gref->index], generics);
         }
         else
         {
-            os << "<" << t->gref->index << ">";
+            os << "#" << t->gref->index;
         }
     }
 
@@ -68,12 +73,25 @@ bool compareTypes(const Type *a, const Type *b)
         return false;
     }
 
-    if(a->args.size() != b->args.size())
+    if(a->generics.size() != b->generics.size())
     {
         return false;
     }
 
+    for(std::size_t i = 0; i < a->generics.size(); ++i)
+    {
+        if(!compareTypes(a->generics[i], b->generics[i]))
+        {
+            return false;
+        }
+    }
+
     if(!compareTypes(a->returnType, b->returnType))
+    {
+        return false;
+    }
+
+    if(a->args.size() != b->args.size())
     {
         return false;
     }
@@ -156,11 +174,12 @@ pcx::optional<std::size_t> Type::size() const
     return { };
 }
 
-Type Type::primary(Sym *sym)
+Type Type::primary(Sym *sym, const std::vector<Type*> &generics)
 {
     Type t;
 
     t.sym = sym;
+    t.generics = generics;
 
     return t;
 }

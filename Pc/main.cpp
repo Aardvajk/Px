@@ -43,12 +43,20 @@ int main(int argc, char *argv[])
 
         auto n = Parser::build(c);
 
+        if(!c.args.contains("q"))
+        {
+            std::cout << banner("ast");
+            Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+
+            std::cout << banner("requests");
+        }
+
         Visitor::visit<Decorator>(n.get(), c);
         Visitor::visit<Finaliser>(n.get(), c);
 
         if(!c.args.contains("q"))
         {
-            std::cout << banner("ast");
+            std::cout << banner("decorated ast");
             Visitor::visit<AstPrinter>(n.get(), c, std::cout);
 
             std::cout << banner("tree");
@@ -64,7 +72,7 @@ int main(int argc, char *argv[])
             }
 
             Visitor::visit<Generator>(n.get(), c, os);
-            Generics::fulfil(c, os);
+            Generics::fulfilFuncs(c, os);
 
             if(!c.args.contains("q"))
             {

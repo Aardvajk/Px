@@ -6,6 +6,8 @@
 
 #include "nodes/Nodes.h"
 
+#include "generics/Generics.h"
+
 TypeQuery::TypeQuery(Context &c) : c(c), r(nullptr)
 {
 }
@@ -48,7 +50,7 @@ void TypeQuery::visit(VarNode &node)
 
 void TypeQuery::visit(CallNode &node)
 {
-    r = assert(c, node.target.get())->returnType;
+    r = Generics::updateTypeFromTarget(c, assert(c, node.target.get())->returnType, node.target.get());
 }
 
 void TypeQuery::visit(CharLiteralNode &node)

@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 class Sym;
 
@@ -29,7 +30,7 @@ public:
 
     pcx::optional<std::size_t> size() const;
 
-    static Type primary(Sym *sym);
+    static Type primary(Sym *sym, const std::vector<Type*> &generics = { });
     static Type function(Type *returnType, const std::vector<Type*> &args = { });
     static Type generic(const GenericRef &ref);
 
@@ -39,6 +40,7 @@ public:
     static std::size_t assertSize(Location location, const Type *type);
 
     Sym *sym;
+    std::vector<Type*> generics;
 
     Type *returnType;
     std::vector<Type*> args;

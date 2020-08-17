@@ -34,7 +34,7 @@ SOURCES += \
         generator/Generator.cpp \
         generator/GlobalInitGenerator.cpp \
         generator/LocalsGenerator.cpp \
-        generics/GenericRequestSet.cpp \
+        generics/GenericFuncRequestSet.cpp \
         generics/GenericStack.cpp \
         generics/Generics.cpp \
         main.cpp \
@@ -92,9 +92,9 @@ HEADERS += \
     generator/Generator.h \
     generator/GlobalInitGenerator.h \
     generator/LocalsGenerator.h \
+    generics/GenericFuncRequest.h \
+    generics/GenericFuncRequestSet.h \
     generics/GenericRef.h \
-    generics/GenericRequest.h \
-    generics/GenericRequestSet.h \
     generics/GenericStack.h \
     generics/Generics.h \
     components/FuncInfo.h \

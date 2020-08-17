@@ -9,7 +9,7 @@
 #include "types/TypeCache.h"
 
 #include "generics/GenericStack.h"
-#include "generics/GenericRequestSet.h"
+#include "generics/GenericFuncRequestSet.h"
 
 #include "components/ParseInfo.h"
 #include "components/FuncInfo.h"
@@ -35,7 +35,7 @@ public:
     TypeCache types;
 
     GenericStack generics;
-    GenericRequestSet genericRequests;
+    GenericFuncRequestSet genericFuncRequests;
 
     pcx::ptr_vector<FuncInfo> funcInfos;
 };

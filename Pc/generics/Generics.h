@@ -8,13 +8,21 @@
 class Context;
 class Sym;
 class Type;
+class Node;
 
 namespace Generics
 {
 
 std::string funcname(const Sym *sym, const std::vector<Type*> &types);
+std::string classname(const Sym *sym, const std::vector<Type*> &types);
 
-void fulfil(Context &c, std::ostream &os);
+Sym *fulfilType(Context &c, Sym *sym, const std::vector<Type*> &types);
+
+void fulfilFuncs(Context &c, std::ostream &os);
+
+bool anyGenerics(const std::vector<Type*> &types);
+
+Type *updateTypeFromTarget(Context &c, Type *type, Node *target);
 
 }
 

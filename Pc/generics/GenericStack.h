@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 
+class Context;
 class Node;
 class Type;
 
@@ -34,7 +35,7 @@ public:
 
     pcx::optional<GenericRef> typeRef(Node *name) const;
 
-    Type *updateType(Type *type) const;
+    Type *updateType(Context &c, Type *type) const;
 
 private:
     std::vector<GenericParamList> v;

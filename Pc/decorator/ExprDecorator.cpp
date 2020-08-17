@@ -133,7 +133,7 @@ void ExprDecorator::visit(IdNode &node)
         std::vector<Type*> types;
         for(auto &g: node.generics)
         {
-            auto type = c.generics.updateType(TypeBuilder::build(c, g.get()));
+            auto type = c.generics.updateType(c, TypeBuilder::build(c, g.get()));
             types.push_back(type);
         }
 
@@ -144,7 +144,7 @@ void ExprDecorator::visit(IdNode &node)
 
         node.setProperty("generics", types);
 
-        c.genericRequests.insert(GenericRequest(sym, types));
+        c.genericFuncRequests.insert(GenericFuncRequest(sym, types));
     }
 }
 
@@ -154,7 +154,7 @@ void ExprDecorator::visit(CallNode &node)
     for(auto &a: node.args)
     {
         decorate(c, a);
-        args.push_back(c.generics.updateType(TypeQuery::assert(c, a.get())));
+        args.push_back(c.generics.updateType(c, TypeQuery::assert(c, a.get())));
     }
 
     auto type = c.types.insert(Type::function(c.types.nullType(), args));

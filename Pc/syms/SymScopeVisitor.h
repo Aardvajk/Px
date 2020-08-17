@@ -13,6 +13,8 @@ public:
 
     Sym *result(){ return curr; }
 
+    virtual void visit(CallNode &node) override;
+
 private:
     Context &c;
     Sym *curr;

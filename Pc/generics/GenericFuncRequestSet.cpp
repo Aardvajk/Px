@@ -1,12 +1,12 @@
-#include "GenericRequestSet.h"
+#include "GenericFuncRequestSet.h"
 
 #include "generics/Generics.h"
 
-GenericRequestSet::GenericRequestSet()
+GenericFuncRequestSet::GenericFuncRequestSet()
 {
 }
 
-void GenericRequestSet::insert(const GenericRequest &request)
+void GenericFuncRequestSet::insert(const GenericFuncRequest &request)
 {
     auto s = Generics::funcname(request.sym, request.types);
     if(sc.find(s) == sc.end())
@@ -16,7 +16,7 @@ void GenericRequestSet::insert(const GenericRequest &request)
     }
 }
 
-void GenericRequestSet::clearPending()
+void GenericFuncRequestSet::clearPending()
 {
     v.clear();
 }
