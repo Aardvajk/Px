@@ -22,6 +22,7 @@ void fulfilFuncs(Context &c, std::ostream &os);
 
 bool anyGenerics(const std::vector<Type*> &types);
 
+Type *updateTypeFromTypes(Context &c, Type *type, const std::vector<Type*> &types);
 Type *updateTypeFromTarget(Context &c, Type *type, Node *target);
 
 }

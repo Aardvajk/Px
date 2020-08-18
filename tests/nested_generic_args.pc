@@ -1,0 +1,26 @@
+class<T> foo
+{
+    var a:T;
+    var b:T;
+}
+
+class<T> woo
+{
+    var a:T;
+}
+
+func<T> bar(a:foo<woo<T> >)
+{
+    a.b.a;
+}
+
+func main()
+{
+    var a:foo<woo<std.int> >;
+
+    bar<std.int>(a);
+
+    var b:foo<woo<std.char> >;
+
+    bar<std.char>(b);
+}

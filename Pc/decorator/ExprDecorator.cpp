@@ -60,6 +60,13 @@ void ExprDecorator::visit(IdNode &node)
         decorate(c, node.parent);
     }
 
+    std::vector<Type*> genericTypes;
+    for(auto &g: node.generics)
+    {
+        auto type = c.generics.updateType(c, TypeBuilder::build(c, g.get()));
+        genericTypes.push_back(type);
+    }
+
     std::vector<Sym*> sv;
     SymFinder::find(c, SymFinder::Type::Global, c.tree.current(), &node, sv);
 
@@ -71,7 +78,7 @@ void ExprDecorator::visit(IdNode &node)
         {
             if(isCandidate(node, s))
             {
-                auto m = Match::create(expected, s->assertProperty("type").to<Type*>());
+                auto m = Match::create(c, expected, s->assertProperty("type").to<Type*>(), genericTypes);
                 if(m.valid && m.total() == expected->args.size())
                 {
                     map[m].push_back(s);
@@ -128,23 +135,16 @@ void ExprDecorator::visit(IdNode &node)
         }
     }
 
-    if(!node.generics.empty() || !deduced.empty())
+    if(!genericTypes.empty() || !deduced.empty())
     {
-        std::vector<Type*> types;
-        for(auto &g: node.generics)
-        {
-            auto type = c.generics.updateType(c, TypeBuilder::build(c, g.get()));
-            types.push_back(type);
-        }
-
         for(auto t: deduced)
         {
-            types.push_back(t);
+            genericTypes.push_back(t);
         }
 
-        node.setProperty("generics", types);
+        node.setProperty("generics", genericTypes);
 
-        c.genericFuncRequests.insert(GenericFuncRequest(sym, types));
+        c.genericFuncRequests.insert(GenericFuncRequest(sym, genericTypes));
     }
 }
 

@@ -129,33 +129,6 @@ void fulfilFuncRequest(Context &c, const GenericFuncRequest &request, std::ostre
     Visitor::visit<Generator>(node, c, os);
 }
 
-Type *updateTypeFromTypes(Context &c, Type *type, const std::vector<Type*> &types)
-{
-    if(type->gref)
-    {
-        type = updateTypeFromTypes(c, types[type->gref->index], types);
-    }
-
-    if(Generics::anyGenerics(type->generics))
-    {
-        auto copy = *type;
-
-        for(std::size_t i = 0; i < copy.generics.size(); ++i)
-        {
-            copy.generics[i] = updateTypeFromTypes(c, copy.generics[i], types);
-        }
-
-        type = c.types.insert(copy);
-    }
-
-    if(type->sym && !type->generics.empty() && !type->sym->property("size"))
-    {
-        type = c.types.insert(Type::primary(Generics::fulfilType(c, type->sym, type->generics)));
-    }
-
-    return type;
-}
-
 }
 
 std::string Generics::funcname(const Sym *sym, const std::vector<Type*> &types)
@@ -224,6 +197,33 @@ bool Generics::anyGenerics(const std::vector<Type*> &types)
     }
 
     return false;
+}
+
+Type *Generics::updateTypeFromTypes(Context &c, Type *type, const std::vector<Type*> &types)
+{
+    if(type->gref)
+    {
+        type = updateTypeFromTypes(c, types[type->gref->index], types);
+    }
+
+    if(anyGenerics(type->generics))
+    {
+        auto copy = *type;
+
+        for(std::size_t i = 0; i < copy.generics.size(); ++i)
+        {
+            copy.generics[i] = updateTypeFromTypes(c, copy.generics[i], types);
+        }
+
+        type = c.types.insert(copy);
+    }
+
+    if(type->sym && !type->generics.empty() && !type->sym->property("size"))
+    {
+        type = c.types.insert(Type::primary(fulfilType(c, type->sym, type->generics)));
+    }
+
+    return type;
 }
 
 Type *Generics::updateTypeFromTarget(Context &c, Type *type, Node *target)
