@@ -4,23 +4,26 @@ class<T> foo
     var b:T;
 }
 
-class<T> woo
+class<T, K> woo
 {
     var a:T;
+    var b:K;
 }
 
-func<T> bar(a:foo<woo<T> >)
+func<T, K> bar(a:foo<woo<T, K> >):foo<K>
 {
     a.b.a;
+    a.b.b.a;
+
+    var b:foo<K>;
+    return b;
 }
 
 func main()
 {
-    var a:foo<woo<std.int> >;
+    var a:foo<woo<std.int, foo<std.char> > >;
 
-    bar<std.int>(a);
+    var b = bar<std.int, foo<std.char> >(a);
 
-    var b:foo<woo<std.char> >;
-
-    bar<std.char>(b);
+    b.a;
 }
