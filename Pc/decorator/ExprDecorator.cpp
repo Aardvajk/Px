@@ -72,7 +72,7 @@ void ExprDecorator::visit(IdNode &node)
             if(isCandidate(node, s))
             {
                 auto m = Match::create(expected, s->assertProperty("type").to<Type*>());
-                if(m.total() == expected->args.size())
+                if(m.valid && m.total() == expected->args.size())
                 {
                     map[m].push_back(s);
                 }

@@ -18,6 +18,8 @@ public:
 
     std::size_t exacts;
     std::size_t generics;
+
+    bool valid;
 };
 
 #endif // MATCH_H

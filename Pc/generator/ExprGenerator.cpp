@@ -70,6 +70,12 @@ void ExprGenerator::visit(IdNode &node)
 void ExprGenerator::visit(CallNode &node)
 {
     auto type = TypeQuery::assertCallable(c, node.target.get());
+
+    for(auto &a: type->args)
+    {
+        Generics::updateTypeFromTarget(c, a, node.target.get());
+    }
+
     auto returnType = Generics::updateTypeFromTarget(c, type->returnType, node.target.get());
 
     auto size = Type::assertSize(node.location(), returnType);

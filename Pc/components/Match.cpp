@@ -2,7 +2,7 @@
 
 #include "types/Type.h"
 
-Match::Match() : exacts(0), generics(0)
+Match::Match() : exacts(0), generics(0), valid(false)
 {
 }
 
@@ -26,6 +26,7 @@ Match Match::create(const Type *expected, const Type *candidate)
         }
     }
 
+    m.valid = true;
     return m;
 }
 
