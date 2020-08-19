@@ -39,8 +39,6 @@ DISTFILES += \
     ../tests/if_else.pc \
     ../tests/implicit_return.pc \
     ../tests/local_init.pc \
-    ../tests/nested_generic_args.pc \
-    ../tests/nested_generic_return.pc \
     ../tests/overload_generic.pc \
     ../workspace/other.pc \
     ../workspace/pb.bat

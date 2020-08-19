@@ -50,7 +50,7 @@ void TypeQuery::visit(VarNode &node)
 
 void TypeQuery::visit(CallNode &node)
 {
-    r = Generics::updateTypeFromTarget(c, assert(c, node.target.get())->returnType, node.target.get());
+    r = assert(c, node.target.get())->returnType;
 }
 
 void TypeQuery::visit(CharLiteralNode &node)

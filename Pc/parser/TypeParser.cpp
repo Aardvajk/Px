@@ -15,17 +15,6 @@ using TypeNodePtr = pcx::scoped_ptr<TypeNode>;
 
 TypeNodePtr outer(Context &c, bool get);
 
-void generics(Context &c, NodeList &container, bool get)
-{
-    auto t = outer(c, get);
-    container.push_back(t.release());
-
-    if(c.scanner.token().type() == Token::Type::Comma)
-    {
-        generics(c, container, true);
-    }
-}
-
 void arg(Context &c, NodeList &container, bool get)
 {
     container.push_back(outer(c, get).release());
@@ -63,12 +52,6 @@ TypeNodePtr primary(Context &c, bool get)
     else
     {
         n->name = CommonParser::name(c, false);
-
-        if(c.scanner.token().type() == Token::Type::Lt)
-        {
-            generics(c, n->generics, true);
-            c.scanner.consume(Token::Type::Gt, false);
-        }
     }
 
     return n;

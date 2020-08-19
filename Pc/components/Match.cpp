@@ -17,14 +17,6 @@ void process(Context &c, const Type *expected, Type *candidate, const std::vecto
     {
         ++m.generics;
     }
-    else if(!generics.empty())
-    {
-        auto temp = Generics::updateTypeFromTypes(c, candidate, generics);
-        if(Type::exact(expected, temp))
-        {
-            ++m.generics;
-        }
-    }
 }
 
 }

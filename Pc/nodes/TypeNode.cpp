@@ -13,7 +13,6 @@ NodePtr TypeNode::cloneDetail() const
     NodePtr n(node);
 
     node->name = safeClone(name);
-    node->generics = safeClone(generics);
     node->args = safeClone(args);
     node->returnType = safeClone(returnType);
 

@@ -48,29 +48,7 @@ void TypeBuilder::visit(TypeNode &node)
             throw Error(node.location(), "type expected - ", node.description());
         }
 
-        auto sym = sv.front();
-
-        std::vector<Type*> generics;
-        for(auto &n: node.generics)
-        {
-            generics.push_back(c.generics.updateType(c, build(c, n.get())));
-        }
-
-        if(auto p = sym->property("generics"))
-        {
-            if(p.to<GenericParamList>().size() != generics.size())
-            {
-                throw Error(node.location(), "mismatched generics - ", node.description());
-            }
-
-            if(!Generics::anyGenerics(generics))
-            {
-                sym = Generics::fulfilType(c, sym, generics);
-                generics.clear();
-            }
-        }
-
-        r = c.types.insert(Type::primary(sym, generics));
+        r = c.types.insert(Type::primary(sv.front()));
     }
 }
 

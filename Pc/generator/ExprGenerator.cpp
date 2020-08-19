@@ -15,6 +15,24 @@
 
 #include <pcx/indexed_range.h>
 
+namespace
+{
+
+Type *updateType(Type *type, Node *target)
+{
+    if(type->gref)
+    {
+        if(auto p = target->property("generics"))
+        {
+            type = p.to<std::vector<Type*> >()[type->gref->index];
+        }
+    }
+
+    return type;
+}
+
+}
+
 ExprGenerator::ExprGenerator(Context &c, std::ostream &os, Flags flags) : c(c), os(os), flags(flags)
 {
 }
@@ -70,13 +88,7 @@ void ExprGenerator::visit(IdNode &node)
 void ExprGenerator::visit(CallNode &node)
 {
     auto type = TypeQuery::assertCallable(c, node.target.get());
-
-    for(auto &a: type->args)
-    {
-        Generics::updateTypeFromTarget(c, a, node.target.get());
-    }
-
-    auto returnType = Generics::updateTypeFromTarget(c, type->returnType, node.target.get());
+    auto returnType = updateType(type->returnType, node.target.get());
 
     auto size = Type::assertSize(node.location(), returnType);
 
@@ -84,7 +96,7 @@ void ExprGenerator::visit(CallNode &node)
 
     for(auto a: pcx::indexed_range(node.args))
     {
-        auto argType = Generics::updateTypeFromTarget(c, type->args[a.index], node.target.get());
+        auto argType = updateType(type->args[a.index], node.target.get());
 
         if(!Type::exact(TypeQuery::assert(c, a.value.get()), argType))
         {

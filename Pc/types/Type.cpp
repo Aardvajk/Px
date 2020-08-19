@@ -31,11 +31,6 @@ std::string describeType(const Type *t, const std::vector<Type*> &generics)
     if(t->sym)
     {
         os << t->sym->fullname();
-
-        if(!t->generics.empty() && !t->sym->property("fulfilled"))
-        {
-            os << "<" << pcx::join_str(t->generics, ",", Functor(generics)) << ">";
-        }
     }
     else if(t->returnType)
     {
@@ -71,19 +66,6 @@ bool compareTypes(const Type *a, const Type *b)
     if(a->sym != b->sym)
     {
         return false;
-    }
-
-    if(a->generics.size() != b->generics.size())
-    {
-        return false;
-    }
-
-    for(std::size_t i = 0; i < a->generics.size(); ++i)
-    {
-        if(!compareTypes(a->generics[i], b->generics[i]))
-        {
-            return false;
-        }
     }
 
     if(!compareTypes(a->returnType, b->returnType))
@@ -174,12 +156,11 @@ pcx::optional<std::size_t> Type::size() const
     return { };
 }
 
-Type Type::primary(Sym *sym, const std::vector<Type*> &generics)
+Type Type::primary(Sym *sym)
 {
     Type t;
 
     t.sym = sym;
-    t.generics = generics;
 
     return t;
 }

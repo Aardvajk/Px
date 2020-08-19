@@ -44,20 +44,5 @@ Type *GenericStack::updateType(Context &c, Type *type) const
         }
     }
 
-    for(auto &g: copy.generics)
-    {
-        g = updateType(c, g);
-    }
-
-    if(copy.sym && !copy.generics.empty())
-    {
-        auto name = pcx::str(copy.sym->name(), "<", pcx::join_str(copy.generics, ",", [](const Type *t){ return t->description(); }), ">");
-
-        if(auto s = copy.sym->parent()->child(name))
-        {
-            copy = *c.types.insert(Type::primary(s));
-        }
-    }
-
     return c.types.insert(copy);
 }
