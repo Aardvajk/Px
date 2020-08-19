@@ -201,7 +201,7 @@ bool Generics::anyGenerics(const std::vector<Type*> &types)
 
 Type *Generics::updateTypeFromTypes(Context &c, Type *type, const std::vector<Type*> &types)
 {
-    if(type->gref)
+    if(type->gref && type->gref->index < types.size())
     {
         type = updateTypeFromTypes(c, types[type->gref->index], types);
     }
