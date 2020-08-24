@@ -9,12 +9,10 @@ func main()
     var b = true;
     var c = foo;
 
-    var d:std.bool = false;
-
     std.test.same(a, 123);
     std.test.same(b, true);
 
-    var e:() = foo;
+    var d = foo;
 }
 
 func foo()
