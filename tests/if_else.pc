@@ -1,6 +1,6 @@
 include "stdtest.ph";
 
-func<T> foo(a:T, b:T):T
+func foo(a:std.int, b:std.int):std.int
 {
     if(a)
     {
@@ -18,7 +18,4 @@ func main():std.null
 {
     std.test.same(123, foo(123, 321));
     std.test.same(321, foo(0, 321));
-
-    std.test.same('x', foo('x', 'y'));
-    std.test.same('y', foo('\0', 'y'));
 }

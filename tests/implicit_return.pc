@@ -1,12 +1,10 @@
 include "stdtest.ph";
 
 func foo();
-func<T> bar();
 
 func main()
 {
     foo();
-    bar<std.int>();
 }
 
 func foo()
@@ -14,7 +12,7 @@ func foo()
     return;
 }
 
-func<T> bar()
+func bar()
 {
     if(true)
     {

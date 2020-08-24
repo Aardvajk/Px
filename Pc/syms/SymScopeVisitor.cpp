@@ -7,8 +7,6 @@
 #include "types/Type.h"
 #include "types/TypeQuery.h"
 
-#include "generics/Generics.h"
-
 SymScopeVisitor::SymScopeVisitor(Context &c, Sym *curr) : c(c), curr(curr)
 {
 }

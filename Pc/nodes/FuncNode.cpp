@@ -12,7 +12,6 @@ NodePtr FuncNode::cloneDetail() const
     auto node = new FuncNode(location(), safeClone(name));
     NodePtr n(node);
 
-    node->genericTags = safeClone(genericTags);
     node->args = safeClone(args);
     node->returnType = safeClone(returnType);
     node->body = safeClone(body);

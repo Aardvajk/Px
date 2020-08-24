@@ -14,8 +14,6 @@
 #include "visitors/AstPrinter.h"
 #include "visitors/Finaliser.h"
 
-#include "generics/Generics.h"
-
 #include <pcx/join_str.h>
 #include <pcx/textfile.h>
 
@@ -72,13 +70,6 @@ int main(int argc, char *argv[])
             }
 
             Visitor::visit<Generator>(n.get(), c, os);
-            Generics::fulfilFuncs(c, os);
-
-            if(!c.args.contains("q"))
-            {
-                std::cout << banner("tree after fulfil");
-                SymPrinter::print(c, c.tree.root(), std::cout);
-            }
         }
 
         if(!c.args.contains("q"))

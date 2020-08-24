@@ -23,16 +23,6 @@ void DescVisitor::visit(IdNode &node)
     }
 
     r += node.name;
-
-    if(!node.generics.empty())
-    {
-        r += "<" + pcx::join_str(node.generics, ", ") + ">";
-    }
-}
-
-void DescVisitor::visit(GenericTagNode &node)
-{
-    r += node.name;
 }
 
 void DescVisitor::visit(NamespaceNode &node)
@@ -44,11 +34,6 @@ void DescVisitor::visit(NamespaceNode &node)
 void DescVisitor::visit(FuncNode &node)
 {
     r += "func";
-
-    if(!node.genericTags.empty())
-    {
-        r += "<" + pcx::join_str(node.genericTags, ", ") + ">";
-    }
 
     r += " " + node.name->description();
     r += "(" + pcx::join_str(node.args, ", ") + ")";
@@ -89,14 +74,7 @@ void DescVisitor::visit(VarNode &node)
 
 void DescVisitor::visit(ClassNode &node)
 {
-    r += "class";
-
-    if(!node.genericTags.empty())
-    {
-        r += "<" + pcx::join_str(node.genericTags, ", ") + ">";
-    }
-
-    r += " " + node.name->description();
+    r += "class " + node.name->description();
 }
 
 void DescVisitor::visit(ScopeNode &node)

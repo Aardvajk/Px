@@ -7,16 +7,11 @@ var a:std.int = 123;
 var b:std.char = 'a';
 var c:std.bool = true;
 
-func<T> bar(a:T):T
-{
-    return a;
-}
-
 }
 
 func main():std.null
 {
-    std.test.same(123, foo.bar(foo.a));
-    std.test.same('a', foo.bar(foo.b));
-    std.test.same(true, foo.bar(foo.c));
+    std.test.same(123, foo.a);
+    std.test.same('a', foo.b);
+    std.test.same(true, foo.c);
 }

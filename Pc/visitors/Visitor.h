@@ -5,7 +5,6 @@
 
 class BlockNode;
 class IdNode;
-class GenericTagNode;
 class NamespaceNode;
 class FuncNode;
 class TypeNode;
@@ -28,7 +27,6 @@ public:
 
     virtual void visit(BlockNode &node);
     virtual void visit(IdNode &node);
-    virtual void visit(GenericTagNode &node);
     virtual void visit(NamespaceNode &node);
     virtual void visit(FuncNode &node);
     virtual void visit(TypeNode &node);

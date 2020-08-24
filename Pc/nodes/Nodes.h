@@ -3,7 +3,6 @@
 
 #include "nodes/BlockNode.h"
 #include "nodes/IdNode.h"
-#include "nodes/GenericTagNode.h"
 #include "nodes/NamespaceNode.h"
 #include "nodes/FuncNode.h"
 #include "nodes/TypeNode.h"

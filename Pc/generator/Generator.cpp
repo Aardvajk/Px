@@ -34,7 +34,7 @@ void Generator::visit(NamespaceNode &node)
 
 void Generator::visit(FuncNode &node)
 {
-    if(node.body && node.genericTags.empty())
+    if(node.body)
     {
         auto sym = node.property("sym").to<Sym*>();
         auto type = sym->property("type").to<Type*>();
@@ -90,7 +90,7 @@ void Generator::visit(VarNode &node)
 
 void Generator::visit(ClassNode &node)
 {
-    if(node.body && node.genericTags.empty())
+    if(node.body)
     {
         auto g = c.tree.open(node.property("sym").to<Sym*>());
         node.body->accept(*this);

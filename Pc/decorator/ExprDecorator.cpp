@@ -18,37 +18,6 @@
 
 #include <map>
 
-namespace
-{
-
-bool isCandidate(const IdNode &node, const Sym *candidate)
-{
-    if(!node.generics.empty())
-    {
-        if(!candidate->property("generics"))
-        {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-pcx::optional<std::size_t> locateGenericArg(const std::vector<Type*> &args, std::size_t index)
-{
-    for(auto a: pcx::indexed_range(args))
-    {
-        if(a.value->gref && a.value->gref->index == index)
-        {
-            return a.index;
-        }
-    }
-
-    return { };
-}
-
-}
-
 ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
 {
 }
@@ -60,13 +29,6 @@ void ExprDecorator::visit(IdNode &node)
         decorate(c, node.parent);
     }
 
-    std::vector<Type*> genericTypes;
-    for(auto &g: node.generics)
-    {
-        auto type = c.generics.updateType(c, TypeBuilder::build(c, g.get()));
-        genericTypes.push_back(type);
-    }
-
     std::vector<Sym*> sv;
     SymFinder::find(c, SymFinder::Type::Global, c.tree.current(), &node, sv);
 
@@ -76,13 +38,10 @@ void ExprDecorator::visit(IdNode &node)
 
         for(auto s: sv)
         {
-            if(isCandidate(node, s))
+            auto m = Match::create(c, expected, s->assertProperty("type").to<Type*>());
+            if(m.valid && m.total() == expected->args.size())
             {
-                auto m = Match::create(c, expected, s->assertProperty("type").to<Type*>(), genericTypes);
-                if(m.valid && m.total() == expected->args.size())
-                {
-                    map[m].push_back(s);
-                }
+                map[m].push_back(s);
             }
         }
 
@@ -108,44 +67,7 @@ void ExprDecorator::visit(IdNode &node)
 
     auto sym = sv.front();
 
-    if(!node.generics.empty() && sym->type() != Sym::Type::Func)
-    {
-        throw Error(node.location(), "invalid generics - ", node.description());
-    }
-
     node.setProperty("sym", sym);
-
-    std::vector<Type*> deduced;
-    if(auto p = sym->property("generics"))
-    {
-        auto candidate = p.to<GenericParamList>();
-        auto type = sym->assertProperty("type").to<Type*>();
-
-        while(node.generics.size() + deduced.size() < candidate.size())
-        {
-            auto index = node.generics.size() + deduced.size();
-
-            auto found = locateGenericArg(type->args, index);
-            if(!found)
-            {
-                throw Error(node.location(), "cannot deduce generic - ", candidate[index].name);
-            }
-
-            deduced.push_back(expected->args[*found]);
-        }
-    }
-
-    if(!genericTypes.empty() || !deduced.empty())
-    {
-        for(auto t: deduced)
-        {
-            genericTypes.push_back(t);
-        }
-
-        node.setProperty("generics", genericTypes);
-
-        c.genericFuncRequests.insert(GenericFuncRequest(sym, genericTypes));
-    }
 }
 
 void ExprDecorator::visit(CallNode &node)
@@ -154,7 +76,7 @@ void ExprDecorator::visit(CallNode &node)
     for(auto &a: node.args)
     {
         decorate(c, a);
-        args.push_back(c.generics.updateType(c, TypeQuery::assert(c, a.get())));
+        args.push_back(TypeQuery::assert(c, a.get()));
     }
 
     auto type = c.types.insert(Type::function(c.types.nullType(), args));

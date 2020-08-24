@@ -30,15 +30,12 @@ SOURCES += \
 DISTFILES += \
     ../tests/basic_member.pc \
     ../tests/comma.pc \
-    ../tests/deduce_generics.pc \
     ../tests/deduce_vars.pc \
     ../tests/function_types.pc \
-    ../tests/generics.pc \
     ../tests/global_init.pc \
     ../tests/globals.pc \
     ../tests/if_else.pc \
     ../tests/implicit_return.pc \
     ../tests/local_init.pc \
-    ../tests/overload_generic.pc \
     ../workspace/other.pc \
     ../workspace/pb.bat

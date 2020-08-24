@@ -33,7 +33,7 @@ void VarDecorator::visit(VarNode &node)
             node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
         }
 
-        type = c.generics.updateType(c, node.type->property("type").to<Type*>());
+        type = node.type->property("type").to<Type*>();
         node.type->setProperty("type", type);
     }
 

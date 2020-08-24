@@ -93,14 +93,6 @@ void Decorator::visit(NamespaceNode &node)
 
 void Decorator::visit(FuncNode &node)
 {
-    GenericParamList generics;
-    for(auto &n: node.genericTags)
-    {
-        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()), nullptr));
-    }
-
-    auto gp = pcx::scoped_push(c.generics, generics);
-
     std::vector<Type*> args;
     for(auto &a: node.args)
     {
@@ -125,19 +117,6 @@ void Decorator::visit(FuncNode &node)
         {
             throw Error(node.location(), "mismatched return type - ", node.description());
         }
-
-        if(auto p = sym->property("generics"))
-        {
-            if(generics.size() != p.to<GenericParamList>().size())
-            {
-                throw Error(node.location(), "mismatched generics - ", node.description());
-            }
-        }
-
-        if(node.body)
-        {
-            sym->setProperty("funcnode", &node);
-        }
     }
     else
     {
@@ -145,12 +124,6 @@ void Decorator::visit(FuncNode &node)
         sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
 
         sym->setProperty("type", type);
-        sym->setProperty("funcnode", &node);
-
-        if(!generics.empty())
-        {
-            sym->setProperty("generics", generics);
-        }
     }
 
     node.setProperty("sym", sym);
@@ -163,10 +136,7 @@ void Decorator::visit(FuncNode &node)
         }
 
         sym->setProperty("defined", true);
-    }
 
-    if(node.body && generics.empty())
-    {
         c.funcInfos.push_back(new FuncInfo());
         sym->setProperty("info", c.funcInfos.back_ptr());
 
@@ -189,40 +159,13 @@ void Decorator::visit(VarNode &node)
 
 void Decorator::visit(ClassNode &node)
 {
-    GenericParamList generics;
-    for(auto &n: node.genericTags)
-    {
-        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericTagName, std::string>(n.get()), nullptr));
-    }
-
     auto sym = search(c, Sym::Type::Class, node.name.get());
-    if(sym)
-    {
-        if(auto p = sym->property("generics"))
-        {
-            if(generics.size() != p.to<GenericParamList>().size())
-            {
-                throw Error(node.location(), "mismatched generics - ", node.description());
-            }
-        }
-
-        if(node.body)
-        {
-            sym->setProperty("classnode", &node);
-        }
-    }
-    else
+    if(!sym)
     {
         auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
         sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
 
         sym->setProperty("type", c.types.insert(Type::primary(sym)));
-        sym->setProperty("classnode", &node);
-
-        if(!generics.empty())
-        {
-            sym->setProperty("generics", generics);
-        }
     }
 
     node.setProperty("sym", sym);
@@ -237,7 +180,7 @@ void Decorator::visit(ClassNode &node)
         sym->setProperty("defined", true);
     }
 
-    if(node.body && generics.empty())
+    if(node.body)
     {
         auto g = c.tree.open(sym);
         node.body->accept(*this);

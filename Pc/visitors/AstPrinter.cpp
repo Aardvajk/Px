@@ -65,11 +65,6 @@ void AstPrinter::visit(IdNode &node)
     }
 }
 
-void AstPrinter::visit(GenericTagNode &node)
-{
-    tab() << "generic tag " << node.name << "\n";
-}
-
 void AstPrinter::visit(NamespaceNode &node)
 {
     tab() << "namespace " << node.name->description() << info(&node) << "\n";

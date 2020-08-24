@@ -5,8 +5,6 @@
 
 #include "scanner/Location.h"
 
-#include "generics/GenericRef.h"
-
 #include <pcx/optional.h>
 
 #include <string>
@@ -21,7 +19,6 @@ public:
     Type();
 
     std::string description() const;
-    std::string convertedDescription(const std::vector<Type*> &types) const;
 
     bool function() const;
     bool primitive() const;
@@ -32,7 +29,6 @@ public:
 
     static Type primary(Sym *sym);
     static Type function(Type *returnType, const std::vector<Type*> &args = { });
-    static Type generic(const GenericRef &ref);
 
     static bool exact(const Type *a, const Type *b);
     static bool exact(const std::vector<Type*> &a, const std::vector<Type*> &b);
@@ -43,8 +39,6 @@ public:
 
     Type *returnType;
     std::vector<Type*> args;
-
-    pcx::optional<GenericRef> gref;
 };
 
 #endif // TYPE_H

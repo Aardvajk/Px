@@ -40,19 +40,6 @@ private:
 std::string assertSimple(Context &c, Node *node);
 std::string assertSimpleUnique(Context &c, Node *node);
 
-class GenericTagName : public Visitor
-{
-public:
-    GenericTagName(){ }
-
-    std::string result() const { return r; }
-
-    virtual void visit(GenericTagNode &node) override;
-
-private:
-    std::string r;
-};
-
 }
 
 #endif // NAMEVISITORS_H

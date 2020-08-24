@@ -13,12 +13,11 @@ public:
 
     bool operator<(const Match &m) const { return exacts < m.exacts; }
 
-    std::size_t total() const { return exacts + generics; }
+    std::size_t total() const { return exacts; }
 
-    static Match create(Context &c, const Type *expected, const Type *candidate, const std::vector<Type*> &generics);
+    static Match create(Context &c, const Type *expected, const Type *candidate);
 
     std::size_t exacts;
-    std::size_t generics;
 
     bool valid;
 };

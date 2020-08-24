@@ -26,7 +26,7 @@ void Finaliser::visit(NamespaceNode &node)
 
 void Finaliser::visit(ClassNode &node)
 {
-    if(node.body && node.genericTags.empty())
+    if(node.body)
     {
         auto sym = node.assertProperty("sym").to<Sym*>();
 

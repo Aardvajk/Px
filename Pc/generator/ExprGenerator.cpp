@@ -8,30 +8,10 @@
 
 #include "syms/Sym.h"
 
-#include "generics/Generics.h"
-
 #include "types/Type.h"
 #include "types/TypeQuery.h"
 
 #include <pcx/indexed_range.h>
-
-namespace
-{
-
-Type *updateType(Type *type, Node *target)
-{
-    if(type->gref)
-    {
-        if(auto p = target->property("generics"))
-        {
-            type = p.to<std::vector<Type*> >()[type->gref->index];
-        }
-    }
-
-    return type;
-}
-
-}
 
 ExprGenerator::ExprGenerator(Context &c, std::ostream &os, Flags flags) : c(c), os(os), flags(flags)
 {
@@ -43,13 +23,7 @@ void ExprGenerator::visit(IdNode &node)
 
     if(sym->type() == Sym::Type::Func)
     {
-        auto name = sym->funcname();
-        if(auto p = node.property("generics"))
-        {
-            name = Generics::funcname(sym, p.to<std::vector<Type*> >());
-        }
-
-        os << "    push &\"" << name << "\";\n";
+        os << "    push &\"" << sym->funcname() << "\";\n";
         r = sizeof(std::size_t);
     }
     else if(sym->property("member"))
@@ -88,15 +62,14 @@ void ExprGenerator::visit(IdNode &node)
 void ExprGenerator::visit(CallNode &node)
 {
     auto type = TypeQuery::assertCallable(c, node.target.get());
-    auto returnType = updateType(type->returnType, node.target.get());
 
-    auto size = Type::assertSize(node.location(), returnType);
+    auto size = Type::assertSize(node.location(), type->returnType);
 
     os << "    allocs " << size << ";\n";
 
     for(auto a: pcx::indexed_range(node.args))
     {
-        auto argType = updateType(type->args[a.index], node.target.get());
+        auto argType = type->args[a.index];
 
         if(!Type::exact(TypeQuery::assert(c, a.value.get()), argType))
         {

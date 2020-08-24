@@ -34,9 +34,6 @@ SOURCES += \
         generator/Generator.cpp \
         generator/GlobalInitGenerator.cpp \
         generator/LocalsGenerator.cpp \
-        generics/GenericFuncRequestSet.cpp \
-        generics/GenericStack.cpp \
-        generics/Generics.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
@@ -44,7 +41,6 @@ SOURCES += \
         nodes/CommaNode.cpp \
         nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
-        nodes/GenericTagNode.cpp \
         nodes/IdNode.cpp \
         nodes/IfNode.cpp \
         nodes/LiteralNodes.cpp \
@@ -92,11 +88,6 @@ HEADERS += \
     generator/Generator.h \
     generator/GlobalInitGenerator.h \
     generator/LocalsGenerator.h \
-    generics/GenericFuncRequest.h \
-    generics/GenericFuncRequestSet.h \
-    generics/GenericRef.h \
-    generics/GenericStack.h \
-    generics/Generics.h \
     components/FuncInfo.h \
     components/ParseInfo.h \
     nodes/BlockNode.h \
@@ -105,7 +96,6 @@ HEADERS += \
     nodes/CommaNode.h \
     nodes/ExprNode.h \
     nodes/FuncNode.h \
-    nodes/GenericTagNode.h \
     nodes/IdNode.h \
     nodes/IfNode.h \
     nodes/LiteralNodes.h \
