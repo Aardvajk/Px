@@ -31,9 +31,19 @@ void DescVisitor::visit(NamespaceNode &node)
     r += node.name->description();
 }
 
+void DescVisitor::visit(GenericNode &node)
+{
+    r += node.name;
+}
+
 void DescVisitor::visit(FuncNode &node)
 {
     r += "func";
+
+    if(!node.generics.empty())
+    {
+        r += "<" + pcx::join_str(node.generics, ", ") + ">";
+    }
 
     r += " " + node.name->description();
     r += "(" + pcx::join_str(node.args, ", ") + ")";
@@ -74,7 +84,14 @@ void DescVisitor::visit(VarNode &node)
 
 void DescVisitor::visit(ClassNode &node)
 {
-    r += "class " + node.name->description();
+    r += "class";
+
+    if(!node.generics.empty())
+    {
+        r += "<" + pcx::join_str(node.generics, ", ") + ">";
+    }
+
+    r += " " + node.name->description();
 }
 
 void DescVisitor::visit(ScopeNode &node)

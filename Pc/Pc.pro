@@ -41,6 +41,7 @@ SOURCES += \
         nodes/CommaNode.cpp \
         nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
+        nodes/GenericNode.cpp \
         nodes/IdNode.cpp \
         nodes/IfNode.cpp \
         nodes/LiteralNodes.cpp \
@@ -96,6 +97,7 @@ HEADERS += \
     nodes/CommaNode.h \
     nodes/ExprNode.h \
     nodes/FuncNode.h \
+    nodes/GenericNode.h \
     nodes/IdNode.h \
     nodes/IfNode.h \
     nodes/LiteralNodes.h \

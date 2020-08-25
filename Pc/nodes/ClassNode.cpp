@@ -12,6 +12,7 @@ NodePtr ClassNode::cloneDetail() const
     auto node = new ClassNode(location(), safeClone(name));
     NodePtr n(node);
 
+    node->generics = safeClone(node->generics);
     node->body = safeClone(body);
 
     return n;

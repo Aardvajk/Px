@@ -16,6 +16,10 @@ void Visitor::visit(NamespaceNode &node)
 {
 }
 
+void Visitor::visit(GenericNode &node)
+{
+}
+
 void Visitor::visit(FuncNode &node)
 {
 }

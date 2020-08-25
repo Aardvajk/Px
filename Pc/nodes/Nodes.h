@@ -4,6 +4,7 @@
 #include "nodes/BlockNode.h"
 #include "nodes/IdNode.h"
 #include "nodes/NamespaceNode.h"
+#include "nodes/GenericNode.h"
 #include "nodes/FuncNode.h"
 #include "nodes/TypeNode.h"
 #include "nodes/VarNode.h"

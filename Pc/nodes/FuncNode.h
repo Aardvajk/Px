@@ -11,6 +11,7 @@ public:
     virtual void accept(Visitor &v) override;
     virtual NodePtr cloneDetail() const override;
 
+    NodeList generics;
     NodePtr name;
     NodeList args;
     NodePtr returnType;

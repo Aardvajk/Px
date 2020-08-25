@@ -34,6 +34,18 @@ void buildNamespace(Context &c, BlockNode *block, bool get)
     n->body = CommonParser::blockContents(c, c.scanner.token().location(), false);
 }
 
+void buildGenerics(Context &c, NodeList &container, bool get)
+{
+    auto tok = c.scanner.match(Token::Type::Id, get);
+    container.push_back(new GenericNode(tok.location(), tok.text()));
+
+    tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Comma)
+    {
+        buildGenerics(c, container, true);
+    }
+}
+
 void buildArgs(Context &c, NodeList &container, bool get)
 {
     std::string name;
@@ -66,12 +78,21 @@ void buildFunction(Context &c, BlockNode *block, bool get)
         throw Error(tok.location(), "invalid function - ", tok.text());
     }
 
+    NodeList generics;
+
     tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Lt)
+    {
+        buildGenerics(c, generics, true);
+        c.scanner.consume(Token::Type::Gt, false);
+    }
 
     auto name = CommonParser::name(c, false);
 
     auto n = new FuncNode(name->location(), name);
     block->push_back(n);
+
+    n->generics = generics;
 
     c.scanner.match(Token::Type::LeftParen, false);
 
@@ -151,12 +172,21 @@ void buildClass(Context &c, BlockNode *block, bool get)
         throw Error(tok.location(), "invalid class - ", tok.text());
     }
 
+    NodeList generics;
+
     tok = c.scanner.next(true);
+    if(tok.type() == Token::Type::Lt)
+    {
+        buildGenerics(c, generics, true);
+        c.scanner.consume(Token::Type::Gt, false);
+    }
 
     auto name = CommonParser::name(c, false);
 
     auto node = new ClassNode(tok.location(), name);
     block->push_back(node);
+
+    node->generics = generics;
 
     if(c.scanner.token().type() == Token::Type::LeftBrace)
     {
