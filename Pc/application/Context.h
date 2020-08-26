@@ -11,6 +11,8 @@
 #include "components/ParseInfo.h"
 #include "components/FuncInfo.h"
 
+#include "generics/GenericStack.h"
+
 #include <pcx/args.h>
 #include <pcx/ptr_vector.h>
 
@@ -30,6 +32,7 @@ public:
 
     SymTree tree;
     TypeCache types;
+    GenericStack generics;
 
     pcx::ptr_vector<FuncInfo> funcInfos;
 };

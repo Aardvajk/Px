@@ -93,6 +93,14 @@ void Decorator::visit(NamespaceNode &node)
 
 void Decorator::visit(FuncNode &node)
 {
+    GenericParamList generics;
+    for(auto &g: node.generics)
+    {
+        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericNodeName, std::string>(g), nullptr));
+    }
+
+    auto gg = pcx::scoped_push(c.generics, generics);
+
     std::vector<Type*> args;
     for(auto &a: node.args)
     {
@@ -159,6 +167,14 @@ void Decorator::visit(VarNode &node)
 
 void Decorator::visit(ClassNode &node)
 {
+    GenericParamList generics;
+    for(auto &g: node.generics)
+    {
+        generics.push_back(GenericParam(Visitor::query<NameVisitors::GenericNodeName, std::string>(g), nullptr));
+    }
+
+    auto gg = pcx::scoped_push(c.generics, generics);
+
     auto sym = search(c, Sym::Type::Class, node.name.get());
     if(!sym)
     {

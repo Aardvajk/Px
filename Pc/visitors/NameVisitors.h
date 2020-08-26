@@ -40,6 +40,20 @@ private:
 std::string assertSimple(Context &c, Node *node);
 std::string assertSimpleUnique(Context &c, Node *node);
 
+class GenericNodeName : public Visitor
+{
+public:
+    GenericNodeName(){ }
+
+    std::string result() const { return r; }
+
+    virtual void visit(GenericNode &node) override;
+
+private:
+    std::string r;
+
+};
+
 }
 
 #endif // NAMEVISITORS_H

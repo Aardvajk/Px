@@ -2,6 +2,8 @@
 
 #include "nodes/Nodes.h"
 
+#include "types/Type.h"
+
 #include <pcx/join_str.h>
 #include <pcx/lexical_cast.h>
 
@@ -56,18 +58,25 @@ void DescVisitor::visit(FuncNode &node)
 
 void DescVisitor::visit(TypeNode &node)
 {
-    if(node.name)
+    if(auto p = node.property("type"))
     {
-        r += node.name->description();
+        r += p.to<Type*>()->description();
     }
-
-    if(node.function)
+    else
     {
-        r += "(" + pcx::join_str(node.args, ",") + ")";
-
-        if(node.returnType)
+        if(node.name)
         {
-            r += node.returnType->description();
+            r += node.name->description();
+        }
+
+        if(node.function)
+        {
+            r += "(" + pcx::join_str(node.args, ",") + ")";
+
+            if(node.returnType)
+            {
+                r += node.returnType->description();
+            }
         }
     }
 }

@@ -23,6 +23,10 @@ std::string describeType(const Type *t)
     {
         os << "(" << pcx::join_str(t->args, ",", [](const Type *t){ return t->description(); }) << "):" << t->returnType->description();
     }
+    else if(t->gref)
+    {
+        os << "#" << t->gref->index << ":" << t->gref->depth;
+    }
 
     return os.str();
 }
@@ -60,6 +64,11 @@ bool compareTypes(const Type *a, const Type *b)
         {
             return false;
         }
+    }
+
+    if(a->gref != b->gref)
+    {
+        return false;
     }
 
     return true;
@@ -137,6 +146,15 @@ Type Type::function(Type *returnType, const std::vector<Type*> &args)
 
     t.returnType = returnType;
     t.args = args;
+
+    return t;
+}
+
+Type Type::generic(const GenericRef &gref)
+{
+    Type t;
+
+    t.gref = gref;
 
     return t;
 }

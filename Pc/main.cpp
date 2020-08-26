@@ -45,11 +45,16 @@ int main(int argc, char *argv[])
         {
             std::cout << banner("ast");
             Visitor::visit<AstPrinter>(n.get(), c, std::cout);
-
-            std::cout << banner("requests");
         }
 
         Visitor::visit<Decorator>(n.get(), c);
+
+        if(!c.args.contains("q"))
+        {
+            std::cout << banner("decorated ast");
+            Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+        }
+
         Visitor::visit<Finaliser>(n.get(), c);
 
         if(!c.args.contains("q"))

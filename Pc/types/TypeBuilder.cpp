@@ -32,6 +32,10 @@ void TypeBuilder::visit(TypeNode &node)
 
         r = c.types.insert(t);
     }
+    else if(auto g = c.generics.typeRef(node.name.get()))
+    {
+        r = c.types.insert(Type::generic(*g));
+    }
     else
     {
         std::vector<Sym*> sv;

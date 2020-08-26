@@ -34,6 +34,7 @@ SOURCES += \
         generator/Generator.cpp \
         generator/GlobalInitGenerator.cpp \
         generator/LocalsGenerator.cpp \
+        generics/GenericStack.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
@@ -91,6 +92,9 @@ HEADERS += \
     generator/LocalsGenerator.h \
     components/FuncInfo.h \
     components/ParseInfo.h \
+    generics/GenericParam.h \
+    generics/GenericRef.h \
+    generics/GenericStack.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
     nodes/ClassNode.h \
