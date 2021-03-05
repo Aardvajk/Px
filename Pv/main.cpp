@@ -1,5 +1,3 @@
-#include <iostream>
-
-int main()
+int main(int ac, char *av[])
 {
 }
