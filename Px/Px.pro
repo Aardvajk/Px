@@ -15,3 +15,17 @@ QMAKE_CXXFLAGS_WARN_ON += -Wno-unknown-pragmas -Wno-comment -Wno-maybe-uninitial
 INCLUDEPATH += "C:/Projects/pcx"
 
 LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a"
+
+HEADERS += \
+    common/Vm.h \
+    framework/Error.h \
+    framework/Location.h \
+    scanner/Source.h \
+    scanner/SourceList.h \
+    scanner/Token.h
+
+SOURCES += \
+    common/Vm.cpp \
+    scanner/Source.cpp \
+    scanner/SourceList.cpp \
+    scanner/Token.cpp
