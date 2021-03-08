@@ -20,12 +20,16 @@ HEADERS += \
     common/Vm.h \
     framework/Error.h \
     framework/Location.h \
+    scanner/Lexer.h \
+    scanner/Scanner.h \
     scanner/Source.h \
     scanner/SourceList.h \
     scanner/Token.h
 
 SOURCES += \
     common/Vm.cpp \
+    scanner/Lexer.cpp \
+    scanner/Scanner.cpp \
     scanner/Source.cpp \
     scanner/SourceList.cpp \
     scanner/Token.cpp

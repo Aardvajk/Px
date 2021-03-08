@@ -2,6 +2,7 @@
 #define CONTEXT_H
 
 #include "scanner/SourceList.h"
+#include "scanner/Scanner.h"
 
 #include <pcx/args.h>
 
@@ -13,7 +14,9 @@ public:
     void open(const std::string &path);
 
     pcx::args args;
+
     SourceList sources;
+    Scanner scanner;
 };
 
 #endif // CONTEXT_H

@@ -25,3 +25,6 @@ SOURCES += \
 
 HEADERS += \
     application/Context.h
+
+DISTFILES += \
+    ../workspace/source.pi
