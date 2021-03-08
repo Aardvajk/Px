@@ -12,7 +12,8 @@ class Token
 public:
     enum class Type
     {
-        Invalid
+        Id,
+        Eof, Invalid
     };
 
     Token();

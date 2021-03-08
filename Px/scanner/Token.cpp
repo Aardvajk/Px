@@ -16,6 +16,8 @@ const char *Token::toString(Type v)
 {
     switch(v)
     {
+        case Type::Id: return "identifier";
+
         default: return "(unknown)";
     }
 }
