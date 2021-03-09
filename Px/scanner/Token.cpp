@@ -18,6 +18,14 @@ const char *Token::toString(Type v)
     {
         case Type::Id: return "identifier";
 
+        case Type::IntLiteral: return "number";
+
+        case Type::Colon: return "colon";
+        case Type::Semicolon: return "semicolon";
+
+        case Type::LeftBrace: return "left brace";
+        case Type::RightBrace: return "right brace";
+
         default: return "(unknown)";
     }
 }

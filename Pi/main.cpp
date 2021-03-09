@@ -2,7 +2,15 @@
 
 #include "application/Context.h"
 
+#include "components/Entity.h"
+
+#include "compiler/Parser.h"
+#include "compiler/Compiler.h"
+
 #include <iostream>
+#include <vector>
+
+void printEntities(std::ostream &os, const Entity &e, int indent);
 
 int main(int argc, char *argv[])
 {
@@ -18,11 +26,18 @@ int main(int argc, char *argv[])
 
         c.open(files[0]);
 
-        auto t = c.scanner.next(true);
-        while(t.type() != Token::Type::Eof)
+        auto n = Parser::build(c);
+
+        printEntities(std::cout, *n, 0);
+
+        std::cout << "================================\n";
+
+        Compiler::compile(c, *n);
+
+        std::cout << "functions:\n";
+        for(auto f: c.functions)
         {
-            std::cout << "[" << t.text() << "]\n";
-            t = c.scanner.next(true);
+            std::cout << "    " << c.strings[f.id] << "\n";
         }
     }
 
@@ -40,3 +55,14 @@ int main(int argc, char *argv[])
         return -1;
     }
 }
+
+void printEntities(std::ostream &os, const Entity &e, int indent)
+{
+    os << std::string(indent * 4, ' ') << Entity::toString(e.type) << ": " << e.property("name").value<std::string>() << "\n";
+
+    for(auto &n: e.entities)
+    {
+        printEntities(os, n, indent + 1);
+    }
+}
+

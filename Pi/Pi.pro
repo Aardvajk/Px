@@ -21,10 +21,21 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
-        main.cpp
+        components/Entity.cpp \
+        compiler/Compiler.cpp \
+        main.cpp \
+        compiler/Parser.cpp \
+        syms/Sym.cpp \
+        syms/SymStack.cpp
 
 HEADERS += \
-    application/Context.h
+    application/Context.h \
+    components/Entity.h \
+    compiler/Compiler.h \
+    compiler/Parser.h \
+    components/Function.h \
+    syms/Sym.h \
+    syms/SymStack.h
 
 DISTFILES += \
     ../workspace/source.pi
