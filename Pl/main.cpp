@@ -32,6 +32,18 @@ int main(int argc, char *argv[])
             Loader::load(c, files[i]);
         }
 
+        auto ep = c.args["entrypoint"];
+        if(ep.empty())
+        {
+            throw Error("no entrypoint specified");
+        }
+
+        auto m = c.find(ep[0]);
+        if(!m)
+        {
+            throw Error("entrypoint not found - ", ep[0]);
+        }
+
         for(auto &f: c.files)
         {
             for(auto &e: f.entities)
@@ -42,6 +54,8 @@ int main(int argc, char *argv[])
                 s.write(e.data.data(), e.data.size());
             }
         }
+
+        mp.assign(c.ds, m->offset + c.ds.position());
 
         pcx::data_ofstream os(files[0]);
         if(!os.is_open())

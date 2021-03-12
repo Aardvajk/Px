@@ -12,6 +12,8 @@ class Context
 public:
     Context(int argc, char *argv[], std::vector<std::string> &files);
 
+    Object::Entity *find(const std::string &name);
+
     pcx::args args;
 
     pcx::ptr_vector<Object::File> files;
