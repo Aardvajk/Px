@@ -7,10 +7,12 @@
 #include "compiler/Parser.h"
 #include "compiler/Compiler.h"
 
+#include <pcx/datastream.h>
+
 #include <iostream>
 #include <vector>
 
-void printEntities(std::ostream &os, const Entity &e, int indent);
+void generate(Context &c, const std::string &path);
 
 int main(int argc, char *argv[])
 {
@@ -24,21 +26,18 @@ int main(int argc, char *argv[])
             throw Error("no source specified");
         }
 
+        if(files.size() < 2)
+        {
+            throw Error("no output specified");
+        }
+
         c.open(files[0]);
 
         auto n = Parser::build(c);
 
-        printEntities(std::cout, *n, 0);
-
-        std::cout << "================================\n";
-
         Compiler::compile(c, *n);
 
-        std::cout << "functions:\n";
-        for(auto f: c.functions)
-        {
-            std::cout << "    " << c.strings[f.id] << "\n";
-        }
+        generate(c, files[1]);
     }
 
     catch(const Error &e)
@@ -56,13 +55,28 @@ int main(int argc, char *argv[])
     }
 }
 
-void printEntities(std::ostream &os, const Entity &e, int indent)
+void generate(Context &c, const std::string &path)
 {
-    os << std::string(indent * 4, ' ') << Entity::toString(e.type) << ": " << e.property("name").value<std::string>() << "\n";
-
-    for(auto &n: e.entities)
+    pcx::data_ofstream os(path);
+    if(!os.is_open())
     {
-        printEntities(os, n, indent + 1);
+        throw Error("unable to create - ", path);
+    }
+
+    os << std::uint32_t(0);
+
+    os << c.strings.size();
+    for(auto &s: c.strings)
+    {
+        os << s;
+    }
+
+    os << c.functions.size();
+    for(auto &f: c.functions)
+    {
+        os << 'F' << std::uint32_t(0) << f.id;
+
+        os << f.bytes.position();
+        os.write(f.bytes.data().data(), f.bytes.position());
     }
 }
-

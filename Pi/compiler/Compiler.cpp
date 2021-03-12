@@ -2,6 +2,8 @@
 
 #include "framework/Error.h"
 
+#include "common/Vm.h"
+
 #include "application/Context.h"
 
 #include "components/Entity.h"
@@ -22,6 +24,16 @@ void compileFunction(Context &c, Entity &e)
 
         auto f = new Function(c.syms.add(new Sym(Sym::Type::Func, n)), c.strings.insert(n));
         c.functions.push_back(f);
+
+        c.syms.push();
+
+        c.func().bytes << Vm::Op::PushR << Vm::Reg::Bp;
+        c.func().bytes << Vm::Op::CopyRR << Vm::Reg::Sp << Vm::Reg::Bp;
+
+        c.func().bytes << Vm::Op::PopR << Vm::Reg::Bp;
+        c.func().bytes << Vm::Op::Ret << c.func().args;
+
+        c.syms.pop();
     }
 }
 

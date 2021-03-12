@@ -19,6 +19,8 @@ public:
 
     void open(const std::string &path);
 
+    Function &func(){ return functions.back(); }
+
     pcx::args args;
 
     SourceList sources;
