@@ -18,6 +18,7 @@ public:
     std::uint32_t flags;
     std::size_t id;
 
+    std::size_t offset;
     std::vector<char> data;
 };
 
