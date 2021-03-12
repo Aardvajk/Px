@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
         Object::File file(files[0]);
 
-        std::cout << "version: " << is.get<std::uint32_t>() <<" \n";
+        std::cout << pcx::format::banner("version") << is.get<std::uint32_t>() << "\n";
 
         is >> file.strings;
 
@@ -46,22 +46,23 @@ int main(int argc, char *argv[])
 
         auto w = pcx::format::padw(file.strings.size());
 
-        std::cout << "strings:\n";
+        std::cout << pcx::format::banner("strings");
         for(auto i: pcx::indexed_range(file.strings))
         {
             std::cout << pcx::format::pad(i.index, w) << ": " << Lexer::encodeString(i.value) << "\n";
         }
 
-        std::cout << "entities:\n";
         for(auto &e: file.entities)
         {
-            std::cout << e.type << " " << file.strings[e.id] << "\n";
+            std::cout << pcx::format::banner(e.type, " ", file.strings[e.id]);
 
             if(e.type == 'F')
             {
                 Disassembler::function(c, e.data.data(), e.data.size(), std::cout);
             }
         }
+
+        std::cout << pcx::format::banner();
     }
 
     catch(const Error &e)
