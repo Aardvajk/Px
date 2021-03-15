@@ -28,7 +28,6 @@ std::string bytes(ByteReader &rm, std::size_t n)
 void Disassembler::function(Context &c, const char *data, std::size_t size, std::ostream &os)
 {
     std::size_t pc = 0;
-    std::size_t mapIndex = 0;
     ByteReader rm(data, pc);
 
     auto pcw = pcx::format::padw(size);
@@ -40,6 +39,7 @@ void Disassembler::function(Context &c, const char *data, std::size_t size, std:
         Op op;
         Reg r0, r1;
         std::size_t s0;
+        int i0;
 
         os << pcx::format::pad(pc, pcw) << ": ";
 
@@ -66,6 +66,8 @@ void Disassembler::function(Context &c, const char *data, std::size_t size, std:
 
             case Op::Call: rm(r0); os << toString(r0); break;
             case Op::Ret: rm(s0); os << s0; break;
+
+            case Op::Svc: rm(i0); os << i0; break;
 
             default: throw Error("invalid opcode - ", static_cast<int>(op));
         }

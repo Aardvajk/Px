@@ -38,6 +38,8 @@ const char *Vm::toString(Op v)
         "call",
         "ret",
 
+        "svc",
+
         "(invalid)"
     };
 
