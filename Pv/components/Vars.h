@@ -10,9 +10,8 @@ class Vars
 public:
     Vm::Op op;
     Vm::Reg r0, r1;
-    std::size_t s0, s1;
-    int i0, i1;
-    char c0;
+    std::size_t s0;
+    int i0;
 };
 
 #endif // VARS_H

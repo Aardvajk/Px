@@ -34,6 +34,18 @@ Entity *headerConstruct(Context &c, Entity *block, Entity::Type type, bool get)
     return e;
 }
 
+void varConstruct(Context &c, Entity *block, Entity::Type type, bool get)
+{
+    auto v = headerConstruct(c, block, type, get);
+
+    if(!v->property("size"))
+    {
+        throw Error("variable missing size - ", v->property("name").to<std::string>());
+    }
+
+    c.scanner.consume(Token::Type::Semicolon, false);
+}
+
 void funcConstruct(Context &c, Entity *block, bool get)
 {
     auto f = headerConstruct(c, block, Entity::Type::Func, get);
@@ -48,6 +60,16 @@ void funcConstruct(Context &c, Entity *block, bool get)
         f->properties["defined"] = true;
 
         c.scanner.next(true);
+        while(c.scanner.token().type() == Token::Type::RwArg)
+        {
+            varConstruct(c, f, Entity::Type::Arg, true);
+        }
+
+        while(c.scanner.token().type() == Token::Type::RwVar)
+        {
+            varConstruct(c, f, Entity::Type::Var, true);
+        }
+
         while(c.scanner.token().type() != Token::Type::RightBrace)
         {
             codeConstruct(c, f, false);
@@ -67,6 +89,7 @@ void construct(Context &c, Entity *block, bool get)
 
     switch(tok.type())
     {
+        case Token::Type::RwVar: varConstruct(c, block, Entity::Type::Global, true); break;
         case Token::Type::RwFunc: funcConstruct(c, block, true); break;
 
         default: throw Error(tok.location(), "invalid syntax - ", tok.text());

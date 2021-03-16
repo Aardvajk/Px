@@ -16,7 +16,10 @@ public:
     enum class Type
     {
         Block,
+        Global,
         Func,
+        Arg,
+        Var,
         Invalid
     };
 

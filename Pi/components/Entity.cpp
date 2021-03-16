@@ -24,7 +24,10 @@ const char *Entity::toString(Type v)
     static const char *s[] =
     {
         "block",
+        "global",
         "func",
+        "arg",
+        "var",
         "(invalid)"
     };
 

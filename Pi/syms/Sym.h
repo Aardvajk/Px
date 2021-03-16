@@ -13,6 +13,8 @@ public:
     enum class Type
     {
         Func,
+        Var,
+        Arg,
         Invalid
     };
 

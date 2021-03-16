@@ -17,6 +17,6 @@ pcx::any Sym::property(const std::string &name) const
 
 const char *Sym::toString(Type v)
 {
-    static const char *s[] = { "func", "(invalid)" };
+    static const char *s[] = { "func", "var", "arg", "(invalid)" };
     return s[static_cast<int>(v)];
 }

@@ -2,23 +2,18 @@
 #define STACK_H
 
 #include "components/Memory.h"
-#include "components/Registers.h"
-
-#include <string>
-
-#include <iostream>
 
 class Stack
 {
 public:
-    Stack(Memory &mm, Registers &rg) : mm(mm), rg(rg) { }
+    Stack(Memory &mm, std::size_t &sp) : mm(mm), sp(sp) { }
 
-    template<typename T> void push(T v){ rg.sp() -= sizeof(T); std::memcpy(mm(rg.sp()), &v, sizeof(T)); }
-    template<typename T> void pop(T &v){ std::memcpy(&v, mm(rg.sp()), sizeof(T)); rg.sp() += sizeof(T); }
+    template<typename T> void push(T v){ sp -= sizeof(T); std::memcpy(mm(sp), &v, sizeof(T)); }
+    template<typename T> void pop(T &v){ std::memcpy(&v, mm(sp), sizeof(T)); sp += sizeof(T); }
 
 private:
     Memory &mm;
-    Registers &rg;
+    std::size_t &sp;
 };
 
 #endif // STACK_H

@@ -17,7 +17,7 @@ Machine::Machine(pcx::args &args, const std::vector<char> &v, ServiceProc sp) : 
 void Machine::execute()
 {
     ByteReader rm(mm(0), rg.pc());
-    Stack s(mm, rg);
+    Stack s(mm, rg.sp());
     Vars v;
 
     while(true)
