@@ -11,6 +11,7 @@ namespace Lexer
 
 enum class Mode
 {
+    Pc,
     Pi
 };
 
