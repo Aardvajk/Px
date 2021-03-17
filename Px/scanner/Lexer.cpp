@@ -34,6 +34,12 @@ struct Reserved
     Token::Type type;
 };
 
+const std::vector<Reserved> pcReserved =
+{
+    { "func", Token::Type::RwFunc },
+    { "var", Token::Type::RwVar },
+};
+
 const std::vector<Reserved> piReserved =
 {
     { "func", Token::Type::RwFunc },
@@ -133,6 +139,7 @@ Token::Type reserved(Lexer::Mode mode, const std::string &text)
 {
     switch(mode)
     {
+        case Lexer::Mode::Pc: return reserved(pcReserved, text);
         case Lexer::Mode::Pi: return reserved(piReserved, text);
 
         default: return Token::Type::Id;
@@ -150,9 +157,14 @@ Token Lexer::next(Mode mode, Source &source)
 
     if(ch == ':') return Token(Token::Type::Colon, loc, ch);
     if(ch == ';') return Token(Token::Type::Semicolon, loc, ch);
+    if(ch == ',') return Token(Token::Type::Comma, loc, ch);
 
     if(ch == '{') return Token(Token::Type::LeftBrace, loc, ch);
     if(ch == '}') return Token(Token::Type::RightBrace, loc, ch);
+    if(ch == '(') return Token(Token::Type::LeftParen, loc, ch);
+    if(ch == ')') return Token(Token::Type::RightParen, loc, ch);
+    if(ch == '[') return Token(Token::Type::LeftSub, loc, ch);
+    if(ch == ']') return Token(Token::Type::RightSub, loc, ch);
 
     if(ch == '\'')
     {

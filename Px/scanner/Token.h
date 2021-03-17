@@ -14,8 +14,8 @@ public:
     {
         Id,
         CharLiteral, StringLiteral, IntLiteral,
-        Colon, Semicolon,
-        LeftBrace, RightBrace,
+        Colon, Semicolon, Comma,
+        LeftBrace, RightBrace, LeftParen, RightParen, LeftSub, RightSub,
         RwFunc, RwVar, RwArg,
         Eof, Invalid
     };

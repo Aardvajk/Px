@@ -22,9 +22,14 @@ const char *Token::toString(Type v)
 
         case Type::Colon: return "colon";
         case Type::Semicolon: return "semicolon";
+        case Type::Comma: return "comma";
 
         case Type::LeftBrace: return "left brace";
         case Type::RightBrace: return "right brace";
+        case Type::LeftParen: return "left bracket";
+        case Type::RightParen: return "right bracket";
+        case Type::LeftSub: return "left subscript";
+        case Type::RightSub: return "right subscript";
 
         default: return "(unknown)";
     }
