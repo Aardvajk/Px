@@ -28,12 +28,22 @@ void AstPrinter::visit(BlockNode &node)
 
 void AstPrinter::visit(IdNode &node)
 {
-    tab() << "id " << node.name;
+    tab() << "id " << node.name << "\n";
 
     if(node.parent)
     {
         auto g = pcx::scoped_counter(tc);
         node.parent->accept(*this);
+    }
+}
+
+void AstPrinter::visit(FuncNode &node)
+{
+    tab() << node.description() << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
     }
 }
 

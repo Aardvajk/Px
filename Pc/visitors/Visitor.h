@@ -5,6 +5,7 @@
 
 class BlockNode;
 class IdNode;
+class FuncNode;
 
 class Visitor
 {
@@ -13,6 +14,7 @@ public:
 
     virtual void visit(BlockNode &node);
     virtual void visit(IdNode &node);
+    virtual void visit(FuncNode &node);
 
     template<typename T, typename N, typename... Args> static void visit(N node, Args&&... args)
     {

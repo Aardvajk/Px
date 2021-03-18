@@ -14,6 +14,7 @@ public:
 
     virtual void visit(BlockNode &node);
     virtual void visit(IdNode &node);
+    virtual void visit(FuncNode &node);
 
 private:
     std::ostream &tab() const;

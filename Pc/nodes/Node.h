@@ -26,6 +26,8 @@ public:
     virtual void accept(Visitor &v) = 0;
     virtual NodePtr cloneDetail() const = 0;
 
+    std::string description() const;
+
     Location location() const { return n; }
 
 protected:

@@ -23,22 +23,26 @@ SOURCES += \
         application/Context.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
+        nodes/FuncNode.cpp \
         nodes/IdNode.cpp \
         nodes/Node.cpp \
         parser/CommonParser.cpp \
         parser/Parser.cpp \
         visitors/AstPrinter.cpp \
+        visitors/DescVisitor.cpp \
         visitors/Visitor.cpp
 
 HEADERS += \
     application/Context.h \
     nodes/BlockNode.h \
+    nodes/FuncNode.h \
     nodes/IdNode.h \
     nodes/Node.h \
     nodes/Nodes.h \
     parser/CommonParser.h \
     parser/Parser.h \
     visitors/AstPrinter.h \
+    visitors/DescVisitor.h \
     visitors/Visitor.h
 
 DISTFILES += \
