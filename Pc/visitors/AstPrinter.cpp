@@ -26,6 +26,17 @@ void AstPrinter::visit(BlockNode &node)
     tab() << "}\n";
 }
 
+void AstPrinter::visit(IdNode &node)
+{
+    tab() << "id " << node.name;
+
+    if(node.parent)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.parent->accept(*this);
+    }
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

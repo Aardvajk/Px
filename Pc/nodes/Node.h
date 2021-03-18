@@ -6,6 +6,7 @@
 #include <pcx/shared_ptr.h>
 
 #include <vector>
+#include <string>
 
 class Node;
 

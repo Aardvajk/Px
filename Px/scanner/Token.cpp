@@ -23,6 +23,7 @@ const char *Token::toString(Type v)
         case Type::Colon: return "colon";
         case Type::Semicolon: return "semicolon";
         case Type::Comma: return "comma";
+        case Type::Dot: return "dot";
 
         case Type::LeftBrace: return "left brace";
         case Type::RightBrace: return "right brace";

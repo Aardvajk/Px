@@ -13,6 +13,7 @@ public:
     AstPrinter(Context &c, std::ostream &os);
 
     virtual void visit(BlockNode &node);
+    virtual void visit(IdNode &node);
 
 private:
     std::ostream &tab() const;
