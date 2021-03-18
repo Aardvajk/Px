@@ -2,6 +2,12 @@
 
 #include "application/Context.h"
 
+#include "parser/Parser.h"
+
+#include "visitors/AstPrinter.h"
+
+#include <pcx/format.h>
+
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -17,6 +23,13 @@ int main(int argc, char *argv[])
         }
 
         c.open(files[0]);
+
+        auto n = Parser::build(c);
+
+        std::cout << pcx::format::banner("ast");
+        Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+
+        std::cout << pcx::format::banner();
     }
 
     catch(const Error &e)

@@ -21,10 +21,21 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
-        main.cpp
+        main.cpp \
+        nodes/BlockNode.cpp \
+        nodes/Node.cpp \
+        parser/Parser.cpp \
+        visitors/AstPrinter.cpp \
+        visitors/Visitor.cpp
 
 HEADERS += \
-    application/Context.h
+    application/Context.h \
+    nodes/BlockNode.h \
+    nodes/Node.h \
+    nodes/Nodes.h \
+    parser/Parser.h \
+    visitors/AstPrinter.h \
+    visitors/Visitor.h
 
 DISTFILES += \
     ../workspace/source.pc
