@@ -37,14 +37,41 @@ void AstPrinter::visit(IdNode &node)
     }
 }
 
+void AstPrinter::visit(NamespaceNode &node)
+{
+    tab() << "namespace " << node.name->description() << "\n";
+
+    node.body->accept(*this);
+}
+
 void AstPrinter::visit(FuncNode &node)
 {
-    tab() << node.description() << "\n";
+    tab() << "func " << node.description() << "\n";
 
     if(node.body)
     {
         node.body->accept(*this);
     }
+}
+
+void AstPrinter::visit(ClassNode &node)
+{
+    tab() << "class " << node.name->description() << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+}
+
+void AstPrinter::visit(TypeNode &node)
+{
+    tab() << "type " << node.description() << "\n";
+}
+
+void AstPrinter::visit(ScopeNode &node)
+{
+    node.body->accept(*this);
 }
 
 std::ostream &AstPrinter::tab() const

@@ -4,6 +4,8 @@
 #include "scanner/SourceList.h"
 #include "scanner/Scanner.h"
 
+#include "components/ParseInfo.h"
+
 #include <pcx/args.h>
 
 class Context
@@ -17,6 +19,8 @@ public:
 
     SourceList sources;
     Scanner scanner;
+
+    ParseInfo parseInfo;
 };
 
 #endif // CONTEXT_H

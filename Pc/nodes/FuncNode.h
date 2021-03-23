@@ -12,6 +12,7 @@ public:
     virtual NodePtr cloneDetail() const override;
 
     NodePtr name;
+    NodePtr type;
     NodePtr body;
 };
 

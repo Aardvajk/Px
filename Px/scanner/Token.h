@@ -16,7 +16,7 @@ public:
         CharLiteral, StringLiteral, IntLiteral,
         Colon, Semicolon, Comma, Dot,
         LeftBrace, RightBrace, LeftParen, RightParen, LeftSub, RightSub,
-        RwFunc, RwVar, RwArg,
+        RwFunc, RwVar, RwArg, RwNamespace, RwClass,
         Eof, Invalid
     };
 

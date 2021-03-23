@@ -12,6 +12,7 @@ NodePtr FuncNode::cloneDetail() const
     auto node = new FuncNode(location(), safeClone(name));
     NodePtr n(node);
 
+    node->type = safeClone(type);
     node->body = safeClone(body);
 
     return n;

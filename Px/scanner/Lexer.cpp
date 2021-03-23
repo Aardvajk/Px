@@ -38,6 +38,8 @@ const std::vector<Reserved> pcReserved =
 {
     { "func", Token::Type::RwFunc },
     { "var", Token::Type::RwVar },
+    { "namespace", Token::Type::RwNamespace },
+    { "class", Token::Type::RwClass }
 };
 
 const std::vector<Reserved> piReserved =

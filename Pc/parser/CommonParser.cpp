@@ -4,6 +4,8 @@
 
 #include "nodes/Nodes.h"
 
+#include "parser/Parser.h"
+
 namespace
 {
 
@@ -29,4 +31,22 @@ NodePtr nameImp(Context &c, NodePtr parent, bool get)
 NodePtr CommonParser::name(Context &c, bool get)
 {
     return nameImp(c, { }, get);
+}
+
+NodePtr CommonParser::blockContents(Context &c, Location location, bool get)
+{
+    auto block = new BlockNode(location);
+    NodePtr n(block);
+
+    c.scanner.match(Token::Type::LeftBrace, get);
+
+    c.scanner.next(true);
+    while(c.scanner.token().type() != Token::Type::RightBrace)
+    {
+        Parser::construct(c, block, false);
+    }
+
+    c.scanner.next(true);
+
+    return n;
 }

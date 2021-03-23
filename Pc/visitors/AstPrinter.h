@@ -14,7 +14,11 @@ public:
 
     virtual void visit(BlockNode &node);
     virtual void visit(IdNode &node);
+    virtual void visit(NamespaceNode &node);
     virtual void visit(FuncNode &node);
+    virtual void visit(ClassNode &node);
+    virtual void visit(TypeNode &node);
+    virtual void visit(ScopeNode &node);
 
 private:
     std::ostream &tab() const;
