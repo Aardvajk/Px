@@ -39,8 +39,6 @@ const char *OpCode::toString(Op v)
 
         "jmpnz",
 
-        "conv",
-
         "svc",
         "(invalid)"
     };

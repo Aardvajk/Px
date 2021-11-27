@@ -277,16 +277,6 @@ void compileIncrS(Context &c, Entity &e)
     c.func().bytes << OpCode::Op::PushR << OpCode::Reg::Dx;
 }
 
-void compileConvert(Context &c, Entity &e)
-{
-    auto from = e.property("from").to<Primitive::Type>();
-    auto to = e.property("to").to<Primitive::Type>();
-
-    c.cm("-convert ", toString(from), " ", toString(to), ";");
-
-    c.func().bytes << OpCode::Op::Conv << from << to;
-}
-
 void compileService(Context &c, Entity &e)
 {
     auto code = e.property("code").to<int>();
@@ -311,8 +301,6 @@ void compileInstruction(Context &c, Entity &e)
 
         case Code::Type::AllocS: compileAllocS(c, e); break;
         case Code::Type::IncrS: compileIncrS(c, e); break;
-
-        case Code::Type::Convert: compileConvert(c, e); break;
 
         case Code::Type::Service: compileService(c, e); break;
 

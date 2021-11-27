@@ -6,8 +6,6 @@
 #include "components/Stack.h"
 #include "components/Vars.h"
 
-#include "operations/ConvertOps.h"
-
 Machine::Machine(pcx::args &args, const std::vector<char> &v, ServiceProc sp) : args(args), mm(1024 * 10), sp(sp)
 {
     std::memcpy(mm(0), v.data(), v.size());
@@ -50,8 +48,6 @@ void Machine::execute()
             case Op::Ret: rm(v.s0); s.pop(rg.pc()); rg.sp() += v.s0; break;
 
             case Op::JmpNz: rm(v.s0); s.pop(v.c0); if(v.c0) rg.pc() += v.s0; break;
-
-            case Op::Conv: ConvertOps::convert(rm, s); break;
 
             case Op::Svc: rm(v.i0); sp(v.i0, mm, rg); break;
 

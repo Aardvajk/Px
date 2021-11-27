@@ -17,8 +17,6 @@ const char *s[] =
     "allocs",
     "incrs",
 
-    "convert",
-
     "service",
 
     ""

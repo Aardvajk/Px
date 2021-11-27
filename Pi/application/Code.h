@@ -20,8 +20,6 @@ enum class Type
     AllocS,
     IncrS,
 
-    Convert,
-
     Service,
 
     Invalid

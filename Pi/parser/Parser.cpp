@@ -13,19 +13,6 @@
 namespace
 {
 
-Primitive::Type scanPrimitive(Scanner &scanner, bool get)
-{
-    auto tok = scanner.next(get);
-
-    auto type = Primitive::fromString(tok.text());
-    if(type == Primitive::Type::Invalid)
-    {
-        throw Error(tok.location(), "primitive type expected - ", tok.text());
-    }
-
-    return type;
-}
-
 template<typename T> std::vector<char> primitiveToBytes(T value)
 {
     pcx::data_ostringstream os;
@@ -111,12 +98,6 @@ void amountConstruct(Context &c, Entity *e, bool get)
     e->properties["amount"] = pcx::lexical_cast<std::size_t>(c.scanner.match(Token::Type::IntLiteral, get).text());
 }
 
-void convertConstruct(Context &c, Entity *e, bool get)
-{
-    e->properties["from"] = scanPrimitive(c.scanner, get);
-    e->properties["to"] = scanPrimitive(c.scanner, true);
-}
-
 void serviceConstruct(Context &c, Entity *e, bool get)
 {
     e->properties["code"] = pcx::lexical_cast<int>(c.scanner.match(Token::Type::IntLiteral, get).text());
@@ -159,8 +140,6 @@ void codeConstruct(Context &c, Entity *block, bool get)
             case Code::Type::Store:
             case Code::Type::AllocS:
             case Code::Type::IncrS: amountConstruct(c, e, true); break;
-
-            case Code::Type::Convert: convertConstruct(c, e, true); break;
 
             case Code::Type::Service: serviceConstruct(c, e, true); break;
 
