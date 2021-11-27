@@ -1,9 +1,9 @@
 #include "framework/Error.h"
-#include "framework/Console.h"
 
 #include "application/Context.h"
 #include "application/Process.h"
 
+#include <pcx/format.h>
 #include <pcx/datastream.h>
 
 #include <iostream>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
             Process::executable(c, path, is, std::cout);
         }
 
-        std::cout << banner();
+        std::cout << pcx::format::banner();
     }
 
     catch(const Error &error)

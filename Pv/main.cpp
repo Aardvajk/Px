@@ -1,9 +1,9 @@
 #include "framework/Error.h"
 #include "framework/ByteReader.h"
-#include "framework/Console.h"
 
 #include "application/Machine.h"
 
+#include <pcx/format.h>
 #include <pcx/args.h>
 #include <pcx/str.h>
 
@@ -111,14 +111,14 @@ int main(int argc, char *argv[])
 
         if(!args.contains("q"))
         {
-            std::cout << banner("executing");
+            std::cout << pcx::format::banner("executing");
         }
 
         m.execute();
 
         if(!args.contains("q"))
         {
-            std::cout << banner("shutdown");
+            std::cout << pcx::format::banner("shutdown");
         }
 
         m.shutdown();

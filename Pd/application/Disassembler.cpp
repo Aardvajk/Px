@@ -4,11 +4,11 @@
 #include "common/Primitives.h"
 
 #include "framework/ByteReader.h"
-#include "framework/Console.h"
 #include "framework/Error.h"
 
 #include "application/Context.h"
 
+#include <pcx/format.h>
 #include <pcx/join_str.h>
 #include <pcx/lexical_cast.h>
 
@@ -27,7 +27,7 @@ void map(Context &c, std::size_t index, std::size_t &map, std::size_t pc, std::o
 
             if(s.length() && s[0] == '-')
             {
-                os << custom_banner('-', s.substr(1));
+                os << pcx::format::custom_banner('-', s.substr(1));
             }
             else
             {
@@ -67,7 +67,7 @@ void Disassembler::function(Context &c, std::size_t index, const char *data, std
     std::size_t mapIndex = 0;
     ByteReader rm(data, pc);
 
-    auto pcw = padw(size);
+    auto pcw = pcx::format::padw(size);
 
     while(pc < size)
     {
@@ -81,10 +81,10 @@ void Disassembler::function(Context &c, std::size_t index, const char *data, std
 
         map(c, index, mapIndex, pc, os);
 
-        os << pad(pc, pcw) << ": ";
+        os << pcx::format::pad(pc, pcw) << ": ";
 
         rm(op);
-        os << pad(toString(op), 7) << " ";
+        os << pcx::format::pad(toString(op), 7) << " ";
 
         switch(op)
         {

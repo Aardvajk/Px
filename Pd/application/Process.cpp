@@ -1,6 +1,5 @@
 #include "Process.h"
 
-#include "framework/Console.h"
 #include "framework/ByteReader.h"
 
 #include "common/Object.h"
@@ -8,6 +7,7 @@
 #include "application/Context.h"
 #include "application/Disassembler.h"
 
+#include <pcx/format.h>
 #include <pcx/indexed_range.h>
 
 void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, std::ostream &os)
@@ -23,17 +23,17 @@ void Process::unit(Context &c, const std::string &path, pcx::data_istream &is, s
         Object::load(is, 0, u.entities.back());
     }
 
-    os << banner(path, " stringtable");
+    os << pcx::format::banner(path, " stringtable");
 
-    auto pw = padw(u.strings.size());
+    auto pw = pcx::format::padw(u.strings.size());
     for(auto s: pcx::indexed_range(u.strings))
     {
-        std::cout << pad(s.index, pw) << ": " << s.value << "\n";
+        std::cout << pcx::format::pad(s.index, pw) << ": " << s.value << "\n";
     }
 
     for(auto e: pcx::indexed_range(u.entities))
     {
-        os << banner(e.value.type, " ", static_cast<std::uint32_t>(e.value.flags), " ", u.strings[e.value.id]);
+        os << pcx::format::banner(e.value.type, " ", static_cast<std::uint32_t>(e.value.flags), " ", u.strings[e.value.id]);
 
         switch(e.value.type)
         {
@@ -47,7 +47,7 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
 {
     auto v = is.all();
 
-    os << banner(path);
+    os << pcx::format::banner(path);
 
     if(c.dm.size())
     {
@@ -59,7 +59,7 @@ void Process::executable(Context &c, const std::string &path, pcx::data_istream 
 
             if(!e.name.empty())
             {
-                os << banner(e.type, " ", e.name);
+                os << pcx::format::banner(e.type, " ", e.name);
             }
 
             switch(e.type)

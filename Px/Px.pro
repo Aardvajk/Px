@@ -21,7 +21,6 @@ SOURCES += \
     common/Object.cpp \
     common/OpCodes.cpp \
     common/Primitives.cpp \
-    framework/Console.cpp \
     scanner/Lexer.cpp \
     scanner/Scanner.cpp \
     scanner/Source.cpp \
@@ -34,7 +33,6 @@ HEADERS += \
     common/OpCodes.h \
     common/Primitives.h \
     framework/ByteReader.h \
-    framework/Console.h \
     framework/Error.h \
     scanner/Lexer.h \
     scanner/Location.h \
