@@ -16,8 +16,6 @@ INCLUDEPATH += "C:/Projects/pcx"
 
 LIBS += "C:/Projects/pcx/build-pcx/release/libpcx.a"
 
-PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
-
 SOURCES += \
     common/FileMap.cpp \
     common/Object.cpp \
