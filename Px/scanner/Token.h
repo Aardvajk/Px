@@ -15,10 +15,7 @@ public:
         Colon, Semicolon, Amp, Assign, Comma, Dot,
         Lt, Gt,
         LeftBrace, RightBrace, LeftParen, RightParen, LeftSub, RightSub,
-        RwNamespace, RwFunc, RwVar, RwArg, RwClass,
-        RwInclude,
-        RwReturn, RwIf, RwElse,
-        RwTrue, RwFalse,
+        RwFunc, RwVar, RwArg,
         Eof, Invalid
     };
 

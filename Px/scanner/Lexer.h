@@ -12,7 +12,7 @@ namespace Lexer
 
 enum class Mode : std::uint8_t
 {
-    Pi, Pc, Map
+    Pi, Map
 };
 
 Token next(Mode mode, Source &source);
