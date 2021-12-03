@@ -29,6 +29,19 @@ void Sym::setProperty(const std::string &name, pcx::any value)
     pm[name] = value;
 }
 
+Sym *Sym::child(const std::string &name)
+{
+    for(auto s: cs)
+    {
+        if(s->name() == name)
+        {
+            return s;
+        }
+    }
+
+    return nullptr;
+}
+
 std::vector<std::string> Sym::names() const
 {
     if(!ps)

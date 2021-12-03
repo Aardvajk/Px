@@ -26,6 +26,8 @@ public:
 
     void setProperty(const std::string &name, pcx::any value);
 
+    Sym *child(const std::string &name);
+
     Type type() const { return t; }
     Location location() const { return n; }
 
