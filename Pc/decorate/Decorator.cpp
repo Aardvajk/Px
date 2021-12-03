@@ -59,3 +59,26 @@ void Decorator::visit(NamespaceNode &node)
     auto g = c.tree.open(sym);
     node.body->accept(*this);
 }
+
+
+void Decorator::visit(FuncNode &node)
+{
+    auto sym = search(c, Sym::Type::Namespace, node.name.get());
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
+    }
+
+    node.setProperty("sym", sym);
+
+    if(node.body)
+    {
+        if(sym->property("defined").value<bool>())
+        {
+            throw Error(node.location(), "function already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
+    }
+}

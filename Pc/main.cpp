@@ -8,11 +8,14 @@
 
 #include "decorate/Decorator.h"
 
+#include "generate/Generator.h"
+
 #include "syms/SymPrinter.h"
 
 #include <pcx/format.h>
 
 #include <iostream>
+#include <fstream>
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +27,11 @@ int main(int argc, char *argv[])
         if(files.size() < 1)
         {
             throw Error("no source specified");
+        }
+
+        if(files.size() < 2)
+        {
+            throw Error("no output specified");
         }
 
         c.open(files[0]);
@@ -45,6 +53,17 @@ int main(int argc, char *argv[])
 
             std::cout << pcx::format::banner("tree");
             SymPrinter::print(c, c.tree.root(), std::cout);
+        }
+
+        if(true)
+        {
+            std::ofstream os(files[1]);
+            if(!os.is_open())
+            {
+                throw Error("unable to create - ", files[1]);
+            }
+
+            Visitor::visit<Generator>(n.get(), c, os);
         }
 
         if(!c.args.contains("q"))

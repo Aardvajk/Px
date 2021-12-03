@@ -22,6 +22,7 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 SOURCES += \
         application/Context.cpp \
         decorate/Decorator.cpp \
+        generate/Generator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/FuncNode.cpp \
@@ -45,6 +46,7 @@ SOURCES += \
 HEADERS += \
     application/Context.h \
     decorate/Decorator.h \
+    generate/Generator.h \
     nodes/BlockNode.h \
     nodes/FuncNode.h \
     nodes/IdNode.h \
@@ -66,4 +68,5 @@ HEADERS += \
     visitors/Visitor.h
 
 DISTFILES += \
-    ../workspace/source.pc
+    ../workspace/source.pc \
+    ../workspace/source.pi
