@@ -16,6 +16,7 @@ public:
         Lt, Gt,
         LeftBrace, RightBrace, LeftParen, RightParen, LeftSub, RightSub,
         RwFunc, RwVar, RwArg,
+        RwNamespace,
         Eof, Invalid
     };
 

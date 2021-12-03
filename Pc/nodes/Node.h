@@ -4,8 +4,11 @@
 #include "scanner/Location.h"
 
 #include <pcx/shared_ptr.h>
+#include <pcx/any.h>
 
 #include <vector>
+#include <string>
+#include <unordered_map>
 
 class Node;
 
@@ -22,8 +25,15 @@ public:
 
     NodePtr clone() const;
 
+    void setProperty(const std::string &name, pcx::any value);
+
     virtual void accept(Visitor &v) = 0;
     virtual NodePtr cloneDetail() const = 0;
+
+    std::string description() const;
+
+    pcx::any property(const std::string &name) const;
+    pcx::any assertedProperty(const std::string &name) const;
 
     Location location() const { return n; }
 
@@ -33,6 +43,7 @@ protected:
 
 private:
     Location n;
+    std::unordered_map<std::string, pcx::any> pm;
 };
 
 #endif // NODE_H

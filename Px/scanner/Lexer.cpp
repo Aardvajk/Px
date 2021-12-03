@@ -26,6 +26,12 @@ static const std::vector<Reserved> piReserved =
     { "arg", Token::Type::RwArg }
 };
 
+static const std::vector<Reserved> pcReserved =
+{
+    { "namespace", Token::Type::RwNamespace },
+    { "func", Token::Type::RwFunc }
+};
+
 Source::Char skip(Source &source)
 {
     auto ch = source.get();
@@ -75,6 +81,7 @@ Token::Type reserved(Lexer::Mode mode, const std::string &text)
     switch(mode)
     {
         case Lexer::Mode::Pi: return reserved(piReserved, text);
+        case Lexer::Mode::Pc: return reserved(pcReserved, text);
 
         default: return Token::Type::Id;
     }

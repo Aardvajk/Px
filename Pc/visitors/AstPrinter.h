@@ -13,6 +13,10 @@ public:
     AstPrinter(Context &c, std::ostream &os);
 
     virtual void visit(BlockNode &node) override;
+    virtual void visit(IdNode &node) override;
+    virtual void visit(NamespaceNode &node) override;
+    virtual void visit(FuncNode &node) override;
+    virtual void visit(ScopeNode &node) override;
 
 private:
     std::ostream &tab() const;

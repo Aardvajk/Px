@@ -24,6 +24,40 @@ void AstPrinter::visit(BlockNode &node)
     tab() << "}\n";
 }
 
+void AstPrinter::visit(IdNode &node)
+{
+    tab() << "id " << node.name << "\n";
+
+    if(node.parent)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.parent->accept(*this);
+    }
+}
+
+void AstPrinter::visit(NamespaceNode &node)
+{
+    tab() << "namespace " << node.name->description() << "\n";
+
+    node.body->accept(*this);
+}
+
+void AstPrinter::visit(FuncNode &node)
+{
+    tab() << "func " << node.name->description() << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+}
+
+void AstPrinter::visit(ScopeNode &node)
+{
+    tab() << "(scope)\n";
+    node.body->accept(*this);
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

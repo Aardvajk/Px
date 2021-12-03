@@ -6,6 +6,8 @@
 
 #include "visitors/AstPrinter.h"
 
+#include "syms/SymPrinter.h"
+
 #include <pcx/format.h>
 
 #include <iostream>
@@ -30,6 +32,12 @@ int main(int argc, char *argv[])
         {
             std::cout << pcx::format::banner("ast");
             Visitor::visit<AstPrinter>(n.get(), c, std::cout);
+        }
+
+        if(!c.args.contains("q"))
+        {
+            std::cout << pcx::format::banner("tree");
+            SymPrinter::print(c, c.tree.root(), std::cout);
         }
 
         if(!c.args.contains("q"))
