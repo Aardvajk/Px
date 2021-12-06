@@ -28,8 +28,9 @@ void Generator::visit(FuncNode &node)
     if(node.body)
     {
         auto sym = node.assertedProperty("sym").to<Sym*>();
+        auto type = sym->assertedProperty("type").to<Type*>();
 
-        os << "func \"" << sym->fullname() << "\":0\n";
+        os << "func \"" << sym->funcname() << "\":" << type->returnType->assertedSize(node.location()) << "\n";
         os << "{\n";
         os << "}\n";
     }

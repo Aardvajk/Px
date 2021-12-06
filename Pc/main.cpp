@@ -53,6 +53,9 @@ int main(int argc, char *argv[])
 
             std::cout << pcx::format::banner("tree");
             SymPrinter::print(c, c.tree.root(), std::cout);
+
+            std::cout << pcx::format::banner("types");
+            c.types.print(std::cout);
         }
 
         if(true)

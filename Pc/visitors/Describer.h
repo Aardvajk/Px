@@ -18,6 +18,7 @@ public:
     virtual void visit(NamespaceNode &node) override;
     virtual void visit(FuncNode &node) override;
     virtual void visit(ScopeNode &node) override;
+    virtual void visit(TypeNode &node) override;
 
 private:
     std::ostringstream r;

@@ -23,3 +23,7 @@ void Visitor::visit(FuncNode &node)
 void Visitor::visit(ScopeNode &node)
 {
 }
+
+void Visitor::visit(TypeNode &node)
+{
+}

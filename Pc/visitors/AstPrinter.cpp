@@ -4,6 +4,8 @@
 
 #include "syms/Sym.h"
 
+#include "types/Type.h"
+
 #include <pcx/scoped_counter.h>
 
 #include <sstream>
@@ -19,6 +21,11 @@ std::string info(Node *node)
     {
         auto s = p.to<Sym*>();
         os << " -> " << Sym::toString(s->type()) << " " << s->fullname();
+
+        if(auto p = s->property("type"))
+        {
+            os << ":" << p.to<Type*>()->description();
+        }
     }
 
     return os.str();
@@ -66,7 +73,14 @@ void AstPrinter::visit(NamespaceNode &node)
 
 void AstPrinter::visit(FuncNode &node)
 {
-    tab() << "func " << node.name->description() << info(&node) << "\n";
+    tab() << "func " << node.name->description() << "()";
+
+    if(node.type)
+    {
+        os << ":" << node.type->description();
+    }
+
+    os << info(&node) << "\n";
 
     if(node.body)
     {
@@ -78,6 +92,11 @@ void AstPrinter::visit(ScopeNode &node)
 {
     tab() << "(scope)" << info(&node) << "\n";
     node.body->accept(*this);
+}
+
+void AstPrinter::visit(TypeNode &node)
+{
+    tab() << "type " << node.name->description() << "\n";
 }
 
 std::ostream &AstPrinter::tab() const

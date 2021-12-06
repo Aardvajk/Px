@@ -16,6 +16,7 @@ public:
     {
         Namespace,
         Func,
+        Class,
         Invalid
     };
 
@@ -35,6 +36,7 @@ public:
 
     std::string name() const { return s; }
     std::string fullname() const;
+    std::string funcname() const;
 
     Sym *parent(){ return ps; }
     const Sym *parent() const { return ps; }

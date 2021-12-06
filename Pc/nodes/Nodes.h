@@ -6,5 +6,6 @@
 #include "nodes/NamespaceNode.h"
 #include "nodes/FuncNode.h"
 #include "nodes/ScopeNode.h"
+#include "nodes/TypeNode.h"
 
 #endif // NODES_H

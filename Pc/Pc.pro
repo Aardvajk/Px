@@ -30,14 +30,19 @@ SOURCES += \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
         nodes/ScopeNode.cpp \
+        nodes/TypeNode.cpp \
         parser/CommonParser.cpp \
         parser/DeclarationParser.cpp \
         parser/Parser.cpp \
+        parser/TypeParser.cpp \
         syms/Sym.cpp \
         syms/SymFinder.cpp \
         syms/SymGuard.cpp \
         syms/SymPrinter.cpp \
         syms/SymTree.cpp \
+        types/Type.cpp \
+        types/TypeBuilder.cpp \
+        types/TypeCache.cpp \
         visitors/AstPrinter.cpp \
         visitors/Describer.cpp \
         visitors/NameVisitors.cpp \
@@ -54,14 +59,19 @@ HEADERS += \
     nodes/Node.h \
     nodes/Nodes.h \
     nodes/ScopeNode.h \
+    nodes/TypeNode.h \
     parser/CommonParser.h \
     parser/DeclarationParser.h \
     parser/Parser.h \
+    parser/TypeParser.h \
     syms/Sym.h \
     syms/SymFinder.h \
     syms/SymGuard.h \
     syms/SymPrinter.h \
     syms/SymTree.h \
+    types/Type.h \
+    types/TypeBuilder.h \
+    types/TypeCache.h \
     visitors/AstPrinter.h \
     visitors/Describer.h \
     visitors/NameVisitors.h \

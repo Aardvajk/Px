@@ -4,7 +4,7 @@
 
 #include <fstream>
 
-Context::Context(int argc, char *argv[], std::vector<std::string> &files) : args(argc, argv, files), scanner(Lexer::Mode::Pc)
+Context::Context(int argc, char *argv[], std::vector<std::string> &files) : args(argc, argv, files), scanner(Lexer::Mode::Pc), types(*this)
 {
 }
 
