@@ -8,6 +8,8 @@
 
 #include "decorate/Decorator.h"
 
+#include "finalise/Finaliser.h"
+
 #include "generate/Generator.h"
 
 #include "syms/SymPrinter.h"
@@ -57,6 +59,8 @@ int main(int argc, char *argv[])
             std::cout << pcx::format::banner("types");
             c.types.print(std::cout);
         }
+
+        Visitor::visit<Finaliser>(n.get(), c);
 
         if(true)
         {

@@ -9,7 +9,7 @@ namespace
 
 bool hasScope(const Sym *sym)
 {
-    if(sym->type() == Sym::Type::Func)
+    if(sym->type() == Sym::Type::Func || sym->type() == Sym::Type::Class)
     {
         return sym->property("defined").value<bool>();
     }
@@ -21,7 +21,14 @@ void dump(Context &c, int tab, const Sym *sym, std::ostream &os)
 {
     auto ts = std::string(std::size_t(tab * 4), ' ');
 
-    os << ts << Sym::toString(sym->type()) << " " << sym->fullname() << "\n";
+    os << ts << Sym::toString(sym->type()) << " " << sym->fullname();
+
+    if(auto t = sym->property("type"))
+    {
+        os << ":" << t.to<Type*>()->description();
+    }
+
+    os << "\n";
 
     if(hasScope(sym))
     {

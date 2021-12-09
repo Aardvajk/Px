@@ -45,6 +45,25 @@ Sym *Sym::child(const std::string &name)
     return nullptr;
 }
 
+Sym *Sym::container()
+{
+    auto s = this;
+
+    while(s)
+    {
+        switch(s->type())
+        {
+            case Type::Namespace:
+            case Type::Class:
+            case Type::Func: return s;
+
+            default: s = s->parent();
+        }
+    }
+
+    return nullptr;
+}
+
 std::vector<std::string> Sym::names() const
 {
     if(!ps)
@@ -98,6 +117,6 @@ pcx::any Sym::assertedProperty(const std::string &name) const
 
 const char *Sym::toString(Type v)
 {
-    static const char *s[] = { "namespace", "func", "class", "(invalid)" };
+    static const char *s[] = { "namespace", "func", "class", "var", "(invalid)" };
     return s[static_cast<int>(v)];
 }

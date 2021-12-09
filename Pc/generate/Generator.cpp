@@ -6,6 +6,8 @@
 
 #include "syms/Sym.h"
 
+#include "types/Type.h"
+
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
 }
@@ -32,6 +34,27 @@ void Generator::visit(FuncNode &node)
 
         os << "func \"" << sym->funcname() << "\":" << type->returnType->assertedSize(node.location()) << "\n";
         os << "{\n";
+
+        for(auto a: node.args)
+        {
+            auto sym = a->assertedProperty("sym").to<Sym*>();
+            auto type = sym->assertedProperty("type").to<Type*>();
+
+            os << "    arg \"" << sym->fullname() << "\":" << type->assertedSize(a->location()) << ";\n";
+        }
+
         os << "}\n";
+    }
+}
+
+void Generator::visit(VarNode &node)
+{
+    auto sym = node.assertedProperty("sym").to<Sym*>();
+
+    if(!sym->property("member").value<bool>())
+    {
+        auto type = sym->assertedProperty("type").to<Type*>();
+
+        os << "var \"" << sym->fullname() << "\":" << type->assertedSize(node.location()) << ";\n";
     }
 }

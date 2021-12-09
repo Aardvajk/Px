@@ -27,3 +27,11 @@ void Visitor::visit(ScopeNode &node)
 void Visitor::visit(TypeNode &node)
 {
 }
+
+void Visitor::visit(VarNode &node)
+{
+}
+
+void Visitor::visit(ClassNode &node)
+{
+}

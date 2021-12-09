@@ -17,6 +17,7 @@ public:
         Namespace,
         Func,
         Class,
+        Var,
         Invalid
     };
 
@@ -28,6 +29,7 @@ public:
     void setProperty(const std::string &name, pcx::any value);
 
     Sym *child(const std::string &name);
+    Sym *container();
 
     Type type() const { return t; }
     Location location() const { return n; }

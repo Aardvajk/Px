@@ -9,8 +9,12 @@
 #include "syms/SymFinder.h"
 
 #include "types/TypeBuilder.h"
+#include "types/TypeQuery.h"
 
 #include "visitors/NameVisitors.h"
+
+#include "decorate/ArgDecorator.h"
+#include "decorate/VarDecorator.h"
 
 namespace
 {
@@ -93,6 +97,13 @@ void Decorator::visit(NamespaceNode &node)
 
 void Decorator::visit(FuncNode &node)
 {
+    std::vector<Type*> args;
+    for(auto a: node.args)
+    {
+        Visitor::visit<ArgDecorator>(a.get(), c);
+        args.push_back(TypeQuery::assert(c, a.get()));
+    }
+
     auto returnType = c.types.nullType();
 
     if(node.type)
@@ -100,12 +111,12 @@ void Decorator::visit(FuncNode &node)
         returnType = TypeBuilder::build(c, node.type.get());
     }
 
-    auto type = c.types.insert(Type::function(returnType, { }));
+    auto type = c.types.insert(Type::function(returnType, args));
 
     auto sym = searchFunc(c, node.name.get(), type);
     if(!sym)
     {
-        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        auto name = NameVisitors::assertSimple(c, node.name.get());
         sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
 
         sym->setProperty("type", type);
@@ -121,5 +132,42 @@ void Decorator::visit(FuncNode &node)
         }
 
         sym->setProperty("defined", true);
+
+        auto g = c.tree.open(sym);
+
+        for(auto &a: node.args)
+        {
+            Visitor::visit<VarDecorator>(a.get(), c);
+        }
+    }
+}
+
+void Decorator::visit(VarNode &node)
+{
+    Visitor::visit<VarDecorator>(&node, c);
+}
+
+void Decorator::visit(ClassNode &node)
+{
+    auto sym = search(c, Sym::Type::Class, node.name.get());
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
+    }
+
+    node.setProperty("sym", sym);
+
+    if(node.body)
+    {
+        if(sym->property("defined").value<bool>())
+        {
+            throw Error(node.location(), "class already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
+
+        auto g = c.tree.open(sym);
+        node.body->accept(*this);
     }
 }

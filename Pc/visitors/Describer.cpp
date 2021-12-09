@@ -2,6 +2,8 @@
 
 #include "nodes/Nodes.h"
 
+#include <pcx/join_str.h>
+
 Describer::Describer()
 {
 }
@@ -24,12 +26,12 @@ void Describer::visit(IdNode &node)
 
 void Describer::visit(NamespaceNode &node)
 {
-    r << "namespace " << node.name->description();
+    r << node.name->description();
 }
 
 void Describer::visit(FuncNode &node)
 {
-    r << "func " << node.name->description() << "()";
+    r << node.name->description() << "(" << pcx::join_str(node.args, ",") << ")";
 
     if(node.type)
     {
@@ -43,6 +45,21 @@ void Describer::visit(ScopeNode &node)
 }
 
 void Describer::visit(TypeNode &node)
+{
+    r << node.name->description();
+}
+
+void Describer::visit(VarNode &node)
+{
+    r << node.name->description();
+
+    if(node.type)
+    {
+        r << ":" << node.type->description();
+    }
+}
+
+void Describer::visit(ClassNode &node)
 {
     r << node.name->description();
 }

@@ -13,6 +13,7 @@ NodePtr FuncNode::cloneDetail() const
     NodePtr n(node);
 
     node->name = safeClone(name);
+    node->args = safeClone(args);
     node->type = safeClone(type);
     node->body = safeClone(body);
 

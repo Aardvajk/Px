@@ -28,8 +28,10 @@ static const std::vector<Reserved> piReserved =
 
 static const std::vector<Reserved> pcReserved =
 {
+    { "func", Token::Type::RwFunc },
+    { "var", Token::Type::RwVar },
     { "namespace", Token::Type::RwNamespace },
-    { "func", Token::Type::RwFunc }
+    { "class", Token::Type::RwClass }
 };
 
 Source::Char skip(Source &source)

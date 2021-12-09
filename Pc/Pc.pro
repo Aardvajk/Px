@@ -21,18 +21,22 @@ PRE_TARGETDEPS += "C:/Projects/Px/Px/build-Px/release/libPx.a"
 
 SOURCES += \
         application/Context.cpp \
+        decorate/ArgDecorator.cpp \
         decorate/Decorator.cpp \
+        decorate/VarDecorator.cpp \
+        finalise/Finaliser.cpp \
         generate/Generator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
+        nodes/ClassNode.cpp \
         nodes/FuncNode.cpp \
         nodes/IdNode.cpp \
         nodes/NamespaceNode.cpp \
         nodes/Node.cpp \
         nodes/ScopeNode.cpp \
         nodes/TypeNode.cpp \
+        nodes/VarNode.cpp \
         parser/CommonParser.cpp \
-        parser/DeclarationParser.cpp \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
         syms/Sym.cpp \
@@ -43,6 +47,7 @@ SOURCES += \
         types/Type.cpp \
         types/TypeBuilder.cpp \
         types/TypeCache.cpp \
+        types/TypeQuery.cpp \
         visitors/AstPrinter.cpp \
         visitors/Describer.cpp \
         visitors/NameVisitors.cpp \
@@ -50,9 +55,13 @@ SOURCES += \
 
 HEADERS += \
     application/Context.h \
+    decorate/ArgDecorator.h \
     decorate/Decorator.h \
+    decorate/VarDecorator.h \
+    finalise/Finaliser.h \
     generate/Generator.h \
     nodes/BlockNode.h \
+    nodes/ClassNode.h \
     nodes/FuncNode.h \
     nodes/IdNode.h \
     nodes/NamespaceNode.h \
@@ -60,8 +69,8 @@ HEADERS += \
     nodes/Nodes.h \
     nodes/ScopeNode.h \
     nodes/TypeNode.h \
+    nodes/VarNode.h \
     parser/CommonParser.h \
-    parser/DeclarationParser.h \
     parser/Parser.h \
     parser/TypeParser.h \
     syms/Sym.h \
@@ -72,6 +81,7 @@ HEADERS += \
     types/Type.h \
     types/TypeBuilder.h \
     types/TypeCache.h \
+    types/TypeQuery.h \
     visitors/AstPrinter.h \
     visitors/Describer.h \
     visitors/NameVisitors.h \

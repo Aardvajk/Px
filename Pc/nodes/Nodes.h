@@ -7,5 +7,7 @@
 #include "nodes/FuncNode.h"
 #include "nodes/ScopeNode.h"
 #include "nodes/TypeNode.h"
+#include "nodes/VarNode.h"
+#include "nodes/ClassNode.h"
 
 #endif // NODES_H

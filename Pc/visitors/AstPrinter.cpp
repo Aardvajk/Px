@@ -7,6 +7,7 @@
 #include "types/Type.h"
 
 #include <pcx/scoped_counter.h>
+#include <pcx/join_str.h>
 
 #include <sstream>
 
@@ -73,7 +74,7 @@ void AstPrinter::visit(NamespaceNode &node)
 
 void AstPrinter::visit(FuncNode &node)
 {
-    tab() << "func " << node.name->description() << "()";
+    tab() << "func " << node.name->description() << "(" << pcx::join_str(node.args, ",") << ")";
 
     if(node.type)
     {
@@ -97,6 +98,28 @@ void AstPrinter::visit(ScopeNode &node)
 void AstPrinter::visit(TypeNode &node)
 {
     tab() << "type " << node.name->description() << "\n";
+}
+
+void AstPrinter::visit(VarNode &node)
+{
+    tab() << "var " << node.name->description();
+
+    if(node.type)
+    {
+        os << ":" << node.type->description();
+    }
+
+    os << "\n";
+}
+
+void AstPrinter::visit(ClassNode &node)
+{
+    tab() << "class " << node.name->description() << info(&node) << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
 }
 
 std::ostream &AstPrinter::tab() const
