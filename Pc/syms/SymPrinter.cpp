@@ -14,7 +14,7 @@ bool hasScope(const Sym *sym)
         return sym->property("defined").value<bool>();
     }
 
-    return sym->type() == Sym::Type::Namespace;
+    return sym->type() == Sym::Type::Namespace || sym->type() == Sym::Type::Scope;
 }
 
 void dump(Context &c, int tab, const Sym *sym, std::ostream &os)

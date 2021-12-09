@@ -117,6 +117,6 @@ pcx::any Sym::assertedProperty(const std::string &name) const
 
 const char *Sym::toString(Type v)
 {
-    static const char *s[] = { "namespace", "func", "class", "var", "(invalid)" };
+    static const char *s[] = { "namespace", "func", "class", "var", "scope", "(invalid)" };
     return s[static_cast<int>(v)];
 }

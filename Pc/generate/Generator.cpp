@@ -8,6 +8,8 @@
 
 #include "types/Type.h"
 
+#include "generate/LocalsGenerator.h"
+
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
 }
@@ -42,6 +44,8 @@ void Generator::visit(FuncNode &node)
 
             os << "    arg \"" << sym->fullname() << "\":" << type->assertedSize(a->location()) << ";\n";
         }
+
+        Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
 
         os << "}\n";
     }

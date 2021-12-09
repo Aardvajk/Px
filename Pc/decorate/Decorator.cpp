@@ -15,6 +15,7 @@
 
 #include "decorate/ArgDecorator.h"
 #include "decorate/VarDecorator.h"
+#include "decorate/FuncDecorator.h"
 
 namespace
 {
@@ -133,12 +134,17 @@ void Decorator::visit(FuncNode &node)
 
         sym->setProperty("defined", true);
 
+        c.funcInfos.push_back(new FuncInfo());
+        sym->setProperty("info", c.funcInfos.back_ptr());
+
         auto g = c.tree.open(sym);
 
         for(auto &a: node.args)
         {
             Visitor::visit<VarDecorator>(a.get(), c);
         }
+
+        Visitor::visit<FuncDecorator>(node.body.get(), c);
     }
 }
 

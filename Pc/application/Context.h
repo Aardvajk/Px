@@ -8,7 +8,10 @@
 
 #include "types/TypeCache.h"
 
+#include "components/FuncInfo.h"
+
 #include <pcx/args.h>
+#include <pcx/ptr_vector.h>
 
 class Context
 {
@@ -26,6 +29,8 @@ public:
     TypeCache types;
 
     std::vector<Sym::Type> containers;
+
+    pcx::ptr_vector<FuncInfo> funcInfos;
 };
 
 #endif // CONTEXT_H

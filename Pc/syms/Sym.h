@@ -18,6 +18,7 @@ public:
         Func,
         Class,
         Var,
+        Scope,
         Invalid
     };
 

@@ -23,9 +23,11 @@ SOURCES += \
         application/Context.cpp \
         decorate/ArgDecorator.cpp \
         decorate/Decorator.cpp \
+        decorate/FuncDecorator.cpp \
         decorate/VarDecorator.cpp \
         finalise/Finaliser.cpp \
         generate/Generator.cpp \
+        generate/LocalsGenerator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/ClassNode.cpp \
@@ -37,6 +39,7 @@ SOURCES += \
         nodes/TypeNode.cpp \
         nodes/VarNode.cpp \
         parser/CommonParser.cpp \
+        parser/FuncParser.cpp \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
         syms/Sym.cpp \
@@ -55,11 +58,14 @@ SOURCES += \
 
 HEADERS += \
     application/Context.h \
+    components/FuncInfo.h \
     decorate/ArgDecorator.h \
     decorate/Decorator.h \
+    decorate/FuncDecorator.h \
     decorate/VarDecorator.h \
     finalise/Finaliser.h \
     generate/Generator.h \
+    generate/LocalsGenerator.h \
     nodes/BlockNode.h \
     nodes/ClassNode.h \
     nodes/FuncNode.h \
@@ -71,6 +77,7 @@ HEADERS += \
     nodes/TypeNode.h \
     nodes/VarNode.h \
     parser/CommonParser.h \
+    parser/FuncParser.h \
     parser/Parser.h \
     parser/TypeParser.h \
     syms/Sym.h \

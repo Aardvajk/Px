@@ -8,6 +8,7 @@
 
 #include "parser/CommonParser.h"
 #include "parser/TypeParser.h"
+#include "parser/FuncParser.h"
 
 #include <pcx/scoped_push.h>
 
@@ -154,7 +155,7 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
         case Token::Type::RwVar: buildVar(c, block, true); break;
         case Token::Type::RwClass: buildClass(c, block, true); break;
 
-        default: throw Error(tok.location(), "parse error - ", tok.text());
+        default: FuncParser::build(c, block, false);
     }
 }
 
