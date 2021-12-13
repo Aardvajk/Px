@@ -49,9 +49,6 @@ void Generator::visit(FuncNode &node)
         Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
         Visitor::visit<FuncGenerator>(node.body.get(), c, os);
 
-static int id = 0;
-os << "    service " << id++ << ";\n";
-
         os << "}\n";
     }
 }

@@ -69,13 +69,16 @@ void buildFunc(Context &c, BlockNode *block, bool get)
         throw Error(n->name->location(), "invalid location for function - ", n->name->description());
     }
 
-    c.scanner.consume(Token::Type::LeftParen, false);
-    if(c.scanner.token().type() != Token::Type::RightParen)
+    if(c.scanner.token().type() == Token::Type::LeftParen)
     {
-        buildArgs(c, n->args, false);
-    }
+        c.scanner.consume(Token::Type::LeftParen, false);
+        if(c.scanner.token().type() != Token::Type::RightParen)
+        {
+            buildArgs(c, n->args, false);
+        }
 
-    c.scanner.consume(Token::Type::RightParen, false);
+        c.scanner.consume(Token::Type::RightParen, false);
+    }
 
     if(c.scanner.token().type() == Token::Type::Colon)
     {
