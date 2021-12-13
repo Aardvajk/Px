@@ -122,6 +122,14 @@ void AstPrinter::visit(ClassNode &node)
     }
 }
 
+void AstPrinter::visit(ExprNode &node)
+{
+    tab() << "expr\n";
+
+    auto g = pcx::scoped_counter(tc);
+    node.expr->accept(*this);
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

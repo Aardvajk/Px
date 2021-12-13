@@ -5,6 +5,7 @@
 #include "nodes/Nodes.h"
 
 #include "decorate/VarDecorator.h"
+#include "decorate/ExprDecorator.h"
 
 #include <pcx/str.h>
 
@@ -34,4 +35,9 @@ void FuncDecorator::visit(ScopeNode &node)
 void FuncDecorator::visit(VarNode &node)
 {
     Visitor::visit<VarDecorator>(&node, c);
+}
+
+void FuncDecorator::visit(ExprNode &node)
+{
+    Visitor::visit<ExprDecorator>(node.expr.get(), c);
 }

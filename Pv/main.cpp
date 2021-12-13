@@ -32,59 +32,7 @@ std::string boolstr(bool value)
 
 void serviceProc(int code, Memory &mm, Registers &rg)
 {
-    auto sp = rg.sp();
-    ByteReader rm(mm(0), sp);
-
-    if(code == 1)
-    {
-        std::cout << "int " << rm.get<int>() << "\n";
-    }
-    else if(code == 2)
-    {
-        std::cout << "char " << charstr(rm.get<char>()) << "\n";
-    }
-    else if(code == 3)
-    {
-        std::cout << "bool " << boolstr(rm.get<char>()) << "\n";
-    }
-    else if(code == 4)
-    {
-        std::cout << "ulong " << rm.get<std::size_t>() << "\n";
-    }
-    else if(code == 100)
-    {
-        auto a = rm.get<int>();
-        auto b = rm.get<int>();
-
-        if(a != b)
-        {
-            throw Error("std.test.same(std.int,std.int) failed with ", a, " and ", b);
-        }
-    }
-    else if(code == 101)
-    {
-        auto a = rm.get<char>();
-        auto b = rm.get<char>();
-
-        if(a != b)
-        {
-            throw Error("std.test.same(std.char,std.char) failed with ", int(a), " and ", int(b));
-        }
-    }
-    else if(code == 102)
-    {
-        auto a = rm.get<char>();
-        auto b = rm.get<char>();
-
-        if(a != b)
-        {
-            throw Error("std.test.same(std.bool,std.bool) failed with ", boolstr(a), boolstr(b));
-        }
-    }
-    else
-    {
-        std::cout << "service " << code << "\n";
-    }
+    std::cout << "service " << code << "\n";
 }
 
 }

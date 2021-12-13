@@ -63,3 +63,8 @@ void Describer::visit(ClassNode &node)
 {
     r << node.name->description();
 }
+
+void Describer::visit(ExprNode &node)
+{
+    r << node.expr->description();
+}

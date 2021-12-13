@@ -23,14 +23,18 @@ SOURCES += \
         application/Context.cpp \
         decorate/ArgDecorator.cpp \
         decorate/Decorator.cpp \
+        decorate/ExprDecorator.cpp \
         decorate/FuncDecorator.cpp \
         decorate/VarDecorator.cpp \
         finalise/Finaliser.cpp \
+        generate/ExprGenerator.cpp \
+        generate/FuncGenerator.cpp \
         generate/Generator.cpp \
         generate/LocalsGenerator.cpp \
         main.cpp \
         nodes/BlockNode.cpp \
         nodes/ClassNode.cpp \
+        nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
         nodes/IdNode.cpp \
         nodes/NamespaceNode.cpp \
@@ -39,6 +43,7 @@ SOURCES += \
         nodes/TypeNode.cpp \
         nodes/VarNode.cpp \
         parser/CommonParser.cpp \
+        parser/ExprParser.cpp \
         parser/FuncParser.cpp \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
@@ -61,13 +66,17 @@ HEADERS += \
     components/FuncInfo.h \
     decorate/ArgDecorator.h \
     decorate/Decorator.h \
+    decorate/ExprDecorator.h \
     decorate/FuncDecorator.h \
     decorate/VarDecorator.h \
     finalise/Finaliser.h \
+    generate/ExprGenerator.h \
+    generate/FuncGenerator.h \
     generate/Generator.h \
     generate/LocalsGenerator.h \
     nodes/BlockNode.h \
     nodes/ClassNode.h \
+    nodes/ExprNode.h \
     nodes/FuncNode.h \
     nodes/IdNode.h \
     nodes/NamespaceNode.h \
@@ -77,6 +86,7 @@ HEADERS += \
     nodes/TypeNode.h \
     nodes/VarNode.h \
     parser/CommonParser.h \
+    parser/ExprParser.h \
     parser/FuncParser.h \
     parser/Parser.h \
     parser/TypeParser.h \

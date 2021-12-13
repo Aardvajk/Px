@@ -9,5 +9,6 @@
 #include "nodes/TypeNode.h"
 #include "nodes/VarNode.h"
 #include "nodes/ClassNode.h"
+#include "nodes/ExprNode.h"
 
 #endif // NODES_H

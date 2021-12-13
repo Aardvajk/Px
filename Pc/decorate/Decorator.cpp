@@ -105,7 +105,7 @@ void Decorator::visit(FuncNode &node)
         args.push_back(TypeQuery::assert(c, a.get()));
     }
 
-    auto returnType = c.types.nullType();
+    auto returnType = c.types.primitiveType(Primitive::Type::Null);
 
     if(node.type)
     {

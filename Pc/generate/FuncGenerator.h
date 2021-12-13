@@ -1,22 +1,24 @@
-#ifndef FUNCDECORATOR_H
-#define FUNCDECORATOR_H
+#ifndef FUNCGENERATOR_H
+#define FUNCGENERATOR_H
 
 #include "visitors/Visitor.h"
 
+#include <iostream>
+
 class Context;
 
-class FuncDecorator : public Visitor
+class FuncGenerator : public Visitor
 {
 public:
-    explicit FuncDecorator(Context &c);
+    FuncGenerator(Context &c, std::ostream &os);
 
     virtual void visit(BlockNode &node) override;
     virtual void visit(ScopeNode &node) override;
-    virtual void visit(VarNode &node) override;
     virtual void visit(ExprNode &node) override;
 
 private:
     Context &c;
+    std::ostream &os;
 };
 
-#endif // FUNCDECORATOR_H
+#endif // FUNCGENERATOR_H

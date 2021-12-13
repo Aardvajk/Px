@@ -7,9 +7,20 @@
 #include "nodes/Nodes.h"
 
 #include "parser/CommonParser.h"
+#include "parser/ExprParser.h"
 
 namespace
 {
+
+void buildExpression(Context &c, BlockNode *block, bool get)
+{
+    auto n = new ExprNode(c.scanner.token().location());
+    block->push_back(n);
+
+    n->expr = ExprParser::build(c, false);
+
+    c.scanner.consume(Token::Type::Semicolon, false);
+}
 
 void buildAnonymousScope(Context &c, BlockNode *block, bool get)
 {
@@ -34,6 +45,6 @@ void FuncParser::build(Context &c, BlockNode *block, bool get)
     {
         case Token::Type::LeftBrace: buildAnonymousScope(c, block, false); break;
 
-        default: throw Error(tok.location(), "parse error - ", tok.text());
+        default: buildExpression(c, block, false);
     }
 }

@@ -9,6 +9,7 @@
 #include "types/Type.h"
 
 #include "generate/LocalsGenerator.h"
+#include "generate/FuncGenerator.h"
 
 Generator::Generator(Context &c, std::ostream &os) : c(c), os(os)
 {
@@ -46,6 +47,10 @@ void Generator::visit(FuncNode &node)
         }
 
         Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
+        Visitor::visit<FuncGenerator>(node.body.get(), c, os);
+
+static int id = 0;
+os << "    service " << id++ << ";\n";
 
         os << "}\n";
     }
