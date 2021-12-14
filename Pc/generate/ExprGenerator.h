@@ -26,6 +26,7 @@ public:
     pcx::optional<std::size_t> result() const { return r; }
 
     virtual void visit(IdNode &node) override;
+    virtual void visit(CallNode &node) override;
 
     static std::size_t generate(Context &c, std::ostream &os, Node *node, Flags flags = { });
 

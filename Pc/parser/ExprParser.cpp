@@ -20,6 +20,18 @@ NodePtr id(Context &c, NodePtr parent, bool get)
     return n;
 }
 
+NodePtr call(Context &c, NodePtr target, bool get)
+{
+    auto node = new CallNode(c.scanner.token().location());
+    NodePtr n(node);
+
+    node->target = target;
+
+    c.scanner.consume(Token::Type::RightParen, get);
+
+    return n;
+}
+
 NodePtr primary(Context &c, bool get)
 {
     auto tok = c.scanner.next(get);
@@ -40,6 +52,7 @@ NodePtr entity(Context &c, bool get)
         switch(c.scanner.token().type())
         {
             case Token::Type::Dot: n = id(c, n, true); break;
+            case Token::Type::LeftParen: n = call(c, n, true); break;
 
             default: return n;
         }

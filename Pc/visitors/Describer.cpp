@@ -68,3 +68,8 @@ void Describer::visit(ExprNode &node)
 {
     r << node.expr->description();
 }
+
+void Describer::visit(CallNode &node)
+{
+    r << node.target->description() << "()";
+}

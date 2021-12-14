@@ -10,5 +10,6 @@
 #include "nodes/VarNode.h"
 #include "nodes/ClassNode.h"
 #include "nodes/ExprNode.h"
+#include "nodes/CallNode.h"
 
 #endif // NODES_H

@@ -15,21 +15,6 @@
 namespace
 {
 
-std::string charstr(char value)
-{
-    if(std::isprint(value))
-    {
-        return std::string(1, value);
-    }
-
-    return pcx::str("(", int(value), ")");
-}
-
-std::string boolstr(bool value)
-{
-    return value ? "true" : "false";
-}
-
 void serviceProc(int code, Memory &mm, Registers &rg)
 {
     std::cout << "service " << code << "\n";

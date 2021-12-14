@@ -8,7 +8,7 @@
 
 #include "syms/SymFinder.h"
 
-ExprDecorator::ExprDecorator(Context &c) : c(c)
+ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
 {
 }
 
@@ -28,4 +28,11 @@ void ExprDecorator::visit(IdNode &node)
     }
 
     node.setProperty("sym", sv.front());
+}
+
+void ExprDecorator::visit(CallNode &node)
+{
+    auto type = c.types.insert(Type::function(c.types.primitiveType(Primitive::Type::Null), { }));
+
+    Visitor::visit<ExprDecorator>(node.target.get(), c, type);
 }

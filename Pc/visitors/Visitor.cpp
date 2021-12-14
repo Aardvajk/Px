@@ -39,3 +39,7 @@ void Visitor::visit(ClassNode &node)
 void Visitor::visit(ExprNode &node)
 {
 }
+
+void Visitor::visit(CallNode &node)
+{
+}

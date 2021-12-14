@@ -22,6 +22,7 @@ public:
     virtual void visit(VarNode &node) override;
     virtual void visit(ClassNode &node) override;
     virtual void visit(ExprNode &node) override;
+    virtual void visit(CallNode &node) override;
 
 private:
     std::ostringstream r;

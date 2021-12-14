@@ -8,6 +8,8 @@
 
 #include "syms/Sym.h"
 
+#include "types/TypeQuery.h"
+
 ExprGenerator::ExprGenerator(Context &c, std::ostream &os, Flags flags) : c(c), os(os), flags(flags)
 {
 }
@@ -48,12 +50,23 @@ void ExprGenerator::visit(IdNode &node)
         }
         else
         {
-            auto type = sym->assertedProperty("type").to<Type*>();
-
             os << "    push \"" << sym->fullname() << "\";\n";
-            r = type->assertedSize(node.location());
+            r = sym->assertedProperty("type").to<Type*>()->assertedSize(node.location());
         }
     }
+}
+
+void ExprGenerator::visit(CallNode &node)
+{
+    auto type = TypeQuery::assertCallable(c, node.target.get());
+    auto size = type->returnType->assertedSize(node.location());
+
+    os << "    allocs " << size << ";\n";
+
+    generate(c, os, node.target.get());
+    os << "    call;\n";
+
+    r = size;
 }
 
 std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Flags flags)

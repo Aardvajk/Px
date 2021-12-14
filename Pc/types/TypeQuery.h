@@ -20,6 +20,7 @@ public:
 
     static Type *query(Context &c, Node *node);
     static Type *assert(Context &c, Node *node);
+    static Type *assertCallable(Context &c, Node *node);
 
 private:
     Context &c;
