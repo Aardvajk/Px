@@ -13,6 +13,7 @@ NodePtr CallNode::cloneDetail() const
     NodePtr n(node);
 
     node->target = safeClone(target);
+    node->args = safeClone(args);
 
     return n;
 }

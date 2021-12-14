@@ -71,5 +71,5 @@ void Describer::visit(ExprNode &node)
 
 void Describer::visit(CallNode &node)
 {
-    r << node.target->description() << "()";
+    r << node.target->description() << "(" << pcx::join_str(node.args, ",") << ")";
 }

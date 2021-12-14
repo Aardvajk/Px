@@ -9,6 +9,8 @@
 namespace
 {
 
+NodePtr expression(Context &c, bool get);
+
 NodePtr id(Context &c, NodePtr parent, bool get)
 {
     auto tok = c.scanner.match(Token::Type::Id, get);
@@ -20,6 +22,16 @@ NodePtr id(Context &c, NodePtr parent, bool get)
     return n;
 }
 
+void args(Context &c, NodeList &container, bool get)
+{
+    container.push_back(expression(c, get));
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        args(c, container, true);
+    }
+}
+
 NodePtr call(Context &c, NodePtr target, bool get)
 {
     auto node = new CallNode(c.scanner.token().location());
@@ -27,8 +39,13 @@ NodePtr call(Context &c, NodePtr target, bool get)
 
     node->target = target;
 
-    c.scanner.consume(Token::Type::RightParen, get);
+    auto tok = c.scanner.next(get);
+    if(tok.type() != Token::Type::RightParen)
+    {
+        args(c, node->args, false);
+    }
 
+    c.scanner.consume(Token::Type::RightParen, false);
     return n;
 }
 
@@ -59,9 +76,14 @@ NodePtr entity(Context &c, bool get)
     }
 }
 
+NodePtr expression(Context &c, bool get)
+{
+    return entity(c, get);
+}
+
 }
 
 NodePtr ExprParser::build(Context &c, bool get)
 {
-    return entity(c, get);
+    return expression(c, get);
 }

@@ -12,6 +12,7 @@ public:
     virtual NodePtr cloneDetail() const override;
 
     NodePtr target;
+    NodeList args;
 };
 
 #endif // CALLNODE_H

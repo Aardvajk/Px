@@ -39,6 +39,11 @@ void TypeQuery::visit(VarNode &node)
     }
 }
 
+void TypeQuery::visit(CallNode &node)
+{
+    r = assert(c, node.target.get())->returnType;
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

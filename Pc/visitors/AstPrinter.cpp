@@ -134,8 +134,14 @@ void AstPrinter::visit(CallNode &node)
 {
     tab() << "call\n";
 
-    auto g = pcx::scoped_counter(tc);
+    auto g1 = pcx::scoped_counter(tc);
     node.target->accept(*this);
+
+    auto g2 = pcx::scoped_counter(tc);
+    for(auto a: node.args)
+    {
+        a->accept(*this);
+    }
 }
 
 std::ostream &AstPrinter::tab() const

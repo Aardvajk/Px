@@ -63,6 +63,11 @@ void ExprGenerator::visit(CallNode &node)
 
     os << "    allocs " << size << ";\n";
 
+    for(auto a: node.args)
+    {
+        generate(c, os, a.get());
+    }
+
     generate(c, os, node.target.get());
     os << "    call;\n";
 
