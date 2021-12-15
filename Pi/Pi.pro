@@ -23,9 +23,11 @@ SOURCES += \
         application/Context.cpp \
         compiler/Compiler.cpp \
         entity/Entity.cpp \
+        entity/Reconstruct.cpp \
         generator/Generator.cpp \
         main.cpp \
         application/Code.cpp \
+        optimise/Optimiser.cpp \
         parser/Parser.cpp \
         syms/Sym.cpp \
         syms/SymStack.cpp
@@ -36,8 +38,10 @@ HEADERS += \
     components/Function.h \
     components/Global.h \
     entity/Entity.h \
+    entity/Reconstruct.h \
     generator/Generator.h \
     application/Code.h \
+    optimise/Optimiser.h \
     parser/Parser.h \
     syms/Sym.h \
     syms/SymStack.h

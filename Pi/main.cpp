@@ -4,9 +4,15 @@
 
 #include "parser/Parser.h"
 
+#include "optimise/Optimiser.h"
+
 #include "compiler/Compiler.h"
 
 #include "generator/Generator.h"
+
+#include "entity/Reconstruct.h"
+
+#include <pcx/format.h>
 
 #include <iostream>
 
@@ -30,6 +36,18 @@ int main(int argc, char *argv[])
         c.open(files[0]);
 
         auto e = Parser::build(c);
+
+        std::cout << pcx::format::banner("reconstructed");
+        Reconstruct::toStream(c, *e, std::cout);
+
+        if(c.args.contains("o"))
+        {
+            Optimiser::process(c, *e);
+
+            std::cout << pcx::format::banner("optimised");
+            Reconstruct::toStream(c, *e, std::cout);
+            std::cout << pcx::format::banner();
+        }
 
         Compiler::compile(c, *e);
 
