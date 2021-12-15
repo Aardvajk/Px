@@ -8,7 +8,7 @@
 namespace
 {
 
-bool shouldRemove(Context &c, Entity &e)
+bool hasNoEffect(Context &c, Entity &e)
 {
     if(e.type == Entity::Type::Instruction)
     {
@@ -89,7 +89,7 @@ void optimiseFunc(Context &c, Entity &e)
         auto i = e.entities.begin();
         while(i != e.entities.end())
         {
-            if(shouldRemove(c, *i))
+            if(hasNoEffect(c, *i))
             {
                 i = e.entities.erase(i);
             }
@@ -104,6 +104,27 @@ void optimiseFunc(Context &c, Entity &e)
     {
         collapseGroups(c, e, Code::Type::AllocS);
         collapseGroups(c, e, Code::Type::IncrS);
+    }
+
+    if(c.args.contains("o", "remove_redundant_jumps"))
+    {
+        auto i = e.entities.begin();
+        while(i != e.entities.end() - 1)
+        {
+            if(isType(*i, Code::Type::Jump))
+            {
+                auto n = i + 1;
+
+                if(n->type == Entity::Type::Label && n->property("name").to<std::string>() == i->property("target").to<std::string>())
+                {
+                    i->type = Entity::Type::Invalid;
+                }
+            }
+
+            ++i;
+        }
+
+        purgeInvalids(c, e);
     }
 }
 

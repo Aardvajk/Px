@@ -25,6 +25,18 @@ void outputPush(Context &c, Entity &e, std::ostream &os)
     }
 }
 
+void outputJump(Context &c, Entity &e, std::ostream &os)
+{
+    os << " ";
+
+    if(e.property("ifz").value<bool>())
+    {
+        os << "ifz ";
+    }
+
+    os << "\"" << e.property("target").to<std::string>() << "\"";
+}
+
 void outputVar(Context &c, Entity &e, std::ostream &os)
 {
     os << "    " << Entity::toString(e.type) << " \"" << e.property("name").to<std::string>() << "\":" << e.property("size").to<std::size_t>() << ";\n";
@@ -41,7 +53,7 @@ void outputCode(Context &c, Entity &e, std::ostream &os)
         case Code::Type::Push: outputPush(c, e, os); break;
 
         case Code::Type::Call: break;
-        case Code::Type::Jump: break;
+        case Code::Type::Jump: outputJump(c, e, os); break;
 
         case Code::Type::Pop:
         case Code::Type::Load:
@@ -70,6 +82,8 @@ void outputFunc(Context &c, Entity &e, std::ostream &os)
             case Entity::Type::Var: outputVar(c, i, os); break;
 
             case Entity::Type::Instruction: outputCode(c, i, os); break;
+
+            case Entity::Type::Label: os << "\"" << i.property("name").to<std::string>() << "\":\n"; break;
 
             default: break;
         }
