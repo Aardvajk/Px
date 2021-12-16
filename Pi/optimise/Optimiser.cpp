@@ -78,8 +78,6 @@ void collapseGroups(Context &c, Entity &e, Code::Type code)
 
         ++i;
     }
-
-    purgeInvalids(c, e);
 }
 
 void optimiseFunc(Context &c, Entity &e)
@@ -123,9 +121,9 @@ void optimiseFunc(Context &c, Entity &e)
 
             ++i;
         }
-
-        purgeInvalids(c, e);
     }
+
+    purgeInvalids(c, e);
 }
 
 }

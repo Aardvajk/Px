@@ -37,16 +37,9 @@ int main(int argc, char *argv[])
 
         auto e = Parser::build(c);
 
-        std::cout << pcx::format::banner("reconstructed");
-        Reconstruct::toStream(c, *e, std::cout);
-
         if(c.args.contains("o"))
         {
             Optimiser::process(c, *e);
-
-            std::cout << pcx::format::banner("optimised");
-            Reconstruct::toStream(c, *e, std::cout);
-            std::cout << pcx::format::banner();
         }
 
         Compiler::compile(c, *e);
