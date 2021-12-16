@@ -20,7 +20,8 @@ public:
     Type *insert(const Type &type);
     Type *primitiveType(Primitive::Type type);
 
-    void print(std::ostream &os);
+    pcx::ptr_vector<Type>::iterator begin(){ return v.begin(); }
+    pcx::ptr_vector<Type>::iterator end(){ return v.end(); }
 
 private:
     void createPrimitive(Context &c, const std::string &name, Sym *container, Primitive::Type type, std::size_t size);

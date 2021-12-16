@@ -57,7 +57,10 @@ int main(int argc, char *argv[])
             SymPrinter::print(c, c.tree.root(), std::cout);
 
             std::cout << pcx::format::banner("types");
-            c.types.print(std::cout);
+            for(auto t: c.types)
+            {
+                std::cout << t.description() << "\n";
+            }
         }
 
         Visitor::visit<Finaliser>(n.get(), c);

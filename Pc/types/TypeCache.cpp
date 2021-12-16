@@ -36,14 +36,6 @@ Type *TypeCache::primitiveType(Primitive::Type type)
     return v.ptr(tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)]);
 }
 
-void TypeCache::print(std::ostream &os)
-{
-    for(auto t: v)
-    {
-        os << t.description() << "\n";
-    }
-}
-
 void TypeCache::createPrimitive(Context &c, const std::string &name, Sym *container, Primitive::Type type, std::size_t size)
 {
     tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)] = container->children().size();
