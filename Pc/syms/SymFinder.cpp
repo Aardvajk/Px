@@ -22,16 +22,16 @@ namespace
 
 Sym *generateTemplateClass(Context &c, Sym *sym, NodeList &params)
 {
-    auto name = pcx::str(sym->fullname(), "<", pcx::join_str(params, ","), ">");
+    for(auto p: params)
+    {
+        p->setProperty("type", TypeBuilder::build(c, p.get()));
+    }
+
+    auto name = pcx::str(sym->fullname(), "<", pcx::join_str(params, ",", [](const NodePtr &n){ return n->property("type").to<Type*>()->description(); }), ">");
 
     if(auto s = sym->parent()->child(name))
     {
         return s;
-    }
-
-    for(auto p: params)
-    {
-        p->setProperty("type", TypeBuilder::build(c, p.get()));
     }
 
     auto node = sym->property("node").to<TemplateClassNode*>();
