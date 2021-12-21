@@ -11,6 +11,7 @@ class ScopeNode;
 class TypeNode;
 class VarNode;
 class ClassNode;
+class TemplateClassNode;
 class ExprNode;
 class CallNode;
 
@@ -27,6 +28,7 @@ public:
     virtual void visit(TypeNode &node);
     virtual void visit(VarNode &node);
     virtual void visit(ClassNode &node);
+    virtual void visit(TemplateClassNode &node);
     virtual void visit(ExprNode &node);
     virtual void visit(CallNode &node);
 

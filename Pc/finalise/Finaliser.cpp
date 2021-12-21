@@ -28,6 +28,8 @@ void Finaliser::visit(ClassNode &node)
 {
     if(node.body)
     {
+        node.body->accept(*this);
+
         auto sym = node.assertedProperty("sym").to<Sym*>();
 
         if(true)
@@ -48,5 +50,13 @@ void Finaliser::visit(ClassNode &node)
         }
 
         sym->setProperty("size", size);
+    }
+}
+
+void Finaliser::visit(TemplateClassNode &node)
+{
+    for(auto i: node.instances)
+    {
+        i->accept(*this);
     }
 }

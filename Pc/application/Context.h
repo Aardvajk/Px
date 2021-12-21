@@ -13,6 +13,9 @@
 #include <pcx/args.h>
 #include <pcx/ptr_vector.h>
 
+#include <vector>
+#include <unordered_map>
+
 class Context
 {
 public:
@@ -31,6 +34,8 @@ public:
     std::vector<Sym::Type> containers;
 
     pcx::ptr_vector<FuncInfo> funcInfos;
+
+    std::vector<std::unordered_map<std::string, Type*> > templateParams;
 };
 
 #endif // CONTEXT_H

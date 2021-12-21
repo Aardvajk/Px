@@ -17,6 +17,7 @@ public:
         Namespace,
         Func,
         Class,
+        TemplateClass,
         Var,
         Scope,
         Invalid

@@ -146,6 +146,64 @@ void buildClass(Context &c, BlockNode *block, bool get)
     }
 }
 
+void buildTemplateParameter(Context &c, NodeList &container, bool get)
+{
+    auto tok = c.scanner.match(Token::Type::Id, get);
+    container.push_back(new IdNode(tok.location(), { }, tok.text()));
+
+    c.scanner.next(true);
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        buildTemplateParameter(c, container, true);
+    }
+}
+
+void buildTemplateClass(Context &c, BlockNode *block, bool get)
+{
+    auto n = new TemplateClassNode(c.scanner.token().location());
+    block->push_back(n);
+
+    c.scanner.consume(Token::Type::Lt, get);
+    if(c.scanner.token().type() != Token::Type::Gt)
+    {
+        buildTemplateParameter(c, n->params, false);
+    }
+
+    c.scanner.match(Token::Type::Gt, false);
+
+    n->name = CommonParser::name(c, true);
+
+    if(c.containers.back() != Sym::Type::Namespace && c.containers.back() != Sym::Type::Class)
+    {
+        throw Error(n->name->location(), "invalid location for template class - ", n->name->description());
+    }
+
+    if(c.scanner.token().type() != Token::Type::Semicolon)
+    {
+        auto cg = pcx::scoped_push(c.containers, Sym::Type::Class);
+
+        n->body = CommonParser::blockContents(c, false);
+    }
+    else
+    {
+        c.scanner.next(true);
+    }
+}
+
+void buildClassOrTemplate(Context &c, BlockNode *block, bool get)
+{
+    auto tok = c.scanner.next(get);
+
+    if(tok.type() == Token::Type::Lt)
+    {
+        buildTemplateClass(c, block, false);
+    }
+    else
+    {
+        buildClass(c, block, false);
+    }
+}
+
 }
 
 void Parser::construct(Context &c, BlockNode *block, bool get)
@@ -156,7 +214,7 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
         case Token::Type::RwNamespace: buildNamespace(c, block, true); break;
         case Token::Type::RwFunc: buildFunc(c, block, true); break;
         case Token::Type::RwVar: buildVar(c, block, true); break;
-        case Token::Type::RwClass: buildClass(c, block, true); break;
+        case Token::Type::RwClass: buildClassOrTemplate(c, block, true); break;
 
         default: FuncParser::build(c, block, false);
     }

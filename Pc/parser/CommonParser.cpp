@@ -5,9 +5,20 @@
 #include "nodes/Nodes.h"
 
 #include "parser/Parser.h"
+#include "parser/TypeParser.h"
 
 namespace
 {
+
+void buildTemplateParam(Context &c, NodeList &container, bool get)
+{
+    container.push_back(TypeParser::build(c, get));
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        buildTemplateParam(c, container, true);
+    }
+}
 
 NodePtr nameImp(Context &c, NodePtr parent, bool get)
 {
@@ -17,6 +28,17 @@ NodePtr nameImp(Context &c, NodePtr parent, bool get)
 
     auto id = new IdNode(tok.location(), parent, tok.text());
     NodePtr n(id);
+
+    if(c.scanner.token().type() == Token::Type::Lt)
+    {
+        c.scanner.next(true);
+        if(c.scanner.token().type() != Token::Type::Gt)
+        {
+            buildTemplateParam(c, id->params, false);
+        }
+
+        c.scanner.consume(Token::Type::Gt, false);
+    }
 
     while(c.scanner.token().type() == Token::Type::Dot)
     {

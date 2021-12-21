@@ -13,6 +13,7 @@ public:
 
     NodePtr parent;
     std::string name;
+    NodeList params;
 };
 
 #endif // IDNODE_H

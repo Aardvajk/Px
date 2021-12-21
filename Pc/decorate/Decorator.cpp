@@ -155,14 +155,23 @@ void Decorator::visit(VarNode &node)
 
 void Decorator::visit(ClassNode &node)
 {
-    auto sym = search(c, Sym::Type::Class, node.name.get());
-    if(!sym)
-    {
-        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
-        sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
-    }
+    Sym *sym = nullptr;
 
-    node.setProperty("sym", sym);
+    if(auto s = node.property("sym"))
+    {
+        sym = s.to<Sym*>();
+    }
+    else
+    {
+        sym = search(c, Sym::Type::Class, node.name.get());
+        if(!sym)
+        {
+            auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+            sym = c.tree.current()->add(new Sym(Sym::Type::Class, node.location(), name));
+        }
+
+        node.setProperty("sym", sym);
+    }
 
     if(node.body)
     {
@@ -175,5 +184,36 @@ void Decorator::visit(ClassNode &node)
 
         auto g = c.tree.open(sym);
         node.body->accept(*this);
+    }
+}
+
+void Decorator::visit(TemplateClassNode &node)
+{
+    auto sym = search(c, Sym::Type::TemplateClass, node.name.get());
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::TemplateClass, node.location(), name));
+    }
+
+    node.setProperty("sym", sym);
+
+    std::vector<std::string> params;
+    for(auto p: node.params)
+    {
+        params.push_back(Visitor::query<NameVisitors::TrailingId, std::string>(p.get()));
+    }
+
+    sym->setProperty("params", params);
+    sym->setProperty("node", &node);
+
+    if(node.body)
+    {
+        if(sym->property("defined").value<bool>())
+        {
+            throw Error(node.location(), "class already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
     }
 }

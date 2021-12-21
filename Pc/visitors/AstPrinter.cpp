@@ -56,7 +56,14 @@ void AstPrinter::visit(BlockNode &node)
 
 void AstPrinter::visit(IdNode &node)
 {
-    tab() << "id " << node.name << info(&node) << "\n";
+    tab() << "id " << node.name;
+
+    if(!node.params.empty())
+    {
+        os << "<" << pcx::join_str(node.params, ",") << ">";
+    }
+
+    os << info(&node) << "\n";
 
     if(node.parent)
     {
@@ -114,11 +121,35 @@ void AstPrinter::visit(VarNode &node)
 
 void AstPrinter::visit(ClassNode &node)
 {
-    tab() << "class " << node.name->description() << info(&node) << "\n";
+    tab() << "class " << node.description() << info(&node) << "\n";
 
     if(node.body)
     {
         node.body->accept(*this);
+    }
+}
+
+void AstPrinter::visit(TemplateClassNode &node)
+{
+    tab() << "template class " << node.description() << info(&node) << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+
+    if(!node.instances.empty())
+    {
+        tab() << "instances\n";
+        tab() << "{\n";
+
+        for(auto i: node.instances)
+        {
+            auto g = pcx::scoped_counter(tc);
+            i->accept(*this);
+        }
+
+        tab() << "}\n";
     }
 }
 

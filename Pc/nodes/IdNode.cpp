@@ -9,5 +9,10 @@ void IdNode::accept(Visitor &v)
 
 NodePtr IdNode::cloneDetail() const
 {
-    return new IdNode(location(), safeClone(parent), name);
+    auto node = new IdNode(location(), safeClone(parent), name);
+    NodePtr n(node);
+
+    node->params = safeClone(params);
+
+    return n;
 }

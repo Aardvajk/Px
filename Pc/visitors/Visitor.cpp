@@ -36,6 +36,10 @@ void Visitor::visit(ClassNode &node)
 {
 }
 
+void Visitor::visit(TemplateClassNode &node)
+{
+}
+
 void Visitor::visit(ExprNode &node)
 {
 }

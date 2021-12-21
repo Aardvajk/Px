@@ -15,4 +15,18 @@ public:
     NodePtr body;
 };
 
+class TemplateClassNode : public Node
+{
+public:
+    explicit TemplateClassNode(Location location) : Node(location) { }
+
+    virtual void accept(Visitor &v) override;
+    virtual NodePtr cloneDetail() const override;
+
+    NodeList params;
+    NodePtr name;
+    NodePtr body;
+    NodeList instances;
+};
+
 #endif // CLASSNODE_H

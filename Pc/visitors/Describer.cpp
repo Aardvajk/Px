@@ -22,6 +22,11 @@ void Describer::visit(IdNode &node)
     }
 
     r << node.name;
+
+    if(!node.params.empty())
+    {
+        r << "<" << pcx::join_str(node.params, ",") << ">";
+    }
 }
 
 void Describer::visit(NamespaceNode &node)
@@ -62,6 +67,11 @@ void Describer::visit(VarNode &node)
 void Describer::visit(ClassNode &node)
 {
     r << node.name->description();
+}
+
+void Describer::visit(TemplateClassNode &node)
+{
+    r << node.name->description() << "<" << pcx::join_str(node.params, ",") << ">";
 }
 
 void Describer::visit(ExprNode &node)

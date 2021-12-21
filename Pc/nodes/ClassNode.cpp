@@ -17,3 +17,21 @@ NodePtr ClassNode::cloneDetail() const
 
     return n;
 }
+
+void TemplateClassNode::accept(Visitor &v)
+{
+    v.visit(*this);
+}
+
+NodePtr TemplateClassNode::cloneDetail() const
+{
+    auto node = new TemplateClassNode(location());
+    NodePtr n(node);
+
+    node->params = safeClone(params);
+    node->name = safeClone(name);
+    node->body = safeClone(body);
+    node->instances = safeClone(instances);
+
+    return n;
+}
