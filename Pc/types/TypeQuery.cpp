@@ -44,6 +44,16 @@ void TypeQuery::visit(CallNode &node)
     r = assert(c, node.target.get())->returnType;
 }
 
+void TypeQuery::visit(CharLiteralNode &node)
+{
+    r = c.types.primitiveType(Primitive::Type::Char);
+}
+
+void TypeQuery::visit(IntLiteralNode &node)
+{
+    r = c.types.primitiveType(Primitive::Type::Int);
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

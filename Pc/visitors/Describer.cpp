@@ -2,6 +2,7 @@
 
 #include "nodes/Nodes.h"
 
+#include <pcx/str.h>
 #include <pcx/join_str.h>
 
 Describer::Describer()
@@ -82,4 +83,14 @@ void Describer::visit(ExprNode &node)
 void Describer::visit(CallNode &node)
 {
     r << node.target->description() << "(" << pcx::join_str(node.args, ",") << ")";
+}
+
+void Describer::visit(CharLiteralNode &node)
+{
+    r << '\'' << node.value << '\'';
+}
+
+void Describer::visit(IntLiteralNode &node)
+{
+    r << pcx::str(node.value);
 }

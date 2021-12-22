@@ -18,6 +18,8 @@ public:
     virtual void visit(TypeNode &node) override;
     virtual void visit(VarNode &node) override;
     virtual void visit(CallNode &node) override;
+    virtual void visit(CharLiteralNode &node) override;
+    virtual void visit(IntLiteralNode &node) override;
 
     static Type *query(Context &c, Node *node);
     static Type *assert(Context &c, Node *node);

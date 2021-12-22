@@ -23,6 +23,8 @@ public:
     virtual void visit(TemplateClassNode &node) override;
     virtual void visit(ExprNode &node) override;
     virtual void visit(CallNode &node) override;
+    virtual void visit(CharLiteralNode &node) override;
+    virtual void visit(IntLiteralNode &node) override;
 
 private:
     std::ostream &tab() const;

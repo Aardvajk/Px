@@ -74,6 +74,18 @@ void ExprGenerator::visit(CallNode &node)
     r = size;
 }
 
+void ExprGenerator::visit(CharLiteralNode &node)
+{
+    os << "    push char(" << static_cast<int>(node.value) << ");\n";
+    r = sizeof(char);
+}
+
+void ExprGenerator::visit(IntLiteralNode &node)
+{
+    os << "    push int(" << node.value << ");\n";
+    r = sizeof(int);
+}
+
 std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Flags flags)
 {
     ExprGenerator g(c, os, flags);

@@ -175,6 +175,16 @@ void AstPrinter::visit(CallNode &node)
     }
 }
 
+void AstPrinter::visit(CharLiteralNode &node)
+{
+    tab() << "char literal " << node.description() << "\n";
+}
+
+void AstPrinter::visit(IntLiteralNode &node)
+{
+    tab() << "int literal " << node.description() << "\n";
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

@@ -6,6 +6,8 @@
 
 #include "nodes/Nodes.h"
 
+#include <pcx/lexical_cast.h>
+
 namespace
 {
 
@@ -51,10 +53,15 @@ NodePtr call(Context &c, NodePtr target, bool get)
 
 NodePtr primary(Context &c, bool get)
 {
+    NodePtr n;
+
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
         case Token::Type::Id: return id(c, { }, false);
+
+        case Token::Type::CharLiteral: n = new CharLiteralNode(tok.location(), tok.text()[0]); c.scanner.next(true); return n;
+        case Token::Type::IntLiteral: n = new IntLiteralNode(tok.location(), pcx::lexical_cast<int>(tok.text())); c.scanner.next(true); return n;
 
         default: throw Error(tok.location(), "primary expected - ", tok.text());
     }
