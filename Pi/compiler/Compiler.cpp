@@ -391,8 +391,11 @@ void compileFunction(Context &c, Entity &e)
         r->properties["size"] = e.property("size").to<std::size_t>();
         r->properties["offset"] = c.func().args + (sizeof(std::size_t) * 2);
 
-        c.cm("-allocate locals");
-        c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << c.func().vars;
+        if(c.func().vars || !c.args.contains("o", "remove_no_effects"))
+        {
+            c.cm("-allocate locals");
+            c.func().bytes << OpCode::Op::SubRI << OpCode::Reg::Sp << c.func().vars;
+        }
 
         while(index < e.entities.size())
         {
@@ -421,8 +424,11 @@ void compileFunction(Context &c, Entity &e)
             j.second.assign(c.func().bytes, pos - (j.second.position() + sizeof(std::size_t)));
         }
 
-        c.cm("-release locals");
-        c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << c.func().vars;
+        if(c.func().vars || !c.args.contains("o", "remove_no_effects"))
+        {
+            c.cm("-release locals");
+            c.func().bytes << OpCode::Op::AddRI << OpCode::Reg::Sp << c.func().vars;
+        }
 
         c.cm("-function epilogue");
         c.func().bytes << OpCode::Op::PopR << OpCode::Reg::Bp;

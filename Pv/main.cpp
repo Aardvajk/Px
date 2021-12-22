@@ -17,7 +17,21 @@ namespace
 
 void serviceProc(int code, Memory &mm, Registers &rg)
 {
-    std::cout << "service " << code << "\n";
+    auto sp = rg.sp();
+    ByteReader rm(mm(0), sp);
+
+    if(code == 1)
+    {
+        std::cout << "char " << rm.get<char>() << "\n";
+    }
+    else if(code == 2)
+    {
+        std::cout << "int " << rm.get<int>() << "\n";
+    }
+    else
+    {
+        std::cout << "service " << code << "\n";
+    }
 }
 
 }

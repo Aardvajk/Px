@@ -18,7 +18,7 @@ void ExprDecorator::visit(IdNode &node)
 {
     if(node.parent)
     {
-        node.parent->accept(*this);
+        Visitor::visit<ExprDecorator>(node.parent.get(), c);
     }
 
     std::vector<Sym*> sv;
@@ -30,11 +30,14 @@ void ExprDecorator::visit(IdNode &node)
 
         for(auto s: sv)
         {
-            auto type = s->assertedProperty("type").to<Type*>();
-
-            if(Type::compare(type->args, expected->args))
+            if(s->type() == Sym::Type::Func)
             {
-                matches.push_back(s);
+                auto type = s->assertedProperty("type").to<Type*>();
+
+                if(Type::compare(type->args, expected->args))
+                {
+                    matches.push_back(s);
+                }
             }
         }
 
