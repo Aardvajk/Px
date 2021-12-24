@@ -8,58 +8,10 @@
 
 #include "syms/Sym.h"
 
-#include "decorate/Decorator.h"
-
-#include "types/TypeBuilder.h"
-#include "types/TypeQuery.h"
-
-#include <pcx/str.h>
-#include <pcx/join_str.h>
-#include <pcx/scoped_push.h>
+#include "templates/Templates.h"
 
 namespace
 {
-
-Sym *generateTemplateClass(Context &c, Sym *sym, NodeList &params)
-{
-    for(auto p: params)
-    {
-        p->setProperty("type", TypeBuilder::build(c, p.get()));
-    }
-
-    auto name = pcx::str(sym->fullname(), "<", pcx::join_str(params, ",", [](const NodePtr &n){ return n->property("type").to<Type*>()->description(); }), ">");
-
-    if(auto s = sym->parent()->child(name))
-    {
-        return s;
-    }
-
-    auto node = sym->property("node").to<TemplateClassNode*>();
-    auto pv = sym->property("params").to<std::vector<std::string> >();
-
-    auto s = sym->parent()->add(new Sym(Sym::Type::Class, node->location(), name));
-
-    auto cn = new ClassNode(node->location());
-
-    cn->name = new IdNode(node->location(), { }, name);
-    cn->body = node->body->clone();
-
-    cn->setProperty("sym", s);
-
-    std::unordered_map<std::string, Type*> map;
-    for(std::size_t i = 0; i < pv.size(); ++i)
-    {
-        map[pv[i]] = TypeQuery::assert(c, params[i].get());
-    }
-
-    auto g = pcx::scoped_push(c.templateParams, map);
-
-    Visitor::visit<Decorator>(cn, c);
-
-    node->instances.push_back(cn);
-
-    return s;
-}
 
 void findIn(Context &c, Sym *scope, IdNode &node, std::vector<Sym*> &result)
 {
@@ -69,7 +21,7 @@ void findIn(Context &c, Sym *scope, IdNode &node, std::vector<Sym*> &result)
         {
             if(s->type() == Sym::Type::TemplateClass)
             {
-                s = generateTemplateClass(c, s, node.params);
+                s = Templates::generateClass(c, s, node.params);
             }
 
             result.push_back(s);

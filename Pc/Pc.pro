@@ -54,6 +54,7 @@ SOURCES += \
         syms/SymGuard.cpp \
         syms/SymPrinter.cpp \
         syms/SymTree.cpp \
+        templates/Templates.cpp \
         types/Type.cpp \
         types/TypeBuilder.cpp \
         types/TypeCache.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     syms/SymGuard.h \
     syms/SymPrinter.h \
     syms/SymTree.h \
+    templates/Templates.h \
     types/Type.h \
     types/TypeBuilder.h \
     types/TypeCache.h \
