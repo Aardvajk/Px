@@ -9,7 +9,7 @@ namespace
 
 bool hasScope(const Sym *sym)
 {
-    if(sym->type() == Sym::Type::Func || sym->type() == Sym::Type::Class || sym->type() == Sym::Type::TemplateClass)
+    if(sym->type() == Sym::Type::Func || sym->type() == Sym::Type::TemplateFunc || sym->type() == Sym::Type::Class || sym->type() == Sym::Type::TemplateClass)
     {
         return sym->property("defined").value<bool>();
     }

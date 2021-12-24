@@ -6,12 +6,24 @@
 
 #include "nodes/Nodes.h"
 
+#include "parser/TypeParser.h"
+
 #include <pcx/lexical_cast.h>
 
 namespace
 {
 
 NodePtr expression(Context &c, bool get);
+
+void templateParam(Context &c, NodeList &container, bool get)
+{
+    container.push_back(TypeParser::build(c, get));
+
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        templateParam(c, container, true);
+    }
+}
 
 NodePtr id(Context &c, NodePtr parent, bool get)
 {
@@ -21,6 +33,17 @@ NodePtr id(Context &c, NodePtr parent, bool get)
     NodePtr n(node);
 
     c.scanner.next(true);
+    if(c.scanner.token().type() == Token::Type::Lt)
+    {
+        c.scanner.next(true);
+        if(c.scanner.token().type() != Token::Type::Gt)
+        {
+            templateParam(c, node->params, false);
+        }
+
+        c.scanner.consume(Token::Type::Gt, false);
+    }
+
     return n;
 }
 

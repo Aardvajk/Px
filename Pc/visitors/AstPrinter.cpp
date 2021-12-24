@@ -96,6 +96,37 @@ void AstPrinter::visit(FuncNode &node)
     }
 }
 
+void AstPrinter::visit(TemplateFuncNode &node)
+{
+    tab() << "template func " << node.name->description() << "<" << pcx::join_str(node.params, ",") << ">(" << pcx::join_str(node.args, ",") << ")";
+
+    if(node.type)
+    {
+        os << ":" << node.type->description();
+    }
+
+    os << info(&node) << "\n";
+
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+
+    if(!node.instances.empty())
+    {
+        tab() << "instances\n";
+        tab() << "{\n";
+
+        for(auto i: node.instances)
+        {
+            auto g = pcx::scoped_counter(tc);
+            i->accept(*this);
+        }
+
+        tab() << "}\n";
+    }
+}
+
 void AstPrinter::visit(ScopeNode &node)
 {
     tab() << "(scope)" << info(&node) << "\n";

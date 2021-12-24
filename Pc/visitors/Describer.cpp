@@ -45,6 +45,16 @@ void Describer::visit(FuncNode &node)
     }
 }
 
+void Describer::visit(TemplateFuncNode &node)
+{
+    r << node.name->description() << "<" << pcx::join_str(node.params, ",") << ">(" << pcx::join_str(node.args, ",") << ")";
+
+    if(node.type)
+    {
+        r << ":" << node.type->description();
+    }
+}
+
 void Describer::visit(ScopeNode &node)
 {
     r << "(scope)";

@@ -53,6 +53,14 @@ void Generator::visit(FuncNode &node)
     }
 }
 
+void Generator::visit(TemplateFuncNode &node)
+{
+    for(auto i: node.instances)
+    {
+        i->accept(*this);
+    }
+}
+
 void Generator::visit(VarNode &node)
 {
     auto sym = node.assertedProperty("sym").to<Sym*>();

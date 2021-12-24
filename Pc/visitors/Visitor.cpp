@@ -20,6 +20,10 @@ void Visitor::visit(FuncNode &node)
 {
 }
 
+void Visitor::visit(TemplateFuncNode &node)
+{
+}
+
 void Visitor::visit(ScopeNode &node)
 {
 }

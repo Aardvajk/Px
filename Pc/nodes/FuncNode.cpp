@@ -19,3 +19,23 @@ NodePtr FuncNode::cloneDetail() const
 
     return n;
 }
+
+void TemplateFuncNode::accept(Visitor &v)
+{
+    v.visit(*this);
+}
+
+NodePtr TemplateFuncNode::cloneDetail() const
+{
+    auto node = new TemplateFuncNode(location());
+    NodePtr n(node);
+
+    node->params = safeClone(params);
+    node->name = safeClone(name);
+    node->args = safeClone(args);
+    node->type = safeClone(type);
+    node->body = safeClone(body);
+    node->instances = safeClone(instances);
+
+    return n;
+}

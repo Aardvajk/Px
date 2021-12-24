@@ -98,32 +98,42 @@ void Decorator::visit(NamespaceNode &node)
 
 void Decorator::visit(FuncNode &node)
 {
-    std::vector<Type*> args;
-    for(auto a: node.args)
+    Sym *sym = nullptr;
+
+    if(auto s = node.property("sym"))
     {
-        Visitor::visit<ArgDecorator>(a.get(), c);
-        args.push_back(TypeQuery::assert(c, a.get()));
+        sym = s.to<Sym*>();
     }
 
-    auto returnType = c.types.primitiveType(Primitive::Type::Null);
-
-    if(node.type)
-    {
-        returnType = TypeBuilder::build(c, node.type.get());
-    }
-
-    auto type = c.types.insert(Type::function(returnType, args));
-
-    auto sym = searchFunc(c, node.name.get(), type);
     if(!sym)
     {
-        auto name = NameVisitors::assertSimple(c, node.name.get());
-        sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
+        std::vector<Type*> args;
+        for(auto a: node.args)
+        {
+            Visitor::visit<ArgDecorator>(a.get(), c);
+            args.push_back(TypeQuery::assert(c, a.get()));
+        }
 
-        sym->setProperty("type", type);
+        auto returnType = c.types.primitiveType(Primitive::Type::Null);
+
+        if(node.type)
+        {
+            returnType = TypeBuilder::build(c, node.type.get());
+        }
+
+        auto type = c.types.insert(Type::function(returnType, args));
+
+        sym = searchFunc(c, node.name.get(), type);
+        if(!sym)
+        {
+            auto name = NameVisitors::assertSimple(c, node.name.get());
+            sym = c.tree.current()->add(new Sym(Sym::Type::Func, node.location(), name));
+
+            sym->setProperty("type", type);
+        }
+
+        node.setProperty("sym", sym);
     }
-
-    node.setProperty("sym", sym);
 
     if(node.body)
     {
@@ -145,6 +155,37 @@ void Decorator::visit(FuncNode &node)
         }
 
         Visitor::visit<FuncDecorator>(node.body.get(), c);
+    }
+}
+
+void Decorator::visit(TemplateFuncNode &node)
+{
+    auto sym = search(c, Sym::Type::TemplateFunc, node.name.get());
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::TemplateFunc, node.location(), name));
+    }
+
+    node.setProperty("sym", sym);
+
+    std::vector<std::string> params;
+    for(auto p: node.params)
+    {
+        params.push_back(Visitor::query<NameVisitors::TrailingId, std::string>(p.get()));
+    }
+
+    sym->setProperty("params", params);
+    sym->setProperty("node", &node);
+
+    if(node.body)
+    {
+        if(sym->property("defined").value<bool>())
+        {
+            throw Error(node.location(), "template function already defined - ", node.name->description());
+        }
+
+        sym->setProperty("defined", true);
     }
 }
 

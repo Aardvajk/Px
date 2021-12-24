@@ -32,6 +32,18 @@ void buildNamespace(Context &c, BlockNode *block, bool get)
     n->body = CommonParser::blockContents(c, false);
 }
 
+void buildTemplateParameter(Context &c, NodeList &container, bool get)
+{
+    auto tok = c.scanner.match(Token::Type::Id, get);
+    container.push_back(new IdNode(tok.location(), { }, tok.text()));
+
+    c.scanner.next(true);
+    if(c.scanner.token().type() == Token::Type::Comma)
+    {
+        buildTemplateParameter(c, container, true);
+    }
+}
+
 void buildArgs(Context &c, NodeList &container, bool get)
 {
     auto n = new VarNode(c.scanner.token().location());
@@ -57,11 +69,8 @@ void buildArgs(Context &c, NodeList &container, bool get)
     }
 }
 
-void buildFunc(Context &c, BlockNode *block, bool get)
+template<typename T> void buildFuncImp(Context &c, T *n, bool get)
 {
-    auto n = new FuncNode(c.scanner.token().location());
-    block->push_back(n);
-
     n->name = CommonParser::name(c, get);
 
     if(c.containers.back() != Sym::Type::Namespace && c.containers.back() != Sym::Type::Class)
@@ -100,6 +109,44 @@ void buildFunc(Context &c, BlockNode *block, bool get)
     }
 }
 
+void buildFunc(Context &c, BlockNode *block, bool get)
+{
+    auto n = new FuncNode(c.scanner.token().location());
+    block->push_back(n);
+
+    buildFuncImp(c, n, get);
+}
+
+void buildTemplateFunc(Context &c, BlockNode *block, bool get)
+{
+    auto n = new TemplateFuncNode(c.scanner.token().location());
+    block->push_back(n);
+
+    c.scanner.consume(Token::Type::Lt, get);
+    if(c.scanner.token().type() != Token::Type::Gt)
+    {
+        buildTemplateParameter(c, n->params, false);
+    }
+
+    c.scanner.match(Token::Type::Gt, false);
+
+    buildFuncImp(c, n, true);
+}
+
+void buildFuncOrTemplate(Context &c, BlockNode *block, bool get)
+{
+    auto tok = c.scanner.next(get);
+
+    if(tok.type() == Token::Type::Lt)
+    {
+        buildTemplateFunc(c, block, false);
+    }
+    else
+    {
+        buildFunc(c, block, false);
+    }
+}
+
 void buildVar(Context &c, BlockNode *block, bool get)
 {
     auto n = new VarNode(c.scanner.token().location());
@@ -122,11 +169,8 @@ void buildVar(Context &c, BlockNode *block, bool get)
     }
 }
 
-void buildClass(Context &c, BlockNode *block, bool get)
+template<typename T> buildClassImp(Context &c, T *n, bool get)
 {
-    auto n = new ClassNode(c.scanner.token().location());
-    block->push_back(n);
-
     n->name = CommonParser::name(c, get);
 
     if(c.containers.back() != Sym::Type::Namespace && c.containers.back() != Sym::Type::Class)
@@ -146,16 +190,12 @@ void buildClass(Context &c, BlockNode *block, bool get)
     }
 }
 
-void buildTemplateParameter(Context &c, NodeList &container, bool get)
+void buildClass(Context &c, BlockNode *block, bool get)
 {
-    auto tok = c.scanner.match(Token::Type::Id, get);
-    container.push_back(new IdNode(tok.location(), { }, tok.text()));
+    auto n = new ClassNode(c.scanner.token().location());
+    block->push_back(n);
 
-    c.scanner.next(true);
-    if(c.scanner.token().type() == Token::Type::Comma)
-    {
-        buildTemplateParameter(c, container, true);
-    }
+    buildClassImp(c, n, get);
 }
 
 void buildTemplateClass(Context &c, BlockNode *block, bool get)
@@ -171,23 +211,7 @@ void buildTemplateClass(Context &c, BlockNode *block, bool get)
 
     c.scanner.match(Token::Type::Gt, false);
 
-    n->name = CommonParser::name(c, true);
-
-    if(c.containers.back() != Sym::Type::Namespace && c.containers.back() != Sym::Type::Class)
-    {
-        throw Error(n->name->location(), "invalid location for template class - ", n->name->description());
-    }
-
-    if(c.scanner.token().type() != Token::Type::Semicolon)
-    {
-        auto cg = pcx::scoped_push(c.containers, Sym::Type::Class);
-
-        n->body = CommonParser::blockContents(c, false);
-    }
-    else
-    {
-        c.scanner.next(true);
-    }
+    buildClassImp(c, n, true);
 }
 
 void buildClassOrTemplate(Context &c, BlockNode *block, bool get)
@@ -212,7 +236,7 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
     switch(tok.type())
     {
         case Token::Type::RwNamespace: buildNamespace(c, block, true); break;
-        case Token::Type::RwFunc: buildFunc(c, block, true); break;
+        case Token::Type::RwFunc: buildFuncOrTemplate(c, block, true); break;
         case Token::Type::RwVar: buildVar(c, block, true); break;
         case Token::Type::RwClass: buildClassOrTemplate(c, block, true); break;
 

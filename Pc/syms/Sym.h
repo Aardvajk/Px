@@ -16,6 +16,7 @@ public:
     {
         Namespace,
         Func,
+        TemplateFunc,
         Class,
         TemplateClass,
         Var,
