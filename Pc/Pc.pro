@@ -47,6 +47,7 @@ SOURCES += \
         parser/CommonParser.cpp \
         parser/ExprParser.cpp \
         parser/FuncParser.cpp \
+        parser/IncludeParser.cpp \
         parser/Parser.cpp \
         parser/TypeParser.cpp \
         syms/Sym.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     parser/CommonParser.h \
     parser/ExprParser.h \
     parser/FuncParser.h \
+    parser/IncludeParser.h \
     parser/Parser.h \
     parser/TypeParser.h \
     syms/Sym.h \

@@ -7,6 +7,7 @@
 #include "nodes/Nodes.h"
 
 #include "parser/CommonParser.h"
+#include "parser/IncludeParser.h"
 #include "parser/TypeParser.h"
 #include "parser/FuncParser.h"
 
@@ -169,7 +170,7 @@ void buildVar(Context &c, BlockNode *block, bool get)
     }
 }
 
-template<typename T> buildClassImp(Context &c, T *n, bool get)
+template<typename T> void buildClassImp(Context &c, T *n, bool get)
 {
     n->name = CommonParser::name(c, get);
 
@@ -235,6 +236,8 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
+        case Token::Type::RwInclude: IncludeParser::build(c, block, true); break;
+
         case Token::Type::RwNamespace: buildNamespace(c, block, true); break;
         case Token::Type::RwFunc: buildFuncOrTemplate(c, block, true); break;
         case Token::Type::RwVar: buildVar(c, block, true); break;
