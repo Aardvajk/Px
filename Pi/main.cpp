@@ -50,7 +50,11 @@ int main(int argc, char *argv[])
         }
 
         Generator::object(c, files[1]);
-        Generator::map(c, files[1] + ".pmap");
+
+        if(c.args.contains("generate_pmap"))
+        {
+            Generator::map(c, files[1] + ".pmap");
+        }
     }
 
     catch(const Error &error)

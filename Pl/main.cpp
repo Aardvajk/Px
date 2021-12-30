@@ -67,7 +67,10 @@ int main(int argc, char *argv[])
             Trim::updateFileMap(c, c.cm);
         }
 
-        Output::map(c, files[0] + ".pmap");
+        if(c.args.contains("generate_pmap"))
+        {
+            Output::map(c, files[0] + ".pmap");
+        }
     }
 
     catch(const Error &error)

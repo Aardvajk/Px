@@ -34,7 +34,7 @@ void process(Context &c, BlockNode *block, bool force, bool get)
 
     if(!pcx::filesys::exists(path))
     {
-        path = search(c.args["I"], path);
+        path = search(c.args["i"], path);
         if(path.empty())
         {
             throw Error(tok.location(), "unable to locate - \"", tok.text(), "\"");

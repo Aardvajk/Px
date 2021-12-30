@@ -1,0 +1,28 @@
+include("stdtest.ph");
+
+func<x> foo(a:x, b:x)
+{
+    std.test.same(a, b);
+}
+
+func<x> bar(a:vector<x>)
+{
+}
+
+class<x> vector
+{
+    var a:x;
+}
+
+func main()
+{
+    foo<std.char>('a', 'a');
+    foo<std.int>(123, 123);
+
+    var a:vector<std.char>;
+    bar<std.char>(a);
+
+    var b:vector<std.int>;
+    bar<std.int>(b);
+}
+

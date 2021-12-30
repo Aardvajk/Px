@@ -1,0 +1,11 @@
+include("stdtest.ph");
+
+func f(a:std.int, b:std.int)
+{
+    std.test.same(a, b);
+}
+
+func main()
+{
+    f(123, 123);
+}

@@ -113,5 +113,9 @@ HEADERS += \
     visitors/Visitor.h
 
 DISTFILES += \
+    ../unittests/basic.pc \
+    ../unittests/runtest.bat \
+    ../unittests/runtests.bat \
+    ../unittests/templates.pc \
     ../workspace/source.pc \
     ../workspace/source.pi
