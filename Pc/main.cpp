@@ -84,6 +84,11 @@ int main(int argc, char *argv[])
 
     catch(const Error &error)
     {
+        if(error.flags() & Error::Flag::Internal)
+        {
+            std::cerr << "internal ";
+        }
+
         std::cerr << "pc error";
         if(auto n = error.location())
         {

@@ -109,7 +109,7 @@ pcx::any Sym::assertedProperty(const std::string &name) const
     auto a = property(name);
     if(!a)
     {
-        throw Error(location(), "Sym::assertProperty failed - ", name, " ", fullname());
+        throw Error(Error::Flag::Internal, location(), "Sym::assertProperty failed - ", name, " ", fullname());
     }
 
     return a;

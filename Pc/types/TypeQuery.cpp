@@ -67,7 +67,7 @@ Type *TypeQuery::assert(Context &c, Node *node)
     auto t = query(c, node);
     if(!t)
     {
-        throw Error(node->location(), "type query failed - ", node->description());
+        throw Error(Error::Flag::Internal, node->location(), "type query failed - ", node->description());
     }
 
     return t;

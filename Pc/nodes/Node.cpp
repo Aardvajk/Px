@@ -46,7 +46,7 @@ pcx::any Node::assertedProperty(const std::string &name) const
     auto a = property(name);
     if(!a)
     {
-        throw Error(location(), "Node::assertProperty failed - ", name, " ", description());
+        throw Error(Error::Flag::Internal, location(), "Node::assertProperty failed - ", name, " ", description());
     }
 
     return a;

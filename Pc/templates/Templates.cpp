@@ -117,7 +117,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
             {
                 if(p->second >= expected->args.size())
                 {
-                    throw Error(sym->location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
+                    throw Error(Error::Flag::Internal, sym->location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
                 }
 
                 types.push_back(expected->args[p->second]);
