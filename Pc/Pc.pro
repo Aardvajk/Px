@@ -117,6 +117,7 @@ HEADERS += \
 DISTFILES += \
     ../unittests/basic.pc \
     ../unittests/deduce.pc \
+    ../unittests/return.pc \
     ../unittests/runtest.bat \
     ../unittests/runtests.bat \
     ../unittests/simple_template_overloads.pc \

@@ -1,0 +1,17 @@
+include ("stdtest.ph");
+
+func foo:std.int
+{
+    return 123;
+}
+
+func bar:std.char
+{
+    return 'z';
+}
+
+func main
+{
+    std.test.same(foo(), 123);
+    std.test.same(bar(), 'z');
+}
