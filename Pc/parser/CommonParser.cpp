@@ -22,7 +22,7 @@ void buildTemplateParam(Context &c, NodeList &container, bool get)
     }
 }
 
-NodePtr nameImp(Context &c, NodePtr parent, bool allowParams, bool get)
+NodePtr nameImp(Context &c, NodePtr parent, bool get)
 {
     auto tok = c.scanner.match(Token::Type::Id, get);
 
@@ -33,11 +33,6 @@ NodePtr nameImp(Context &c, NodePtr parent, bool allowParams, bool get)
 
     if(c.scanner.token().type() == Token::Type::Lt)
     {
-        if(!allowParams)
-        {
-            throw Error(id->location(), "parameters not allowed in this context - ", id->name);
-        }
-
         c.scanner.next(true);
         if(c.scanner.token().type() != Token::Type::Gt)
         {
@@ -49,7 +44,7 @@ NodePtr nameImp(Context &c, NodePtr parent, bool allowParams, bool get)
 
     while(c.scanner.token().type() == Token::Type::Dot)
     {
-        n = nameImp(c, n, allowParams, true);
+        n = nameImp(c, n, true);
     }
 
     return n;
@@ -59,12 +54,7 @@ NodePtr nameImp(Context &c, NodePtr parent, bool allowParams, bool get)
 
 NodePtr CommonParser::name(Context &c, bool get)
 {
-    return nameImp(c, { }, true, get);
-}
-
-NodePtr CommonParser::argName(Context &c, bool get)
-{
-    return nameImp(c, { }, false, get);
+    return nameImp(c, { }, get);
 }
 
 NodePtr CommonParser::blockContents(Context &c, bool get)

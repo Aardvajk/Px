@@ -9,7 +9,6 @@ namespace TypeParser
 {
 
 NodePtr build(Context &c, bool get);
-NodePtr buildArg(Context &c, bool get);
 
 }
 
