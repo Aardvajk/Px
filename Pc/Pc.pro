@@ -118,5 +118,6 @@ DISTFILES += \
     ../unittests/runtest.bat \
     ../unittests/runtests.bat \
     ../unittests/templates.pc \
+    ../workspace/run.bat \
     ../workspace/source.pc \
     ../workspace/source.pi

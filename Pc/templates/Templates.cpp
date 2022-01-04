@@ -30,7 +30,7 @@
 namespace
 {
 
-std::unordered_map<std::string, std::size_t> generateIndexMap(Context &c, const std::vector<std::string> &names, TemplateFuncNode *node, Type *expected)
+std::unordered_map<std::string, std::size_t> generateIndexMap(Context &c, const std::vector<std::string> &names, TemplateFuncNode *node)
 {
     std::unordered_map<std::string, std::size_t> map;
 
@@ -108,7 +108,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
 
     if(types.size() < pv.size() && expected)
     {
-        auto map = generateIndexMap(c, pv, node, expected);
+        auto map = generateIndexMap(c, pv, node);
 
         for(std::size_t i = types.size(); i < pv.size(); ++i)
         {
@@ -117,7 +117,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
             {
                 if(p->second >= expected->args.size())
                 {
-                    throw Error(sym->location(), "internal error 1000 - ", sym->fullname());
+                    throw Error(sym->location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
                 }
 
                 types.push_back(expected->args[p->second]);
