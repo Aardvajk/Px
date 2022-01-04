@@ -162,8 +162,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
 
     auto type = c.types.insert(Type::function(returnType, args));
 
-    auto desc = [](const Type *t){ return t->description(); };
-    auto name = pcx::str(sym->name(), "<", pcx::join_str(types, ",", desc), ">(", pcx::join_str(args, ",", desc), "):", returnType->description());
+    auto name = pcx::str(sym->name(), "<", pcx::join_str(types, ","), ">(", pcx::join_str(args, ","), "):", returnType->description());
 
     if(auto s = sym->parent()->child(name))
     {
