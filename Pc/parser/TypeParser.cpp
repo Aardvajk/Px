@@ -12,3 +12,10 @@ NodePtr TypeParser::build(Context &c, bool get)
 
     return new TypeNode(name->location(), name);
 }
+
+NodePtr TypeParser::buildArg(Context &c, bool get)
+{
+    auto name = CommonParser::argName(c, get);
+
+    return new TypeNode(name->location(), name);
+}

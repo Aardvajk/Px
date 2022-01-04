@@ -62,7 +62,7 @@ void buildArgs(Context &c, NodeList &container, bool get)
     n->name = new IdNode(tok.location(), { }, name);
 
     c.scanner.match(Token::Type::Colon, false);
-    n->type = TypeParser::build(c, true);
+    n->type = TypeParser::buildArg(c, true);
 
     if(c.scanner.token().type() == Token::Type::Comma)
     {

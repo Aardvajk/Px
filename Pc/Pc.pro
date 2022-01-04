@@ -114,6 +114,7 @@ HEADERS += \
 
 DISTFILES += \
     ../unittests/basic.pc \
+    ../unittests/deduce.pc \
     ../unittests/runtest.bat \
     ../unittests/runtests.bat \
     ../unittests/templates.pc \

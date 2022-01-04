@@ -1,0 +1,23 @@
+include("stdtest.ph");
+
+func<x> foo(a:x, b:x)
+{
+    std.test.same(a, b);
+}
+
+func<y, x> bar(a:x, b:x)
+{
+    std.test.same(a, b);
+
+    var c:y;
+    std.test.same(c, c);
+}
+
+func main()
+{
+    foo(123, 123);
+    foo('a', 'a');
+
+    bar<std.char>(123, 123);
+    bar<std.int>('a', 'a');
+}

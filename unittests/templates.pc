@@ -5,7 +5,7 @@ func<x> foo(a:x, b:x)
     std.test.same(a, b);
 }
 
-func<x> bar(a:vector<x>)
+func<x> bar(a:x)
 {
 }
 
@@ -20,9 +20,9 @@ func main()
     foo<std.int>(123, 123);
 
     var a:vector<std.char>;
-    bar<std.char>(a);
+    bar<vector<std.char> >(a);
 
     var b:vector<std.int>;
-    bar<std.int>(b);
+    bar<vector<std.int> >(b);
 }
 

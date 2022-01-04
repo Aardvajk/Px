@@ -9,6 +9,7 @@ namespace CommonParser
 {
 
 NodePtr name(Context &c, bool get);
+NodePtr argName(Context &c, bool get);
 
 NodePtr blockContents(Context &c, bool get);
 

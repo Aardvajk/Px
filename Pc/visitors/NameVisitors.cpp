@@ -37,3 +37,17 @@ std::string NameVisitors::assertSimpleUnique(Context &c, Node *node)
 
     return n;
 }
+
+void NameVisitors::TypeNameExtractor::visit(TypeNode &node)
+{
+    if(Visitor::query<NameVisitors::IsNameSimple, bool>(node.name.get()))
+    {
+        r = Visitor::query<NameVisitors::TrailingId, std::string>(node.name.get());
+    }
+}
+
+void NameVisitors::TypeNameExtractor::visit(VarNode &node)
+{
+    node.type->accept(*this);
+}
+

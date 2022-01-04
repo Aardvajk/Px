@@ -49,7 +49,7 @@ void Generator::visit(FuncNode &node)
         Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
         Visitor::visit<FuncGenerator>(node.body.get(), c, os);
 
-        os << "}\n";
+        os << "}\n\n";
     }
 }
 

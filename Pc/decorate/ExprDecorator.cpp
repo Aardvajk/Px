@@ -36,7 +36,7 @@ void ExprDecorator::visit(IdNode &node)
     {
         if(s->type() == Sym::Type::TemplateFunc)
         {
-            s = Templates::generateFunc(c, s, node);
+            s = Templates::generateFunc(c, s, expected, node);
         }
     }
 

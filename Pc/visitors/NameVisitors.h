@@ -40,6 +40,20 @@ private:
 std::string assertSimple(Context &c, Node *node);
 std::string assertSimpleUnique(Context &c, Node *node);
 
+class TypeNameExtractor : public Visitor
+{
+public:
+    TypeNameExtractor(){ }
+
+    std::string result() const { return r; }
+
+    virtual void visit(TypeNode &node) override;
+    virtual void visit(VarNode &node) override;
+
+private:
+    std::string r;
+};
+
 }
 
 #endif // NAMEVISITORS_H
