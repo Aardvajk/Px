@@ -33,7 +33,8 @@ static const std::vector<Reserved> pcReserved =
     { "namespace", Token::Type::RwNamespace },
     { "class", Token::Type::RwClass },
     { "include", Token::Type::RwInclude },
-    { "inline", Token::Type::RwInline }
+    { "inline", Token::Type::RwInline },
+    { "return", Token::Type::RwReturn }
 };
 
 Source::Char skip(Source &source)

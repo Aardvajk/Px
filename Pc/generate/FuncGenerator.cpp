@@ -29,3 +29,17 @@ void FuncGenerator::visit(ExprNode &node)
 
     os << "    pop " << size << ";\n";
 }
+
+void FuncGenerator::visit(ReturnNode &node)
+{
+    if(node.expr)
+    {
+        auto sz = ExprGenerator::generate(c, os, node.expr.get());
+
+        os << "    push &\"@ret\";\n";
+        os << "    store " << sz << ";\n";
+        os << "    pop " << sz << ";\n";
+    }
+
+    os << "    jump \"#end_function\";\n";
+}

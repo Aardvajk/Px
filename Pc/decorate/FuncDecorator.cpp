@@ -41,3 +41,8 @@ void FuncDecorator::visit(ExprNode &node)
 {
     Visitor::visit<ExprDecorator>(node.expr.get(), c);
 }
+
+void FuncDecorator::visit(ReturnNode &node)
+{
+    Visitor::visit<ExprDecorator>(node.expr.get(), c);
+}

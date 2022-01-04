@@ -216,6 +216,17 @@ void AstPrinter::visit(IntLiteralNode &node)
     tab() << "int literal " << node.description() << "\n";
 }
 
+void AstPrinter::visit(ReturnNode &node)
+{
+    tab() << "return\n";
+
+    if(node.expr)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.expr->accept(*this);
+    }
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

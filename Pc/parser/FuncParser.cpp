@@ -30,6 +30,20 @@ void buildAnonymousScope(Context &c, BlockNode *block, bool get)
     n->body = CommonParser::blockContents(c, get);
 }
 
+void buildReturn(Context &c, BlockNode *block, bool get)
+{
+    auto n = new ReturnNode(c.scanner.token().location());
+    block->push_back(n);
+
+    auto tok = c.scanner.next(true);
+    if(tok.type() != Token::Type::Semicolon)
+    {
+        n->expr = ExprParser::build(c, false);
+    }
+
+    c.scanner.consume(Token::Type::Semicolon, false);
+}
+
 }
 
 void FuncParser::build(Context &c, BlockNode *block, bool get)
@@ -44,6 +58,8 @@ void FuncParser::build(Context &c, BlockNode *block, bool get)
     switch(tok.type())
     {
         case Token::Type::LeftBrace: buildAnonymousScope(c, block, false); break;
+
+        case Token::Type::RwReturn: buildReturn(c, block, true); break;
 
         default: buildExpression(c, block, false);
     }

@@ -104,3 +104,13 @@ void Describer::visit(IntLiteralNode &node)
 {
     r << pcx::str(node.value);
 }
+
+void Describer::visit(ReturnNode &node)
+{
+    r << "return";
+
+    if(node.expr)
+    {
+        r << " " << node.expr->description();
+    }
+}

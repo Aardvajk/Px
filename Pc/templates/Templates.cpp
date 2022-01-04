@@ -117,7 +117,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
             {
                 if(p->second >= expected->args.size())
                 {
-                    throw Error(Error::Flag::Internal, sym->location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
+                    throw Error(Error::Flag::Internal, id.location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
                 }
 
                 types.push_back(expected->args[p->second]);
@@ -127,7 +127,7 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
 
     if(pv.size() != types.size())
     {
-        throw Error(sym->location(), "mismatched template params - ", sym->fullname());
+        throw Error(id.location(), "mismatched template params - ", sym->fullname());
     }
 
     std::unordered_map<std::string, Type*> map;
