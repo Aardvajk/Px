@@ -117,6 +117,7 @@ DISTFILES += \
     ../unittests/deduce.pc \
     ../unittests/runtest.bat \
     ../unittests/runtests.bat \
+    ../unittests/simple_template_overloads.pc \
     ../unittests/templates.pc \
     ../workspace/run.bat \
     ../workspace/source.pc \
