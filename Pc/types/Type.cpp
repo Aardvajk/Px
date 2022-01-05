@@ -2,6 +2,8 @@
 
 #include "framework/Error.h"
 
+#include "application/Context.h"
+
 #include "syms/Sym.h"
 
 #include <pcx/join_str.h>
@@ -141,6 +143,27 @@ bool Type::compare(const std::vector<Type*> &a, const std::vector<Type*> &b)
         if(!compareTypes(a[i], b[i]))
         {
             return false;
+        }
+    }
+
+    return true;
+}
+
+bool Type::compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b)
+{
+    if(a.size() != b.size())
+    {
+        return false;
+    }
+
+    for(std::size_t i = 0; i < a.size(); ++i)
+    {
+        if(a[i] != c.types.unknownTemplateType() && b[i] != c.types.unknownTemplateType())
+        {
+            if(!compareTypes(a[i], b[i]))
+            {
+                return false;
+            }
         }
     }
 

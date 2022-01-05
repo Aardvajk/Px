@@ -13,6 +13,9 @@
 
 #include "templates/Templates.h"
 
+#include <pcx/str.h>
+#include <pcx/join_str.h>
+
 ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
 {
 }
@@ -36,7 +39,17 @@ void ExprDecorator::visit(IdNode &node)
     {
         if(s->type() == Sym::Type::TemplateFunc)
         {
-            s = Templates::generateFunc(c, s, expected, node);
+            if(!expected)
+            {
+                throw Error(node.location(), "cannot instantiate template func without call - ", node.description());
+            }
+
+            auto type = s->assertedProperty("type").to<Type*>();
+
+            if(Type::compareNonTemplates(c, type->args, expected->args))
+            {
+                s = Templates::generateFunc(c, s, expected, node);
+            }
         }
     }
 
@@ -62,7 +75,7 @@ void ExprDecorator::visit(IdNode &node)
 
     if(sv.empty())
     {
-        throw Error(node.location(), "symbol not found - ", node.description());
+        throw Error(node.location(), "symbol not found - ", node.description(), expected ? pcx::str("(", pcx::join_str(expected->args, ","), ")") : "");
     }
 
     if(sv.size() > 1)

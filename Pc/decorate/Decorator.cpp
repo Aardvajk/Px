@@ -17,6 +17,8 @@
 #include "decorate/VarDecorator.h"
 #include "decorate/FuncDecorator.h"
 
+#include <pcx/scoped_push.h>
+
 namespace
 {
 
@@ -38,23 +40,23 @@ Sym *search(Context &c, Sym::Type type, Node *node)
     return nullptr;
 }
 
-Sym *searchFunc(Context &c, Node *node, Type *type)
+Sym *searchFunc(Context &c, Sym::Type type, Node *node, Type *func)
 {
     std::vector<Sym*> sv;
     SymFinder::find(c, SymFinder::Type::Local, c.tree.current(), node, sv);
 
     for(auto s: sv)
     {
-        if(s->type() != Sym::Type::Func)
+        if(s->type() != type)
         {
-            throw Error(node->location(), "func expected - ", s->fullname());
+            throw Error(node->location(), Sym::toString(type), " expected - ", s->fullname());
         }
 
         auto t = s->assertedProperty("type").to<Type*>();
 
-        if(Type::compare(type->args, t->args))
+        if(Type::compare(func->args, t->args))
         {
-            if(!Type::compare(type->returnType, t->returnType))
+            if(!Type::compare(func->returnType, t->returnType))
             {
                 throw Error(node->location(), "mismatched return type - ", s->fullname());
             }
@@ -123,7 +125,7 @@ void Decorator::visit(FuncNode &node)
 
         auto type = c.types.insert(Type::function(returnType, args));
 
-        sym = searchFunc(c, node.name.get(), type);
+        sym = searchFunc(c, Sym::Type::Func, node.name.get(), type);
         if(!sym)
         {
             auto name = NameVisitors::assertSimple(c, node.name.get());
@@ -160,20 +162,56 @@ void Decorator::visit(FuncNode &node)
 
 void Decorator::visit(TemplateFuncNode &node)
 {
-    auto sym = search(c, Sym::Type::TemplateFunc, node.name.get());
-    if(!sym)
-    {
-        auto name = NameVisitors::assertSimpleUnique(c, node.name.get());
-        sym = c.tree.current()->add(new Sym(Sym::Type::TemplateFunc, node.location(), name));
-    }
-
-    node.setProperty("sym", sym);
-
     std::vector<std::string> params;
     for(auto p: node.params)
     {
         params.push_back(Visitor::query<NameVisitors::TrailingId, std::string>(p.get()));
     }
+
+    std::unordered_map<std::string, Type*> map;
+    for(auto p: params)
+    {
+        map[p] = c.types.unknownTemplateType();
+    }
+
+    std::vector<Type*> args;
+    Type *returnType = c.types.primitiveType(Primitive::Type::Null);
+
+    if(true)
+    {
+        auto g = pcx::scoped_push(c.templateParams, map);
+
+        NodeList copyArgs;
+        for(auto a: node.args)
+        {
+            copyArgs.push_back(a->clone());
+        }
+
+        for(auto a: copyArgs)
+        {
+            Visitor::visit<ArgDecorator>(a.get(), c);
+            args.push_back(TypeQuery::assert(c, a.get()));
+        }
+
+        if(node.type)
+        {
+            auto copy = node.type->clone();
+            returnType = TypeBuilder::build(c, copy.get());
+        }
+    }
+
+    auto type = c.types.insert(Type::function(returnType, args));
+
+    auto sym = searchFunc(c, Sym::Type::TemplateFunc, node.name.get(), type);
+    if(!sym)
+    {
+        auto name = NameVisitors::assertSimple(c, node.name.get());
+        sym = c.tree.current()->add(new Sym(Sym::Type::TemplateFunc, node.location(), name));
+
+        sym->setProperty("type", type);
+    }
+
+    node.setProperty("sym", sym);
 
     sym->setProperty("params", params);
     sym->setProperty("node", &node);

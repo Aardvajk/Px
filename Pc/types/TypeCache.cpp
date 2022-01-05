@@ -5,6 +5,14 @@
 namespace
 {
 
+Sym *createUnknownTemplateType(Context &c)
+{
+    pcx::scoped_ptr<Sym> s = new Sym(Sym::Type::Class, { }, "#unknowntemplate");
+
+    s->setProperty("type", c.types.insert(Type::primary(s.get())));
+
+    return s.release();
+}
 
 }
 
@@ -15,6 +23,8 @@ TypeCache::TypeCache(Context &c)
     createPrimitive(c, "null", ns, Primitive::Type::Null, 0);
     createPrimitive(c, "char", ns, Primitive::Type::Char, 1);
     createPrimitive(c, "int", ns, Primitive::Type::Int, 4);
+
+    unknownTemplateSym = createUnknownTemplateType(c);
 }
 
 Type *TypeCache::insert(const Type &type)
@@ -34,6 +44,11 @@ Type *TypeCache::insert(const Type &type)
 Type *TypeCache::primitiveType(Primitive::Type type)
 {
     return v.ptr(tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)]);
+}
+
+Type *TypeCache::unknownTemplateType()
+{
+    return unknownTemplateSym->property("type").to<Type*>();
 }
 
 void TypeCache::createPrimitive(Context &c, const std::string &name, Sym *container, Primitive::Type type, std::size_t size)

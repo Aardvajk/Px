@@ -6,11 +6,13 @@
 #include "types/Type.h"
 
 #include <pcx/ptr_vector.h>
+#include <pcx/scoped_ptr.h>
 
 #include <iostream>
 #include <unordered_map>
 
 class Context;
+class Sym;
 
 class TypeCache
 {
@@ -19,6 +21,7 @@ public:
 
     Type *insert(const Type &type);
     Type *primitiveType(Primitive::Type type);
+    Type *unknownTemplateType();
 
     pcx::ptr_vector<Type>::iterator begin(){ return v.begin(); }
     pcx::ptr_vector<Type>::iterator end(){ return v.end(); }
@@ -28,6 +31,8 @@ private:
 
     pcx::ptr_vector<Type> v;
     std::unordered_map<std::underlying_type<Primitive::Type>::type, std::size_t> tm;
+
+    pcx::scoped_ptr<Sym> unknownTemplateSym;
 };
 
 #endif // TYPECACHE_H

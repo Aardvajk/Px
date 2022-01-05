@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 
+class Context;
 class Sym;
 
 class Type
@@ -26,6 +27,8 @@ public:
 
     static bool compare(const Type *a, const Type *b);
     static bool compare(const std::vector<Type*> &a, const std::vector<Type*> &b);
+
+    static bool compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b);
 
     Sym *sym;
 
