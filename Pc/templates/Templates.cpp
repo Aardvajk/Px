@@ -47,6 +47,48 @@ std::unordered_map<std::string, std::size_t> generateIndexMap(Context &c, const 
     return map;
 }
 
+void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
+{
+    auto p = r.node->assertedProperty("sym").to<Sym*>()->property("body");
+    if(!p)
+    {
+        throw Error(r.sym->location(), "template function not defined - ", r.sym->fullname());
+    }
+
+    auto fn = new FuncNode(r.node->location());
+    r.node->instances.push_back(fn);
+
+    auto returnType = c.types.primitiveType(Primitive::Type::Null);
+
+    if(r.node->type)
+    {
+        auto copy = r.node->type->clone();
+        returnType = TypeBuilder::build(c, copy.get());
+    }
+
+    auto tn = new TypeNode(r.node->location(), new IdNode(r.node->location(), { }, { }));
+    fn->type = tn;
+
+    tn->setProperty("type", returnType);
+
+    fn->name = new IdNode(r.node->location(), { }, r.sym->name());
+
+    NodeList args;
+    for(auto a: r.node->args)
+    {
+        args.push_back(a->clone());
+    }
+
+    fn->args = args;
+    fn->body = p.to<Node*>()->clone();
+
+    fn->setProperty("sym", r.sym);
+
+    auto g = pcx::scoped_push(c.templateParams, r.map);
+
+    Visitor::visit<Decorator>(fn, c);
+}
+
 }
 
 Sym *Templates::generateClass(Context &c, Sym *sym, NodeList &params)
@@ -187,44 +229,7 @@ void Templates::fullfillFuncReqs(Context &c)
 
         for(auto &r: reqs)
         {
-            auto p = r.node->assertedProperty("sym").to<Sym*>()->property("body");
-            if(!p)
-            {
-                throw Error(r.sym->location(), "template function not defined - ", r.sym->fullname());
-            }
-
-            auto fn = new FuncNode(r.node->location());
-            r.node->instances.push_back(fn);
-
-            auto returnType = c.types.primitiveType(Primitive::Type::Null);
-
-            if(r.node->type)
-            {
-                auto copy = r.node->type->clone();
-                returnType = TypeBuilder::build(c, copy.get());
-            }
-
-            auto tn = new TypeNode(r.node->location(), new IdNode(r.node->location(), { }, { }));
-            fn->type = tn;
-
-            tn->setProperty("type", returnType);
-
-            fn->name = new IdNode(r.node->location(), { }, r.sym->name());
-
-            NodeList args;
-            for(auto a: r.node->args)
-            {
-                args.push_back(a->clone());
-            }
-
-            fn->args = args;
-            fn->body = p.to<Node*>()->clone();
-
-            fn->setProperty("sym", r.sym);
-
-            auto g = pcx::scoped_push(c.templateParams, r.map);
-
-            Visitor::visit<Decorator>(fn, c);
+            fullfillFuncReq(c, r);
         }
     }
 }
