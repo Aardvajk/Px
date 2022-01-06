@@ -39,7 +39,7 @@ void ExprDecorator::visit(IdNode &node)
     {
         if(s->type() == Sym::Type::TemplateFunc)
         {
-            if(!expected)
+            if(!expected || !expected->returnType)
             {
                 throw Error(node.location(), "cannot instantiate template func without call - ", node.description());
             }
