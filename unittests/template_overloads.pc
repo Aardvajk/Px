@@ -1,5 +1,14 @@
 include("stdtest.ph");
 
+func<x> foo(a:x, b:std.int);
+func<x> foo(a:x, b:std.char);
+
+func main()
+{
+    foo(123, 123);
+    foo('a', 'a');
+}
+
 func<x> foo(a:x, b:std.int)
 {
     std.test.same(a, 123);
@@ -8,11 +17,5 @@ func<x> foo(a:x, b:std.int)
 func<x> foo(a:x, b:std.char)
 {
     std.test.same(a, 'a');
-}
-
-func main()
-{
-    foo(123, 123);
-    foo('a', 'a');
 }
 

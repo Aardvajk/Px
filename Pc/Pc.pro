@@ -69,6 +69,7 @@ SOURCES += \
 HEADERS += \
     application/Context.h \
     components/FuncInfo.h \
+    components/TemplateFuncReq.h \
     decorate/ArgDecorator.h \
     decorate/Decorator.h \
     decorate/ExprDecorator.h \

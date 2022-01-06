@@ -224,6 +224,7 @@ void Decorator::visit(TemplateFuncNode &node)
         }
 
         sym->setProperty("defined", true);
+        sym->setProperty("body", node.body.get());
     }
 }
 

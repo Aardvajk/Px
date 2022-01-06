@@ -8,6 +8,8 @@
 
 #include "decorate/Decorator.h"
 
+#include "templates/Templates.h"
+
 #include "finalise/Finaliser.h"
 
 #include "generate/Generator.h"
@@ -47,6 +49,7 @@ int main(int argc, char *argv[])
         }
 
         Visitor::visit<Decorator>(n.get(), c);
+        Templates::fullfillFuncReqs(c);
 
         if(!c.args.contains("q"))
         {

@@ -95,7 +95,7 @@ Sym *Templates::generateClass(Context &c, Sym *sym, NodeList &params)
     return s;
 }
 
-Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
+Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id)
 {
     auto node = sym->assertedProperty("node").to<TemplateFuncNode*>();
     auto pv = sym->property("params").to<std::vector<std::string> >();
@@ -173,31 +173,58 @@ Sym *Templates::generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id)
 
     s->setProperty("type", type);
 
-    if(node->body)
-    {
-        auto fn = new FuncNode(node->location());
-        node->instances.push_back(fn);
-
-        auto tn = new TypeNode(node->location(), new IdNode(node->location(), { }, { }));
-        fn->type = tn;
-
-        tn->setProperty("type", returnType);
-
-        fn->name = new IdNode(node->location(), { }, name);
-
-        NodeList args;
-        for(auto a: node->args)
-        {
-            args.push_back(a->clone());
-        }
-
-        fn->args = args;
-        fn->body = node->body->clone();
-
-        fn->setProperty("sym", s);
-
-        Visitor::visit<Decorator>(fn, c);
-    }
+    c.templateFuncReqs.push_back(TemplateFuncReq(node, s, map));
 
     return s;
+}
+
+void Templates::fullfillFuncReqs(Context &c)
+{
+    while(!c.templateFuncReqs.empty())
+    {
+        auto reqs = c.templateFuncReqs;
+        c.templateFuncReqs.clear();
+
+        for(auto &r: reqs)
+        {
+            auto p = r.node->assertedProperty("sym").to<Sym*>()->property("body");
+            if(!p)
+            {
+                throw Error(r.sym->location(), "template function not defined - ", r.sym->fullname());
+            }
+
+            auto fn = new FuncNode(r.node->location());
+            r.node->instances.push_back(fn);
+
+            auto returnType = c.types.primitiveType(Primitive::Type::Null);
+
+            if(r.node->type)
+            {
+                auto copy = r.node->type->clone();
+                returnType = TypeBuilder::build(c, copy.get());
+            }
+
+            auto tn = new TypeNode(r.node->location(), new IdNode(r.node->location(), { }, { }));
+            fn->type = tn;
+
+            tn->setProperty("type", returnType);
+
+            fn->name = new IdNode(r.node->location(), { }, r.sym->name());
+
+            NodeList args;
+            for(auto a: r.node->args)
+            {
+                args.push_back(a->clone());
+            }
+
+            fn->args = args;
+            fn->body = p.to<Node*>()->clone();
+
+            fn->setProperty("sym", r.sym);
+
+            auto g = pcx::scoped_push(c.templateParams, r.map);
+
+            Visitor::visit<Decorator>(fn, c);
+        }
+    }
 }

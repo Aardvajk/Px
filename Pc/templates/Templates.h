@@ -12,7 +12,9 @@ namespace Templates
 {
 
 Sym *generateClass(Context &c, Sym *sym, NodeList &params);
-Sym *generateFunc(Context &c, Sym *sym, Type *expected, IdNode &id);
+Sym *generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id);
+
+void fullfillFuncReqs(Context &c);
 
 }
 

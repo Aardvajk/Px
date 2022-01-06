@@ -48,7 +48,7 @@ void ExprDecorator::visit(IdNode &node)
 
             if(Type::compareNonTemplates(c, type->args, expected->args))
             {
-                s = Templates::generateFunc(c, s, expected, node);
+                s = Templates::generateFuncReq(c, s, expected, node);
             }
         }
     }
