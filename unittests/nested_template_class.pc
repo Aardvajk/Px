@@ -1,0 +1,22 @@
+include("stdtest.ph");
+
+class<x> foo
+{
+    class<y> bar
+    {
+        var a:y;
+    }
+}
+
+func z(a:foo<std.int>.bar<std.char>)
+{
+    a.a;
+}
+
+func main
+{
+    var a:foo<std.int>.bar<std.char>;
+    var b:foo<std.char>.bar<std.char>;
+
+    z(a);
+}

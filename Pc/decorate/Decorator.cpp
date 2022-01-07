@@ -40,16 +40,16 @@ Sym *search(Context &c, Sym::Type type, Node *node)
     return nullptr;
 }
 
-Sym *searchFunc(Context &c, Sym::Type type, Node *node, Type *func)
+Sym *searchFunc(Context &c, Node *node, Type *func)
 {
     std::vector<Sym*> sv;
     SymFinder::find(c, SymFinder::Type::Local, c.tree.current(), node, sv);
 
     for(auto s: sv)
     {
-        if(s->type() != type)
+        if(s->type() != Sym::Type::Func && s->type() != Sym::Type::TemplateFunc)
         {
-            throw Error(node->location(), Sym::toString(type), " expected - ", s->fullname());
+            throw Error(node->location(), "function expected - ", s->fullname());
         }
 
         auto t = s->assertedProperty("type").to<Type*>();
@@ -125,7 +125,7 @@ void Decorator::visit(FuncNode &node)
 
         auto type = c.types.insert(Type::function(returnType, args));
 
-        sym = searchFunc(c, Sym::Type::Func, node.name.get(), type);
+        sym = searchFunc(c, node.name.get(), type);
         if(!sym)
         {
             auto name = NameVisitors::assertSimple(c, node.name.get());
@@ -202,7 +202,7 @@ void Decorator::visit(TemplateFuncNode &node)
 
     auto type = c.types.insert(Type::function(returnType, args));
 
-    auto sym = searchFunc(c, Sym::Type::TemplateFunc, node.name.get(), type);
+    auto sym = searchFunc(c, node.name.get(), type);
     if(!sym)
     {
         auto name = NameVisitors::assertSimple(c, node.name.get());

@@ -118,6 +118,7 @@ HEADERS += \
 DISTFILES += \
     ../unittests/basic.pc \
     ../unittests/deduce.pc \
+    ../unittests/nested_template_class.pc \
     ../unittests/return.pc \
     ../unittests/run.bat \
     ../unittests/runtest.bat \
