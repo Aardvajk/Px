@@ -55,6 +55,8 @@ void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
         throw Error(r.sym->location(), "template function not defined - ", r.sym->fullname());
     }
 
+    auto g = pcx::scoped_push(c.templateParams, r.map);
+
     auto fn = new FuncNode(r.node->location());
     r.node->instances.push_back(fn);
 
@@ -83,8 +85,6 @@ void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
     fn->body = p.to<Node*>()->clone();
 
     fn->setProperty("sym", r.sym);
-
-    auto g = pcx::scoped_push(c.templateParams, r.map);
 
     Visitor::visit<Decorator>(fn, c);
 }
