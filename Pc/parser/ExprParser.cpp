@@ -74,6 +74,16 @@ NodePtr call(Context &c, NodePtr target, bool get)
     return n;
 }
 
+template<typename T> NodePtr exprNode(Context &c, bool get)
+{
+    auto node = new T(c.scanner.token().location());
+    NodePtr n(node);
+
+    node->expr = expression(c, get);
+
+    return n;
+}
+
 NodePtr primary(Context &c, bool get)
 {
     NodePtr n;
@@ -85,6 +95,9 @@ NodePtr primary(Context &c, bool get)
 
         case Token::Type::CharLiteral: n = new CharLiteralNode(tok.location(), tok.text()[0]); c.scanner.next(true); return n;
         case Token::Type::IntLiteral: n = new IntLiteralNode(tok.location(), pcx::lexical_cast<int>(tok.text())); c.scanner.next(true); return n;
+
+        case Token::Type::Star: return exprNode<DerefNode>(c, true);
+        case Token::Type::Amp: return exprNode<AddrNode>(c, true);
 
         default: throw Error(tok.location(), "primary expected - ", tok.text());
     }

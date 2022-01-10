@@ -25,6 +25,11 @@ bool compareTypes(const Type *a, const Type *b)
         return false;
     }
 
+    if(a->ptr != b->ptr)
+    {
+        return false;
+    }
+
     if(a->sym != b->sym)
     {
         return false;
@@ -55,6 +60,11 @@ std::string describeType(const Type *t)
 {
     std::ostringstream os;
 
+    for(std::size_t i = 0; i < t->ptr; ++i)
+    {
+        os << "ptr ";
+    }
+
     if(t->sym)
     {
         os << t->sym->fullname();
@@ -69,7 +79,7 @@ std::string describeType(const Type *t)
 
 }
 
-Type::Type() : sym(nullptr), returnType(nullptr)
+Type::Type() : ptr(0), sym(nullptr), returnType(nullptr)
 {
 }
 
@@ -80,7 +90,7 @@ std::string Type::description() const
 
 pcx::optional<std::size_t> Type::size() const
 {
-    if(returnType)
+    if(ptr || returnType)
     {
         return sizeof(std::size_t);
     }

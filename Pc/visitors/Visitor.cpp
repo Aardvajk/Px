@@ -63,3 +63,11 @@ void Visitor::visit(IntLiteralNode &node)
 void Visitor::visit(ReturnNode &node)
 {
 }
+
+void Visitor::visit(DerefNode &node)
+{
+}
+
+void Visitor::visit(AddrNode &node)
+{
+}

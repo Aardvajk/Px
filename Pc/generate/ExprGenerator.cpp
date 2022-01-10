@@ -86,6 +86,27 @@ void ExprGenerator::visit(IntLiteralNode &node)
     r = sizeof(int);
 }
 
+void ExprGenerator::visit(DerefNode &node)
+{
+    auto sz = TypeQuery::query(c, &node)->assertedSize(node.location());
+
+    generate(c, os, node.expr.get());
+
+    os << "    load " << sz << ";\n";
+    r = sz;
+}
+
+void ExprGenerator::visit(AddrNode &node)
+{
+    if(flags & Flag::Addr)
+    {
+        throw Error(node.location(), "cannot take address of address - ", node.description());
+    }
+
+    generate(c, os, node.expr.get(), Flag::Addr);
+    r = sizeof(std::size_t);
+}
+
 std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Flags flags)
 {
     ExprGenerator g(c, os, flags);

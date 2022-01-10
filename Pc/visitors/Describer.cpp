@@ -62,6 +62,11 @@ void Describer::visit(ScopeNode &node)
 
 void Describer::visit(TypeNode &node)
 {
+    for(std::size_t i = 0; i < node.ptr; ++i)
+    {
+        r << "ptr ";
+    }
+
     r << node.name->description();
 }
 
@@ -113,4 +118,14 @@ void Describer::visit(ReturnNode &node)
     {
         r << " " << node.expr->description();
     }
+}
+
+void Describer::visit(DerefNode &node)
+{
+    r << "*(" << node.expr->description() << ")";
+}
+
+void Describer::visit(AddrNode &node)
+{
+    r << "&(" << node.expr->description() << ")";
 }

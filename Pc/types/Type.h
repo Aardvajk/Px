@@ -30,6 +30,8 @@ public:
 
     static bool compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b);
 
+    std::size_t ptr;
+
     Sym *sym;
 
     Type *returnType;

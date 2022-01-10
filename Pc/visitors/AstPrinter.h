@@ -27,6 +27,8 @@ public:
     virtual void visit(CharLiteralNode &node) override;
     virtual void visit(IntLiteralNode &node) override;
     virtual void visit(ReturnNode &node) override;
+    virtual void visit(DerefNode &node) override;
+    virtual void visit(AddrNode &node) override;
 
 private:
     std::ostream &tab() const;

@@ -161,3 +161,13 @@ void ExprDecorator::visit(CallNode &node)
 
     Visitor::visit<ExprDecorator>(node.target.get(), c, type);
 }
+
+void ExprDecorator::visit(DerefNode &node)
+{
+    Visitor::visit<ExprDecorator>(node.expr.get(), c);
+}
+
+void ExprDecorator::visit(AddrNode &node)
+{
+    Visitor::visit<ExprDecorator>(node.expr.get(), c);
+}

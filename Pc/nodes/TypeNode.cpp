@@ -9,5 +9,10 @@ void TypeNode::accept(Visitor &v)
 
 NodePtr TypeNode::cloneDetail() const
 {
-    return new TypeNode(location(), safeClone(name));
+    auto node = new TypeNode(location(), safeClone(name));
+    NodePtr n(node);
+
+    node->ptr = ptr;
+
+    return n;
 }

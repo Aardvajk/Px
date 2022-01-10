@@ -54,6 +54,24 @@ void TypeQuery::visit(IntLiteralNode &node)
     r = c.types.primitiveType(Primitive::Type::Int);
 }
 
+void TypeQuery::visit(DerefNode &node)
+{
+    auto t = *(Visitor::query<TypeQuery, Type*>(node.expr.get(), c));
+
+    --t.ptr;
+
+    r = c.types.insert(t);
+}
+
+void TypeQuery::visit(AddrNode &node)
+{
+    auto t = *(Visitor::query<TypeQuery, Type*>(node.expr.get(), c));
+
+    ++t.ptr;
+
+    r = c.types.insert(t);
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

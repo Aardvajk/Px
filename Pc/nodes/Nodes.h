@@ -13,5 +13,7 @@
 #include "nodes/CallNode.h"
 #include "nodes/LiteralNodes.h"
 #include "nodes/ReturnNode.h"
+#include "nodes/DerefNode.h"
+#include "nodes/AddrNode.h"
 
 #endif // NODES_H

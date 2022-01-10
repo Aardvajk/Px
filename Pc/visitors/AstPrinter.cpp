@@ -135,7 +135,7 @@ void AstPrinter::visit(ScopeNode &node)
 
 void AstPrinter::visit(TypeNode &node)
 {
-    tab() << "type " << node.name->description() << "\n";
+    tab() << "type " << node.description() << "\n";
 }
 
 void AstPrinter::visit(VarNode &node)
@@ -225,6 +225,22 @@ void AstPrinter::visit(ReturnNode &node)
         auto g = pcx::scoped_counter(tc);
         node.expr->accept(*this);
     }
+}
+
+void AstPrinter::visit(DerefNode &node)
+{
+    tab() << "deref\n";
+
+    auto g = pcx::scoped_counter(tc);
+    node.expr->accept(*this);
+}
+
+void AstPrinter::visit(AddrNode &node)
+{
+    tab() << "addrof\n";
+
+    auto g = pcx::scoped_counter(tc);
+    node.expr->accept(*this);
 }
 
 std::ostream &AstPrinter::tab() const

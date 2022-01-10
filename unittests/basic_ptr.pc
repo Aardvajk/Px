@@ -1,0 +1,28 @@
+include("stdtest.ph");
+
+func<x> hoo(a:x)
+{
+    std.test.same(**a, 123);
+}
+
+func woo(a:ptr ptr std.int)
+{
+    std.test.same(**a, 123);
+}
+
+func bar(a:ptr std.int)
+{
+    std.test.same(*a, 123);
+    woo(&a);
+    hoo(&a);
+}
+
+func foo(a:std.int)
+{
+    bar(&a);
+}
+
+func main
+{
+    foo(123);
+}

@@ -32,9 +32,11 @@ SOURCES += \
         generate/Generator.cpp \
         generate/LocalsGenerator.cpp \
         main.cpp \
+        nodes/AddrNode.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
         nodes/ClassNode.cpp \
+        nodes/DerefNode.cpp \
         nodes/ExprNode.cpp \
         nodes/FuncNode.cpp \
         nodes/IdNode.cpp \
@@ -80,9 +82,11 @@ HEADERS += \
     generate/FuncGenerator.h \
     generate/Generator.h \
     generate/LocalsGenerator.h \
+    nodes/AddrNode.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
     nodes/ClassNode.h \
+    nodes/DerefNode.h \
     nodes/ExprNode.h \
     nodes/FuncNode.h \
     nodes/IdNode.h \
@@ -117,6 +121,7 @@ HEADERS += \
 
 DISTFILES += \
     ../unittests/basic.pc \
+    ../unittests/basic_ptr.pc \
     ../unittests/deduce.pc \
     ../unittests/nested_template_class.pc \
     ../unittests/return.pc \

@@ -40,6 +40,14 @@ void TypeBuilder::visit(TypeNode &node)
     if(!c.templateParams.empty())
     {
         r = checkTemplateParam(c, node.name);
+
+        if(r && node.ptr)
+        {
+            auto t = *r;
+            t.ptr = node.ptr;
+
+            r = c.types.insert(t);
+        }
     }
 
     if(!r)
@@ -52,7 +60,11 @@ void TypeBuilder::visit(TypeNode &node)
             throw Error(node.location(), "type expected - ", node.description());
         }
 
-        r = c.types.insert(Type::primary(sv.front()));
+        auto t = Type::primary(sv.front());
+
+        t.ptr = node.ptr;
+
+        r = c.types.insert(t);
     }
 }
 
