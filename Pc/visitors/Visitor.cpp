@@ -71,3 +71,7 @@ void Visitor::visit(DerefNode &node)
 void Visitor::visit(AddrNode &node)
 {
 }
+
+void Visitor::visit(AssignNode &node)
+{
+}

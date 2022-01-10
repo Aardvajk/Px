@@ -31,6 +31,7 @@ public:
     virtual void visit(IntLiteralNode &node) override;
     virtual void visit(DerefNode &node) override;
     virtual void visit(AddrNode &node) override;
+    virtual void visit(AssignNode &node) override;
 
     static std::size_t generate(Context &c, std::ostream &os, Node *node, Flags flags = { });
 

@@ -165,9 +165,20 @@ void ExprDecorator::visit(CallNode &node)
 void ExprDecorator::visit(DerefNode &node)
 {
     Visitor::visit<ExprDecorator>(node.expr.get(), c);
+
+    if(!TypeQuery::assert(c, node.expr.get())->ptr)
+    {
+        throw Error(node.location(), "cannot deference a non-pointer - ", node.description());
+    }
 }
 
 void ExprDecorator::visit(AddrNode &node)
 {
     Visitor::visit<ExprDecorator>(node.expr.get(), c);
+}
+
+void ExprDecorator::visit(AssignNode &node)
+{
+    Visitor::visit<ExprDecorator>(node.target.get(), c);
+    Visitor::visit<ExprDecorator>(node.value.get(), c);
 }

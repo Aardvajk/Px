@@ -129,3 +129,8 @@ void Describer::visit(AddrNode &node)
 {
     r << "&(" << node.expr->description() << ")";
 }
+
+void Describer::visit(AssignNode &node)
+{
+    r << node.target->description() << " = " << node.value->description();
+}

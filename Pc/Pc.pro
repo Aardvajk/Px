@@ -33,6 +33,7 @@ SOURCES += \
         generate/LocalsGenerator.cpp \
         main.cpp \
         nodes/AddrNode.cpp \
+        nodes/AssignNode.cpp \
         nodes/BlockNode.cpp \
         nodes/CallNode.cpp \
         nodes/ClassNode.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     generate/Generator.h \
     generate/LocalsGenerator.h \
     nodes/AddrNode.h \
+    nodes/AssignNode.h \
     nodes/BlockNode.h \
     nodes/CallNode.h \
     nodes/ClassNode.h \

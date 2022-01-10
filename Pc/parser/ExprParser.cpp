@@ -15,6 +15,15 @@ namespace
 
 NodePtr expression(Context &c, bool get);
 
+NodePtr paren(Context &c, bool get)
+{
+    auto n = expression(c, get);
+
+    c.scanner.consume(Token::Type::RightParen, false);
+
+    return n;
+}
+
 void templateParam(Context &c, NodeList &container, bool get)
 {
     container.push_back(TypeParser::build(c, get));
@@ -91,6 +100,8 @@ NodePtr primary(Context &c, bool get)
     auto tok = c.scanner.next(get);
     switch(tok.type())
     {
+        case Token::Type::LeftParen: return paren(c, true);
+
         case Token::Type::Id: return id(c, { }, false);
 
         case Token::Type::CharLiteral: n = new CharLiteralNode(tok.location(), tok.text()[0]); c.scanner.next(true); return n;
@@ -119,9 +130,24 @@ NodePtr entity(Context &c, bool get)
     }
 }
 
+NodePtr assign(Context &c, bool get)
+{
+    auto n = entity(c, get);
+
+    while(c.scanner.token().type() == Token::Type::Assign)
+    {
+        auto an = new AssignNode(c.scanner.token().location(), n);
+        n = an;
+
+        an->value = expression(c, true);
+    }
+
+    return n;
+}
+
 NodePtr expression(Context &c, bool get)
 {
-    return entity(c, get);
+    return assign(c, get);
 }
 
 }

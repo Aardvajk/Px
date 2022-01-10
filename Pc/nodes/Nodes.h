@@ -15,5 +15,6 @@
 #include "nodes/ReturnNode.h"
 #include "nodes/DerefNode.h"
 #include "nodes/AddrNode.h"
+#include "nodes/AssignNode.h"
 
 #endif // NODES_H

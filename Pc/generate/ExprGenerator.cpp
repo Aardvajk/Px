@@ -76,12 +76,22 @@ void ExprGenerator::visit(CallNode &node)
 
 void ExprGenerator::visit(CharLiteralNode &node)
 {
+    if(flags & Flag::Addr)
+    {
+        throw Error(node.location(), "cannot take address of constant - ", node.description());
+    }
+
     os << "    push char(" << static_cast<int>(node.value) << ");\n";
     r = sizeof(char);
 }
 
 void ExprGenerator::visit(IntLiteralNode &node)
 {
+    if(flags & Flag::Addr)
+    {
+        throw Error(node.location(), "cannot take address of constant - ", node.description());
+    }
+
     os << "    push int(" << node.value << ");\n";
     r = sizeof(int);
 }
@@ -92,7 +102,11 @@ void ExprGenerator::visit(DerefNode &node)
 
     generate(c, os, node.expr.get());
 
-    os << "    load " << sz << ";\n";
+    if(!(flags & Flag::Addr))
+    {
+        os << "    load " << sz << ";\n";
+    }
+
     r = sz;
 }
 
@@ -105,6 +119,16 @@ void ExprGenerator::visit(AddrNode &node)
 
     generate(c, os, node.expr.get(), Flag::Addr);
     r = sizeof(std::size_t);
+}
+
+void ExprGenerator::visit(AssignNode &node)
+{
+    auto sz = generate(c, os, node.value.get());
+
+    generate(c, os, node.target.get(), Flag::Addr);
+    os << "    store " << sz << ";\n";
+
+    r = sz;
 }
 
 std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Flags flags)
