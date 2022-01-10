@@ -30,7 +30,7 @@
 namespace
 {
 
-std::unordered_map<std::string, std::size_t> generateIndexMap(Context &c, const std::vector<std::string> &names, TemplateFuncNode *node)
+std::unordered_map<std::string, std::size_t> generateIndexMap(const std::vector<std::string> &names, TemplateFuncNode *node)
 {
     std::unordered_map<std::string, std::size_t> map;
 
@@ -45,6 +45,23 @@ std::unordered_map<std::string, std::size_t> generateIndexMap(Context &c, const 
     }
 
     return map;
+}
+
+std::unordered_set<std::size_t> generateParamIndices(const std::vector<std::string> &names, TemplateFuncNode *node)
+{
+    std::unordered_set<std::size_t> set;
+
+    for(auto a: pcx::indexed_range(node->args))
+    {
+        auto s = Visitor::query<NameVisitors::TypeNameExtractor, std::string>(a.value.get());
+
+        if(std::find(names.begin(), names.end(), s) != names.end())
+        {
+            set.insert(a.index);
+        }
+    }
+
+    return set;
 }
 
 void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
@@ -150,7 +167,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
 
     if(types.size() < pv.size() && expected)
     {
-        auto map = generateIndexMap(c, pv, node);
+        auto map = generateIndexMap(pv, node);
 
         for(std::size_t i = types.size(); i < pv.size(); ++i)
         {
@@ -214,6 +231,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
     auto s = sym->parent()->add(new Sym(Sym::Type::Func, node->location(), name));
 
     s->setProperty("type", type);
+    s->setProperty("paramindices", generateParamIndices(pv, node));
 
     c.templateFuncReqs.push_back(TemplateFuncReq(node, s, map));
 
@@ -229,7 +247,10 @@ void Templates::fullfillFuncReqs(Context &c)
 
         for(auto &r: reqs)
         {
-            fullfillFuncReq(c, r);
+            if(r.uses)
+            {
+                fullfillFuncReq(c, r);
+            }
         }
     }
 }

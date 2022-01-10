@@ -16,6 +16,9 @@
 #include <pcx/str.h>
 #include <pcx/join_str.h>
 
+#include <unordered_set>
+#include <algorithm>
+
 ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
 {
 }
@@ -55,7 +58,16 @@ void ExprDecorator::visit(IdNode &node)
 
     if(expected && expected->returnType)
     {
-        std::vector<Sym*> matches;
+        class Match
+        {
+        public:
+            Match(Sym *sym, std::size_t conversions) : sym(sym), conversions(conversions) { }
+
+            Sym *sym;
+            std::size_t conversions;
+        };
+
+        std::vector<Match> matches;
 
         for(auto s: sv)
         {
@@ -63,14 +75,51 @@ void ExprDecorator::visit(IdNode &node)
             {
                 auto type = s->assertedProperty("type").to<Type*>();
 
-                if(Type::compare(type->args, expected->args))
+                if(type->args.size() == expected->args.size())
                 {
-                    matches.push_back(s);
+                    auto ps = s->property("paramindices").value<std::unordered_set<std::size_t> >();
+
+                    std::size_t m = 0;
+                    std::size_t cv = 0;
+
+                    for(std::size_t i = 0; i < type->args.size(); ++i)
+                    {
+                        if(Type::compare(type->args[i], expected->args[i]))
+                        {
+                            ++m;
+                            if(ps.find(i) != ps.end())
+                            {
+                                ++cv;
+                            }
+                        }
+                    }
+
+                    if(m == type->args.size())
+                    {
+                        matches.push_back(Match(s, cv));
+                    }
                 }
             }
         }
 
-        sv = matches;
+        std::vector<Sym*> least;
+        if(!matches.empty())
+        {
+            std::sort(matches.begin(), matches.end(), [](Match a, Match b){ return a.conversions < b.conversions; });
+
+            auto min = matches.front().conversions;
+
+            std::size_t i = 0;
+            auto v = min;
+
+            while(i < matches.size() && v == min)
+            {
+                least.push_back(matches[i].sym);
+                v = matches[++i].conversions;
+            }
+        }
+
+        sv = least;
     }
 
     if(sv.empty())
@@ -83,7 +132,19 @@ void ExprDecorator::visit(IdNode &node)
         throw Error(node.location(), "ambiguous symbol - ", node.description());
     }
 
-    node.setProperty("sym", sv.front());
+    auto sym = sv.front();
+    if(sym->type() == Sym::Type::Func)
+    {
+        for(auto &r: c.templateFuncReqs)
+        {
+            if(r.sym == sym)
+            {
+                ++r.uses;
+            }
+        }
+    }
+
+    node.setProperty("sym", sym);
 }
 
 void ExprDecorator::visit(CallNode &node)
