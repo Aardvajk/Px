@@ -73,3 +73,11 @@ void Generator::visit(VarNode &node)
         os << "var \"" << sym->fullname() << "\":" << type->assertedSize(node.location()) << ";\n";
     }
 }
+
+void Generator::visit(ClassNode &node)
+{
+    if(node.body)
+    {
+        node.body->accept(*this);
+    }
+}

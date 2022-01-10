@@ -17,6 +17,7 @@ public:
     virtual void visit(FuncNode &node) override;
     virtual void visit(TemplateFuncNode &node) override;
     virtual void visit(VarNode &node) override;
+    virtual void visit(ClassNode &node) override;
 
 private:
     Context &c;
