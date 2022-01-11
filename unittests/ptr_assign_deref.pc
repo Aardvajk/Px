@@ -21,4 +21,12 @@ func main
     a.a = 123;
 
     f(&a);
+
+    var b:ptr foo;
+
+    b = &a;
+
+    (*b).a = 999;
+
+    std.test.same(a.a, 999);
 }
