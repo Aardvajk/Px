@@ -72,6 +72,11 @@ void TypeQuery::visit(AddrNode &node)
     r = c.types.insert(t);
 }
 
+void TypeQuery::visit(AssignNode &node)
+{
+    node.target->accept(*this);
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

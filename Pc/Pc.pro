@@ -126,6 +126,7 @@ DISTFILES += \
     ../unittests/basic_ptr.pc \
     ../unittests/deduce.pc \
     ../unittests/nested_template_class.pc \
+    ../unittests/ptr_assign_deref.pc \
     ../unittests/return.pc \
     ../unittests/run.bat \
     ../unittests/runtest.bat \

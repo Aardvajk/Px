@@ -1,0 +1,24 @@
+include("stdtest.ph");
+
+class foo
+{
+    var a:std.int;
+}
+
+func f(a:ptr foo)
+{
+    std.test.same((*a).a, 123);
+
+    (*a) = 321;
+
+    std.test.same((*a).a, 321);
+}
+
+func main
+{
+    var a:foo;
+
+    a.a = 123;
+
+    f(&a);
+}
