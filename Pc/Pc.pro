@@ -58,6 +58,7 @@ SOURCES += \
         syms/SymFinder.cpp \
         syms/SymGuard.cpp \
         syms/SymPrinter.cpp \
+        syms/SymScopeVisitor.cpp \
         syms/SymTree.cpp \
         templates/Templates.cpp \
         types/Type.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     syms/SymFinder.h \
     syms/SymGuard.h \
     syms/SymPrinter.h \
+    syms/SymScopeVisitor.h \
     syms/SymTree.h \
     templates/Templates.h \
     types/Type.h \

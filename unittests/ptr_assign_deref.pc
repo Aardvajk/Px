@@ -22,6 +22,8 @@ func main
 
     f(&a);
 
+    std.test.same(a.a, 321);
+
     var b:ptr foo;
 
     b = &a;

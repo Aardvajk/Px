@@ -101,13 +101,13 @@ void ExprGenerator::visit(DerefNode &node)
     auto sz = TypeQuery::query(c, &node)->assertedSize(node.location());
 
     generate(c, os, node.expr.get());
+    r = sizeof(std::size_t);
 
     if(!(flags & Flag::Addr))
     {
         os << "    load " << sz << ";\n";
+        r = sz;
     }
-
-    r = sz;
 }
 
 void ExprGenerator::visit(AddrNode &node)

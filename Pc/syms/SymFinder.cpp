@@ -7,6 +7,7 @@
 #include "nodes/Nodes.h"
 
 #include "syms/Sym.h"
+#include "syms/SymScopeVisitor.h"
 
 #include "templates/Templates.h"
 
@@ -58,12 +59,22 @@ void SymFinder::visit(IdNode &node)
 {
     if(node.parent)
     {
-        std::vector<Sym*> sc;
-        SymFinder::find(c, type, curr, node.parent.get(), sc);
+        SymScopeVisitor sv(c, curr);
+        node.parent->accept(sv);
 
-        if(!sc.empty() && sc.front()->type() == Sym::Type::Var)
+        std::vector<Sym*> sc;
+        if(sv.result() == curr)
         {
-            sc = { sc.front()->assertedProperty("type").to<::Type*>()->sym };
+            SymFinder::find(c, type, curr, node.parent.get(), sc);
+
+            if(!sc.empty() && sc.front()->type() == Sym::Type::Var)
+            {
+                sc = { sc.front()->assertedProperty("type").to<::Type*>()->sym };
+            }
+        }
+        else
+        {
+            sc = { sv.result() };
         }
 
         for(auto s: sc)
