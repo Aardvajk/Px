@@ -22,6 +22,7 @@ public:
 
     virtual void visit(IdNode &node) override;
     virtual void visit(DerefNode &node) override;
+    virtual void visit(AddrNode &node) override;
 
     static void find(Context &c, Type type, Sym *curr, Node *node, std::vector<Sym*> &result);
 

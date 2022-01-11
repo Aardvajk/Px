@@ -9,7 +9,7 @@ func f(a:ptr foo)
 {
     std.test.same((*a).a, 123);
 
-    (*a) = 321;
+    (*a).a = 321;
 
     std.test.same((*a).a, 321);
 }
@@ -31,4 +31,8 @@ func main
     (*b).a = 999;
 
     std.test.same(a.a, 999);
+
+    (*(&a)).a = 100;
+
+    std.test.same(a.a, 100);
 }

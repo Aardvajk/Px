@@ -13,7 +13,10 @@
 namespace
 {
 
+NodePtr entity(Context &c, bool get);
 NodePtr expression(Context &c, bool get);
+
+using Func = NodePtr(*)(Context&,bool);
 
 NodePtr paren(Context &c, bool get)
 {
@@ -83,12 +86,12 @@ NodePtr call(Context &c, NodePtr target, bool get)
     return n;
 }
 
-template<typename T> NodePtr exprNode(Context &c, bool get)
+template<typename T> NodePtr exprNode(Context &c, Func fn, bool get)
 {
     auto node = new T(c.scanner.token().location());
     NodePtr n(node);
 
-    node->expr = expression(c, get);
+    node->expr = fn(c, get);
 
     return n;
 }
@@ -107,8 +110,8 @@ NodePtr primary(Context &c, bool get)
         case Token::Type::CharLiteral: n = new CharLiteralNode(tok.location(), tok.text()[0]); c.scanner.next(true); return n;
         case Token::Type::IntLiteral: n = new IntLiteralNode(tok.location(), pcx::lexical_cast<int>(tok.text())); c.scanner.next(true); return n;
 
-        case Token::Type::Star: return exprNode<DerefNode>(c, true);
-        case Token::Type::Amp: return exprNode<AddrNode>(c, true);
+        case Token::Type::Star: return exprNode<DerefNode>(c, entity, true);
+        case Token::Type::Amp: return exprNode<AddrNode>(c, entity, true);
 
         default: throw Error(tok.location(), "primary expected - ", tok.text());
     }

@@ -181,4 +181,12 @@ void ExprDecorator::visit(AssignNode &node)
 {
     Visitor::visit<ExprDecorator>(node.target.get(), c);
     Visitor::visit<ExprDecorator>(node.value.get(), c);
+
+    auto tt = TypeQuery::assert(c, node.target.get());
+    auto vt = TypeQuery::assert(c, node.value.get());
+
+    if(!Type::compare(tt, vt))
+    {
+        throw Error(node.location(), "type mismatche in assignment - ", tt->description(), " expected");
+    }
 }

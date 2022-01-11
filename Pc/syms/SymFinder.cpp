@@ -93,6 +93,11 @@ void SymFinder::visit(DerefNode &node)
     node.expr->accept(*this);
 }
 
+void SymFinder::visit(AddrNode &node)
+{
+    node.expr->accept(*this);
+}
+
 void SymFinder::find(Context &c, Type type, Sym *curr, Node *node, std::vector<Sym*> &result)
 {
     SymFinder sf(c, type, curr, result);
