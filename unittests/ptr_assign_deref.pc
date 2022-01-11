@@ -14,6 +14,13 @@ func f(a:ptr foo)
     std.test.same((*a).a, 321);
 }
 
+var g:std.int;
+
+func get():ptr std.int
+{
+    return &g;
+}
+
 func main
 {
     var a:foo;
@@ -35,4 +42,8 @@ func main
     (*(&a)).a = 100;
 
     std.test.same(a.a, 100);
+
+    *(get()) = 99;
+
+    std.test.same(g, 99);
 }
