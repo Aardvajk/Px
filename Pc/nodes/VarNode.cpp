@@ -14,6 +14,7 @@ NodePtr VarNode::cloneDetail() const
 
     node->name = safeClone(name);
     node->type = safeClone(type);
+    node->value = safeClone(value);
 
     return n;
 }

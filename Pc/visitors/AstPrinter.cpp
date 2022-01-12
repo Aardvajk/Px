@@ -148,6 +148,12 @@ void AstPrinter::visit(VarNode &node)
     }
 
     os << "\n";
+
+    if(node.value)
+    {
+        auto g = pcx::scoped_counter(tc);
+        node.value->accept(*this);
+    }
 }
 
 void AstPrinter::visit(ClassNode &node)

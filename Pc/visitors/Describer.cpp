@@ -78,6 +78,11 @@ void Describer::visit(VarNode &node)
     {
         r << ":" << node.type->description();
     }
+
+    if(node.value)
+    {
+        r << " = " << node.value->description();
+    }
 }
 
 void Describer::visit(ClassNode &node)

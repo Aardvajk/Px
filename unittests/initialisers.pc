@@ -1,0 +1,24 @@
+include("stdtest.ph");
+
+func<x> foo(b:x):x
+{
+    var a:x = b;
+    return a;
+}
+
+func main
+{
+    var a = 123;
+    var b = 'a';
+
+    std.test.same(a, 123);
+    std.test.same(b, 'a');
+
+    std.test.same(foo(123), 123);
+    std.test.same(foo('a'), 'a');
+
+    var c = &a;
+    (*c) = 99;
+
+    std.test.same(a, foo(99));
+}

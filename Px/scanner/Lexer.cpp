@@ -35,6 +35,7 @@ static const std::vector<Reserved> pcReserved =
     { "include", Token::Type::RwInclude },
     { "inline", Token::Type::RwInline },
     { "ptr", Token::Type::RwPtr },
+    { "ref", Token::Type::RwRef },
     { "return", Token::Type::RwReturn }
 };
 

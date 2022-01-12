@@ -10,6 +10,7 @@
 #include "parser/IncludeParser.h"
 #include "parser/TypeParser.h"
 #include "parser/FuncParser.h"
+#include "parser/ExprParser.h"
 
 #include <pcx/scoped_push.h>
 
@@ -158,6 +159,11 @@ void buildVar(Context &c, BlockNode *block, bool get)
     if(c.scanner.token().type() == Token::Type::Colon)
     {
         n->type = TypeParser::build(c, true);
+    }
+
+    if(c.scanner.token().type() == Token::Type::Assign)
+    {
+        n->value = ExprParser::build(c, true);
     }
 
     if(c.scanner.token().type() == Token::Type::Comma)
