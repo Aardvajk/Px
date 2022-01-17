@@ -6,10 +6,12 @@
 class VarNode : public Node
 {
 public:
-    explicit VarNode(Location location) : Node(location) { }
+    explicit VarNode(Location location) : Node(location), ref(false) { }
 
     virtual void accept(Visitor &v) override;
     virtual NodePtr cloneDetail() const override;
+
+    bool ref;
 
     NodePtr name;
     NodePtr type;

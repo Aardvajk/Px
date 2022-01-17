@@ -51,6 +51,8 @@ void buildArgs(Context &c, NodeList &container, bool get)
     auto n = new VarNode(c.scanner.token().location());
     container.push_back(n);
 
+    n->setProperty("arg", true);
+
     auto tok = c.scanner.next(get);
 
     std::string name;

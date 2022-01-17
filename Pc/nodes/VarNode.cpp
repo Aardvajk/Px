@@ -12,6 +12,8 @@ NodePtr VarNode::cloneDetail() const
     auto node = new VarNode(location());
     NodePtr n(node);
 
+    node->ref = ref;
+
     node->name = safeClone(name);
     node->type = safeClone(type);
     node->value = safeClone(value);

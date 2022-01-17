@@ -40,14 +40,6 @@ void TypeBuilder::visit(TypeNode &node)
     if(!c.templateParams.empty())
     {
         r = checkTemplateParam(c, node.name);
-
-        if(r && node.ptr)
-        {
-            auto t = *r;
-            t.ptr = node.ptr;
-
-            r = c.types.insert(t);
-        }
     }
 
     if(!r)
@@ -62,6 +54,7 @@ void TypeBuilder::visit(TypeNode &node)
 
         auto t = Type::primary(sv.front());
 
+        t.ref = node.ref;
         t.ptr = node.ptr;
 
         r = c.types.insert(t);

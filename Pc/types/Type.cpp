@@ -60,6 +60,11 @@ std::string describeType(const Type *t)
 {
     std::ostringstream os;
 
+    if(t->ref)
+    {
+        os << "ref ";
+    }
+
     for(std::size_t i = 0; i < t->ptr; ++i)
     {
         os << "ptr ";
@@ -79,7 +84,7 @@ std::string describeType(const Type *t)
 
 }
 
-Type::Type() : ptr(0), sym(nullptr), returnType(nullptr)
+Type::Type() : ref(false), ptr(0), sym(nullptr), returnType(nullptr)
 {
 }
 

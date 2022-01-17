@@ -61,6 +61,27 @@ void VarDecorator::visit(VarNode &node)
         throw Error(node.location(), "no type provided - ", node.description());
     }
 
+    if(type->ref)
+    {
+        auto t = *type;
+        ++t.ptr;
+
+        type = c.types.insert(t);
+
+        if(!node.property("arg").value<bool>())
+        {
+            if(!node.value)
+            {
+                throw Error(node.location(), "ref must be initialised - ", node.description());
+            }
+
+            auto a = new AddrNode(node.location());
+            a->expr = node.value;
+
+            node.value = a;
+        }
+    }
+
     sym->setProperty("type", type);
 
     if(c.tree.current()->container()->type() == Sym::Type::Class)

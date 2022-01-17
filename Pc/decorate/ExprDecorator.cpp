@@ -133,6 +133,18 @@ void ExprDecorator::visit(IdNode &node)
     }
 
     auto sym = sv.front();
+
+    if(auto t = sym->property("type"))
+    {
+        if(t.to<Type*>()->ref)
+        {
+            auto d = new DerefNode(node.location());
+            rn = d;
+
+            d->expr = cn;
+        }
+    }
+
     if(sym->type() == Sym::Type::Func)
     {
         for(auto &r: c.templateFuncReqs)

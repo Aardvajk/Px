@@ -62,6 +62,11 @@ void Describer::visit(ScopeNode &node)
 
 void Describer::visit(TypeNode &node)
 {
+    if(node.ref)
+    {
+        r << "ref ";
+    }
+
     for(std::size_t i = 0; i < node.ptr; ++i)
     {
         r << "ptr ";

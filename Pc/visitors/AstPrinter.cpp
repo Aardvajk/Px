@@ -140,7 +140,7 @@ void AstPrinter::visit(TypeNode &node)
 
 void AstPrinter::visit(VarNode &node)
 {
-    tab() << "var " << node.name->description();
+    tab() << (node.ref ? "ref " : "var ") << node.name->description();
 
     if(node.type)
     {

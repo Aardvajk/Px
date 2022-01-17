@@ -30,6 +30,7 @@ public:
 
     static bool compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b);
 
+    bool ref;
     std::size_t ptr;
 
     Sym *sym;
