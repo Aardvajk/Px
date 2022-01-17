@@ -28,6 +28,8 @@ public:
     static bool compare(const Type *a, const Type *b);
     static bool compare(const std::vector<Type*> &a, const std::vector<Type*> &b);
 
+    static bool exact(const Type *a, const Type *b);
+
     static bool compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b);
 
     bool ref;

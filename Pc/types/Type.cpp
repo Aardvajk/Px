@@ -13,7 +13,7 @@
 namespace
 {
 
-bool compareTypes(const Type *a, const Type *b)
+bool compareTypes(const Type *a, const Type *b, bool exact)
 {
     if(!a && !b)
     {
@@ -35,7 +35,7 @@ bool compareTypes(const Type *a, const Type *b)
         return false;
     }
 
-    if(!compareTypes(a->returnType, b->returnType))
+    if(!compareTypes(a->returnType, b->returnType, exact))
     {
         return false;
     }
@@ -47,7 +47,15 @@ bool compareTypes(const Type *a, const Type *b)
 
     for(std::size_t i = 0; i < a->args.size(); ++i)
     {
-        if(!compareTypes(a->args[i], b->args[i]))
+        if(!compareTypes(a->args[i], b->args[i], exact))
+        {
+            return false;
+        }
+    }
+
+    if(exact)
+    {
+        if(a->ref != b->ref)
         {
             return false;
         }
@@ -143,7 +151,7 @@ Type Type::function(Type *returnType, const std::vector<Type*> &args)
 
 bool Type::compare(const Type *a, const Type *b)
 {
-    return compareTypes(a, b);
+    return compareTypes(a, b, false);
 }
 
 bool Type::compare(const std::vector<Type*> &a, const std::vector<Type*> &b)
@@ -155,13 +163,18 @@ bool Type::compare(const std::vector<Type*> &a, const std::vector<Type*> &b)
 
     for(std::size_t i = 0; i < a.size(); ++i)
     {
-        if(!compareTypes(a[i], b[i]))
+        if(!compareTypes(a[i], b[i], false))
         {
             return false;
         }
     }
 
     return true;
+}
+
+bool Type::exact(const Type *a, const Type *b)
+{
+    return compareTypes(a, b, true);
 }
 
 bool Type::compareNonTemplates(Context &c, const std::vector<Type*> &a, const std::vector<Type*> &b)
@@ -175,7 +188,7 @@ bool Type::compareNonTemplates(Context &c, const std::vector<Type*> &a, const st
     {
         if(a[i] != c.types.unknownTemplateType() && b[i] != c.types.unknownTemplateType())
         {
-            if(!compareTypes(a[i], b[i]))
+            if(!compareTypes(a[i], b[i], false))
             {
                 return false;
             }

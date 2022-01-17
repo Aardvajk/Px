@@ -172,6 +172,19 @@ void ExprDecorator::visit(CallNode &node)
     auto type = c.types.insert(Type::function(c.types.primitiveType(Primitive::Type::Null), args));
 
     node.target = ExprDecorator::decorate(c, node.target, type);
+
+    type = TypeQuery::assertCallable(c, node.target.get());
+
+    for(std::size_t i = 0; i < type->args.size(); ++i)
+    {
+        if(type->args[i]->ref)
+        {
+            auto a = new AddrNode(node.location());
+            a->expr = node.args[i];
+
+            node.args[i] = a;
+        }
+    }
 }
 
 void ExprDecorator::visit(DerefNode &node)

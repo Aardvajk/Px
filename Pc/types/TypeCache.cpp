@@ -31,7 +31,7 @@ Type *TypeCache::insert(const Type &type)
 {
     for(std::size_t i = 0; i < v.size(); ++i)
     {
-        if(Type::compare(&type, v.ptr(i)) && type.ref == v[i].ref)
+        if(Type::exact(&type, v.ptr(i)))
         {
             return v.ptr(i);
         }

@@ -131,6 +131,7 @@ DISTFILES += \
     ../unittests/local_refs.pc \
     ../unittests/nested_template_class.pc \
     ../unittests/ptr_assign_deref.pc \
+    ../unittests/ref_args.pc \
     ../unittests/return.pc \
     ../unittests/run.bat \
     ../unittests/runtest.bat \
