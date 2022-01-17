@@ -19,7 +19,7 @@
 #include <unordered_set>
 #include <algorithm>
 
-ExprDecorator::ExprDecorator(Context &c, Type *expected) : c(c), expected(expected)
+ExprDecorator::ExprDecorator(Context &c, NodePtr &cn, Type *expected) : c(c), cn(cn), expected(expected)
 {
 }
 
@@ -27,7 +27,7 @@ void ExprDecorator::visit(IdNode &node)
 {
     if(node.parent)
     {
-        Visitor::visit<ExprDecorator>(node.parent.get(), c);
+        node.parent = ExprDecorator::decorate(c, node.parent);
     }
 
     for(auto p: node.params)
@@ -151,20 +151,20 @@ void ExprDecorator::visit(CallNode &node)
 {
     std::vector<Type*> args;
 
-    for(auto a: node.args)
+    for(auto &a: node.args)
     {
-        Visitor::visit<ExprDecorator>(a.get(), c);
+        a = ExprDecorator::decorate(c, a);
         args.push_back(TypeQuery::assert(c, a.get()));
     }
 
     auto type = c.types.insert(Type::function(c.types.primitiveType(Primitive::Type::Null), args));
 
-    Visitor::visit<ExprDecorator>(node.target.get(), c, type);
+    node.target = ExprDecorator::decorate(c, node.target, type);
 }
 
 void ExprDecorator::visit(DerefNode &node)
 {
-    Visitor::visit<ExprDecorator>(node.expr.get(), c);
+    node.expr = ExprDecorator::decorate(c, node.expr);
 
     if(!TypeQuery::assert(c, node.expr.get())->ptr)
     {
@@ -174,13 +174,13 @@ void ExprDecorator::visit(DerefNode &node)
 
 void ExprDecorator::visit(AddrNode &node)
 {
-    Visitor::visit<ExprDecorator>(node.expr.get(), c);
+    node.expr = ExprDecorator::decorate(c, node.expr);
 }
 
 void ExprDecorator::visit(AssignNode &node)
 {
-    Visitor::visit<ExprDecorator>(node.target.get(), c);
-    Visitor::visit<ExprDecorator>(node.value.get(), c);
+    node.target = ExprDecorator::decorate(c, node.target);
+    node.value = ExprDecorator::decorate(c, node.value);
 
     auto tt = TypeQuery::assert(c, node.target.get());
     auto vt = TypeQuery::assert(c, node.value.get());
@@ -189,4 +189,12 @@ void ExprDecorator::visit(AssignNode &node)
     {
         throw Error(node.location(), "type mismatche in assignment - ", tt->description(), " expected");
     }
+}
+
+NodePtr ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
+{
+    ExprDecorator el(c, node, expected);
+    node->accept(el);
+
+    return el.result() ? el.result() : node;
 }

@@ -3,14 +3,18 @@
 
 #include "visitors/Visitor.h"
 
+#include "nodes/Node.h"
+
 class Context;
 class Type;
-class Node;
 
 class ExprDecorator : public Visitor
 {
+private:
+    explicit ExprDecorator(Context &c, NodePtr &cn, Type *expected = nullptr);
+
 public:
-    explicit ExprDecorator(Context &c, Type *expected = nullptr);
+    NodePtr result() const { return rn; }
 
     virtual void visit(IdNode &node) override;
     virtual void visit(CallNode &node) override;
@@ -18,9 +22,14 @@ public:
     virtual void visit(AddrNode &node) override;
     virtual void visit(AssignNode &node) override;
 
+    static NodePtr decorate(Context &c, NodePtr node, Type *expected = nullptr);
+
 private:
     Context &c;
+    NodePtr &cn;
     Type *expected;
+
+    NodePtr rn;
 };
 
 #endif // EXPRDECORATOR_H
