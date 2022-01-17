@@ -43,13 +43,10 @@ void TypeBuilder::visit(TypeNode &node)
 
         if(r)
         {
-            if(node.ref)
-            {
-                auto t = *r;
-                t.ref = true;
+            auto t = *r;
+            t.ref = node.ref;
 
-                r = c.types.insert(t);
-            }
+            r = c.types.insert(t);
         }
     }
 
