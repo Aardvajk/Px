@@ -21,6 +21,9 @@ public:
 
     Type *insert(const Type &type);
     Type *primitiveType(Primitive::Type type);
+
+    bool isUnknownTemplateType(const Type *type) const;
+
     Type *unknownTemplateType();
 
     pcx::ptr_vector<Type>::iterator begin(){ return v.begin(); }

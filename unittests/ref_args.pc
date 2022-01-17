@@ -5,6 +5,11 @@ func foo(a:ref std.int)
     a = 321;
 }
 
+func<x> bar(a:ref x)
+{
+    a = 999;
+}
+
 func main
 {
     var a = 123;
@@ -19,4 +24,8 @@ func main
     std.test.same(b, 99);
     foo(b);
     std.test.same(a, 321);
+
+    bar(b);
+    std.test.same(b, 999);
+    std.test.same(a, 999);
 }

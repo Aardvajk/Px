@@ -186,7 +186,7 @@ bool Type::compareNonTemplates(Context &c, const std::vector<Type*> &a, const st
 
     for(std::size_t i = 0; i < a.size(); ++i)
     {
-        if(a[i] != c.types.unknownTemplateType() && b[i] != c.types.unknownTemplateType())
+        if(!c.types.isUnknownTemplateType(a[i]) && !c.types.isUnknownTemplateType(b[i]))
         {
             if(!compareTypes(a[i], b[i], false))
             {

@@ -46,6 +46,14 @@ Type *TypeCache::primitiveType(Primitive::Type type)
     return v.ptr(tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)]);
 }
 
+bool TypeCache::isUnknownTemplateType(const Type *type) const
+{
+    auto t = *type;
+    t.ref = false;
+
+    return Type::compare(&t, unknownTemplateSym->property("type").to<Type*>());
+}
+
 Type *TypeCache::unknownTemplateType()
 {
     return unknownTemplateSym->property("type").to<Type*>();

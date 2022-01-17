@@ -40,6 +40,17 @@ void TypeBuilder::visit(TypeNode &node)
     if(!c.templateParams.empty())
     {
         r = checkTemplateParam(c, node.name);
+
+        if(r)
+        {
+            if(node.ref)
+            {
+                auto t = *r;
+                t.ref = true;
+
+                r = c.types.insert(t);
+            }
+        }
     }
 
     if(!r)
