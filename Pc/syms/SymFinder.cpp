@@ -11,6 +11,8 @@
 
 #include "templates/Templates.h"
 
+#include "types/TypeQuery.h"
+
 namespace
 {
 

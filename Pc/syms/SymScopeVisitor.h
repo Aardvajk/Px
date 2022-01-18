@@ -14,6 +14,7 @@ public:
     Sym *result(){ return curr; }
 
     virtual void visit(CallNode &node) override;
+    virtual void visit(DerefNode &node) override;
 
 private:
     Context &c;

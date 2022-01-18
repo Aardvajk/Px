@@ -15,3 +15,8 @@ void SymScopeVisitor::visit(CallNode &node)
 {
     curr = TypeQuery::assertCallable(c, node.target.get())->returnType->sym;
 }
+
+void SymScopeVisitor::visit(DerefNode &node)
+{
+    node.expr->accept(*this);
+}
