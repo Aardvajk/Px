@@ -70,7 +70,7 @@ void Generator::visit(VarNode &node)
     {
         auto type = sym->assertedProperty("type").to<Type*>();
 
-        os << "var \"" << sym->fullname() << "\":" << type->assertedSize(node.location()) << ";\n";
+        os << "var \"" << sym->fullname() << "\":" << type->assertedSize(node.location()) << ";\n\n";
     }
 }
 
