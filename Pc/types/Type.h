@@ -27,6 +27,9 @@ public:
     static Type primary(Sym *sym);
     static Type function(Type *returnType, const std::vector<Type*> &args = { });
 
+    Type addPointer() const;
+    Type removePointer() const;
+
     static bool compare(const Type *a, const Type *b);
     static bool compare(const std::vector<Type*> &a, const std::vector<Type*> &b);
 

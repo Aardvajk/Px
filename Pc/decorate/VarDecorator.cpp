@@ -63,10 +63,7 @@ void VarDecorator::visit(VarNode &node)
 
     if(type->ref)
     {
-        auto t = *type;
-        ++t.ptr;
-
-        type = c.types.insert(t);
+        type = c.types.insert(type->addPointer());
 
         if(!node.property("arg").value<bool>())
         {

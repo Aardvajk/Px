@@ -164,6 +164,22 @@ Type Type::function(Type *returnType, const std::vector<Type*> &args)
     return t;
 }
 
+Type Type::addPointer() const
+{
+    auto t = *this;
+    ++t.ptr;
+
+    return t;
+}
+
+Type Type::removePointer() const
+{
+    auto t = *this;
+    --t.ptr;
+
+    return t;
+}
+
 bool Type::compare(const Type *a, const Type *b)
 {
     return compareTypes(a, b, false);

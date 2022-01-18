@@ -59,20 +59,12 @@ void TypeQuery::visit(IntLiteralNode &node)
 
 void TypeQuery::visit(DerefNode &node)
 {
-    auto t = *(Visitor::query<TypeQuery, Type*>(node.expr.get(), c));
-
-    --t.ptr;
-
-    r = c.types.insert(t);
+    r = c.types.insert(Visitor::query<TypeQuery, Type*>(node.expr.get(), c)->removePointer());
 }
 
 void TypeQuery::visit(AddrNode &node)
 {
-    auto t = *(Visitor::query<TypeQuery, Type*>(node.expr.get(), c));
-
-    ++t.ptr;
-
-    r = c.types.insert(t);
+    r = c.types.insert(Visitor::query<TypeQuery, Type*>(node.expr.get(), c)->addPointer());
 }
 
 void TypeQuery::visit(AssignNode &node)
