@@ -26,6 +26,8 @@ public:
     Location location() const { return n; }
     Flags flags() const { return f; }
 
+    template<typename... Args> static void assert(bool condition, Location location, Args&&... args){ if(!condition) throw Error(Error::Flag::Internal, location, args...); }
+
 private:
     Location n;
     Flags f;

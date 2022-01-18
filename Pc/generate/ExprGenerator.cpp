@@ -143,10 +143,7 @@ std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Fl
     ExprGenerator g(c, os, flags);
     node->accept(g);
 
-    if(!g.result())
-    {
-        throw Error(Error::Flag::Internal, node->location(), "expr generator failed - ", node->description());
-    }
+    Error::assert(g.result(), node->location(), "expr generator failed - ", node->description());
 
     return *g.result();
 }

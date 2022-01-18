@@ -174,10 +174,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
             auto p = map.find(pv[i]);
             if(p != map.end())
             {
-                if(p->second >= expected->args.size())
-                {
-                    throw Error(Error::Flag::Internal, id.location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
-                }
+                Error::assert(p->second >= expected->args.size(), id.location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
 
                 types.push_back(expected->args[p->second]);
             }
