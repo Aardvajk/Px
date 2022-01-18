@@ -101,6 +101,21 @@ std::string Type::description() const
     return describeType(this);
 }
 
+bool Type::primitive() const
+{
+    if(ptr || returnType)
+    {
+        return true;
+    }
+
+    if(sym)
+    {
+        return sym->property("primitive");
+    }
+
+    return false;
+}
+
 pcx::optional<std::size_t> Type::size() const
 {
     if(ptr || returnType)

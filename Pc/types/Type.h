@@ -19,6 +19,8 @@ public:
 
     std::string description() const;
 
+    bool primitive() const;
+
     pcx::optional<std::size_t> size() const;
     std::size_t assertedSize(Location location) const;
 

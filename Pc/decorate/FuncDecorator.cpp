@@ -1,8 +1,12 @@
 #include "FuncDecorator.h"
 
+#include "framework/Error.h"
+
 #include "application/Context.h"
 
 #include "nodes/Nodes.h"
+
+#include "types/TypeQuery.h"
 
 #include "decorate/VarDecorator.h"
 #include "decorate/ExprDecorator.h"
@@ -44,5 +48,19 @@ void FuncDecorator::visit(ExprNode &node)
 
 void FuncDecorator::visit(ReturnNode &node)
 {
-    node.expr = ExprDecorator::decorate(c, node.expr);
+    auto t = c.types.primitiveType(Primitive::Type::Null);
+
+    if(node.expr)
+    {
+        node.expr = ExprDecorator::decorate(c, node.expr);
+
+        t = TypeQuery::assert(c, node.expr.get());
+    }
+
+    auto f = c.tree.current()->container()->assertedProperty("type").to<Type*>();
+
+    if(!Type::compare(f->returnType, t))
+    {
+        throw Error(node.location(), f->returnType->description(), " expected - ", node.description());
+    }
 }

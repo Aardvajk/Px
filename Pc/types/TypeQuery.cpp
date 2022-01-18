@@ -18,7 +18,10 @@ void TypeQuery::visit(IdNode &node)
 {
     if(auto sym = node.property("sym"))
     {
-        r = sym.to<Sym*>()->assertedProperty("type").to<Type*>();
+        if(auto t = sym.to<Sym*>()->property("type"))
+        {
+            r = t.to<Type*>();
+        }
     }
 }
 

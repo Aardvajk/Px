@@ -10,6 +10,19 @@
 
 #include "types/TypeQuery.h"
 
+namespace
+{
+
+void checkLiteral(ExprGenerator::Flags flags, Node &node)
+{
+    if(flags & ExprGenerator::Flag::Addr)
+    {
+        throw Error(node.location(), "cannot take address of constant - ", node.description());
+    }
+}
+
+}
+
 ExprGenerator::ExprGenerator(Context &c, std::ostream &os, Flags flags) : c(c), os(os), flags(flags)
 {
 }
@@ -76,10 +89,7 @@ void ExprGenerator::visit(CallNode &node)
 
 void ExprGenerator::visit(CharLiteralNode &node)
 {
-    if(flags & Flag::Addr)
-    {
-        throw Error(node.location(), "cannot take address of constant - ", node.description());
-    }
+    checkLiteral(flags, node);
 
     os << "    push char(" << static_cast<int>(node.value) << ");\n";
     r = sizeof(char);
@@ -87,10 +97,7 @@ void ExprGenerator::visit(CharLiteralNode &node)
 
 void ExprGenerator::visit(IntLiteralNode &node)
 {
-    if(flags & Flag::Addr)
-    {
-        throw Error(node.location(), "cannot take address of constant - ", node.description());
-    }
+    checkLiteral(flags, node);
 
     os << "    push int(" << node.value << ");\n";
     r = sizeof(int);

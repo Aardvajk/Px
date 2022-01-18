@@ -28,6 +28,12 @@ void ExprDecorator::visit(IdNode &node)
     if(node.parent)
     {
         node.parent = ExprDecorator::decorate(c, node.parent);
+
+        auto t = TypeQuery::query(c, node.parent.get());
+        if(t && t->ptr)
+        {
+            throw Error(node.location(), "cannot access via pointer - ", node.description());
+        }
     }
 
     for(auto p: node.params)
