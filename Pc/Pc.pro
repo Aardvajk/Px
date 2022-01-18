@@ -127,6 +127,7 @@ DISTFILES += \
     ../unittests/basic.pc \
     ../unittests/basic_ptr.pc \
     ../unittests/deduce.pc \
+    ../unittests/func_deref.pc \
     ../unittests/initialisers.pc \
     ../unittests/local_refs.pc \
     ../unittests/nested_template_class.pc \

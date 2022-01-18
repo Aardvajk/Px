@@ -1,0 +1,25 @@
+include("stdtest.ph");
+
+class bar
+{
+    var x:std.int;
+}
+
+func foo(a:ptr bar):ptr bar
+{
+    return a;
+}
+
+func<x> foo_template(a:x):x
+{
+    return a;
+}
+
+func main
+{
+    var a:bar;
+    a.x = 123;
+
+    std.test.same((*(foo(&a))).x, 123);
+    std.test.same((*(foo_template(&a))).x, 123);
+}
