@@ -22,4 +22,7 @@ func main
 
     std.test.same((*(foo(&a))).x, 123);
     std.test.same((*(foo_template(&a))).x, 123);
+
+    std.test.same((*(foo(&*&a))).x, 123);
+    std.test.same((*(foo_template(&*&a))).x, 123);
 }
