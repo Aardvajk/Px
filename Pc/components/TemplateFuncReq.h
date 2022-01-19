@@ -10,13 +10,13 @@ class Type;
 class TemplateFuncReq
 {
 public:
-    TemplateFuncReq(TemplateFuncNode *node, Sym *sym, const std::unordered_map<std::string, Type*> &map) : node(node), sym(sym), map(map), uses(0) { }
+    TemplateFuncReq(TemplateFuncNode *node, Sym *sym, const std::unordered_map<std::string, Type*> &map) : node(node), sym(sym), map(map), used(false) { }
 
     TemplateFuncNode *node;
     Sym *sym;
     std::unordered_map<std::string, Type*> map;
 
-    std::size_t uses;
+    bool used;
 };
 
 #endif // TEMPLATEFUNCREQ_H

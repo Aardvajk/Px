@@ -157,7 +157,7 @@ void ExprDecorator::visit(IdNode &node)
         {
             if(r.sym == sym)
             {
-                ++r.uses;
+                r.used = true;
             }
         }
     }

@@ -249,7 +249,7 @@ void Templates::fullfillFuncReqs(Context &c)
 
         for(auto &r: reqs)
         {
-            if(r.uses)
+            if(r.used)
             {
                 fullfillFuncReq(c, r);
             }
