@@ -123,6 +123,11 @@ void Decorator::visit(FuncNode &node)
             returnType = TypeBuilder::build(c, node.type.get());
         }
 
+        if(returnType->ref)
+        {
+            returnType = c.types.insert(returnType->addPointer());
+        }
+
         auto type = c.types.insert(Type::function(returnType, args));
 
         sym = searchFunc(c, node.name.get(), type);

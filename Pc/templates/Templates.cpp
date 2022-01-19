@@ -174,7 +174,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
             auto p = map.find(pv[i]);
             if(p != map.end())
             {
-                Error::assert(p->second >= expected->args.size(), id.location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
+                Error::assert(p->second < expected->args.size(), id.location(), "Templates::generateFunc - p->second != expected->args.size() - ", sym->fullname());
 
                 types.push_back(expected->args[p->second]);
             }
@@ -214,6 +214,11 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
     {
         auto copy = node->type->clone();
         returnType = TypeBuilder::build(c, copy.get());
+    }
+
+    if(returnType->ref)
+    {
+        returnType = c.types.insert(returnType->addPointer());
     }
 
     auto type = c.types.insert(Type::function(returnType, args));

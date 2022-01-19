@@ -191,6 +191,14 @@ void ExprDecorator::visit(CallNode &node)
             node.args[i] = a;
         }
     }
+
+    if(type->returnType->ref)
+    {
+        auto n = new DerefNode(node.location());
+        n->expr = cn;
+
+        rn = n;
+    }
 }
 
 void ExprDecorator::visit(DerefNode &node)

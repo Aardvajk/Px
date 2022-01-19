@@ -1,0 +1,50 @@
+include("stdtest.ph");
+
+var g:std.int;
+
+func foo():ref std.int
+{
+    return g;
+}
+
+class bar
+{
+    var x:std.int;
+}
+
+var h:bar;
+
+func<x> bar_func():ref x
+{
+    return h;
+}
+
+func<x> woo(a:ref x):ref x
+{
+    return a;
+}
+
+func main
+{
+    g = 123;
+
+    var a = foo();
+
+    std.test.same(a, 123);
+
+    a = 321;
+
+    std.test.same(g, 321);
+
+    h.x = 999;
+    std.test.same(h.x, 999);
+
+    bar_func<bar>().x = 888;
+
+    std.test.same(h.x, 888);
+
+    var n:bar;
+
+    woo(n).x = 345;
+    std.test.same(n.x, 345);
+}

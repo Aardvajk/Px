@@ -53,11 +53,22 @@ void FuncDecorator::visit(ReturnNode &node)
     if(node.expr)
     {
         node.expr = ExprDecorator::decorate(c, node.expr);
-
-        t = TypeQuery::assert(c, node.expr.get());
     }
 
     auto f = c.tree.current()->container()->assertedProperty("type").to<Type*>();
+
+    if(f->returnType->ref)
+    {
+        auto n = new AddrNode(node.location());
+        n->expr = node.expr;
+
+        node.expr = n;
+    }
+
+    if(node.expr)
+    {
+        t = TypeQuery::assert(c, node.expr.get());
+    }
 
     if(!Type::compare(f->returnType, t))
     {
