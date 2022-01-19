@@ -48,7 +48,7 @@ void FuncDecorator::visit(ExprNode &node)
 
 void FuncDecorator::visit(ReturnNode &node)
 {
-    auto t = c.types.primitiveType(Primitive::Type::Null);
+    auto t = c.types.nullType();
 
     if(node.expr)
     {

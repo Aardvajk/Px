@@ -116,7 +116,7 @@ void Decorator::visit(FuncNode &node)
             args.push_back(TypeQuery::assert(c, a.get()));
         }
 
-        auto returnType = c.types.primitiveType(Primitive::Type::Null);
+        auto returnType = c.types.nullType();
 
         if(node.type)
         {
@@ -180,7 +180,7 @@ void Decorator::visit(TemplateFuncNode &node)
     }
 
     std::vector<Type*> args;
-    Type *returnType = c.types.primitiveType(Primitive::Type::Null);
+    Type *returnType = c.types.nullType();
 
     if(true)
     {

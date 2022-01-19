@@ -175,7 +175,7 @@ void ExprDecorator::visit(CallNode &node)
         args.push_back(TypeQuery::assert(c, a.get()));
     }
 
-    auto type = c.types.insert(Type::function(c.types.primitiveType(Primitive::Type::Null), args));
+    auto type = c.types.insert(Type::function(c.types.nullType(), args));
 
     node.target = ExprDecorator::decorate(c, node.target, type);
 

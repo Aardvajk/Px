@@ -41,9 +41,19 @@ Type *TypeCache::insert(const Type &type)
     return v.back_ptr();
 }
 
-Type *TypeCache::primitiveType(Primitive::Type type)
+Type *TypeCache::nullType()
 {
-    return v.ptr(tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)]);
+    return v.ptr(0);
+}
+
+Type *TypeCache::charType()
+{
+    return v.ptr(1);
+}
+
+Type *TypeCache::intType()
+{
+    return v.ptr(2);
 }
 
 bool TypeCache::isUnknownTemplateType(const Type *type) const
@@ -61,8 +71,6 @@ Type *TypeCache::unknownTemplateType()
 
 void TypeCache::createPrimitive(Context &c, const std::string &name, Sym *container, Primitive::Type type, std::size_t size)
 {
-    tm[static_cast<std::underlying_type<Primitive::Type>::type>(type)] = container->children().size();
-
     auto s = new Sym(Sym::Type::Class, { }, name);
     container->add(s);
 

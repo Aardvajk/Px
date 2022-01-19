@@ -49,12 +49,12 @@ void TypeQuery::visit(CallNode &node)
 
 void TypeQuery::visit(CharLiteralNode &node)
 {
-    r = c.types.primitiveType(Primitive::Type::Char);
+    r = c.types.charType();
 }
 
 void TypeQuery::visit(IntLiteralNode &node)
 {
-    r = c.types.primitiveType(Primitive::Type::Int);
+    r = c.types.intType();
 }
 
 void TypeQuery::visit(DerefNode &node)

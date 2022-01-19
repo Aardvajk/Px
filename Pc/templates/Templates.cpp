@@ -77,7 +77,7 @@ void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
     auto fn = new FuncNode(r.node->location());
     r.node->instances.push_back(fn);
 
-    auto returnType = c.types.primitiveType(Primitive::Type::Null);
+    auto returnType = c.types.nullType();
 
     if(r.node->type)
     {
@@ -208,7 +208,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
         args.push_back(TypeQuery::assert(c, a.get()));
     }
 
-    auto returnType = c.types.primitiveType(Primitive::Type::Null);
+    auto returnType = c.types.nullType();
 
     if(node->type)
     {

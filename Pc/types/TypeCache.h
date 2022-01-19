@@ -20,7 +20,10 @@ public:
     TypeCache(Context &c);
 
     Type *insert(const Type &type);
-    Type *primitiveType(Primitive::Type type);
+
+    Type *nullType();
+    Type *charType();
+    Type *intType();
 
     bool isUnknownTemplateType(const Type *type) const;
 
@@ -33,8 +36,6 @@ private:
     void createPrimitive(Context &c, const std::string &name, Sym *container, Primitive::Type type, std::size_t size);
 
     pcx::ptr_vector<Type> v;
-    std::unordered_map<std::underlying_type<Primitive::Type>::type, std::size_t> tm;
-
     pcx::scoped_ptr<Sym> unknownTemplateSym;
 };
 
