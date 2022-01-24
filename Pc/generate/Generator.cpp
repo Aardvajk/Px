@@ -25,6 +25,7 @@ void Generator::visit(BlockNode &node)
 
 void Generator::visit(NamespaceNode &node)
 {
+    auto g = c.tree.open(node.assertedProperty("sym").to<Sym*>());
     node.body->accept(*this);
 }
 
@@ -38,6 +39,11 @@ void Generator::visit(FuncNode &node)
         os << "func \"" << sym->funcname() << "\":" << type->returnType->assertedSize(node.location()) << "\n";
         os << "{\n";
 
+        if(type->method)
+        {
+            os << "    arg \"" << sym->fullname() << ".this\":" << sizeof(std::size_t) << ";\n";
+        }
+
         for(auto a: node.args)
         {
             auto sym = a->assertedProperty("sym").to<Sym*>();
@@ -45,6 +51,8 @@ void Generator::visit(FuncNode &node)
 
             os << "    arg \"" << sym->fullname() << "\":" << type->assertedSize(a->location()) << ";\n";
         }
+
+        auto g = c.tree.open(sym);
 
         Visitor::visit<LocalsGenerator>(node.body.get(), c, os);
         Visitor::visit<FuncGenerator>(node.body.get(), c, os);
@@ -78,6 +86,16 @@ void Generator::visit(ClassNode &node)
 {
     if(node.body)
     {
+        auto g = c.tree.open(node.assertedProperty("sym").to<Sym*>());
+
         node.body->accept(*this);
+    }
+}
+
+void Generator::visit(TemplateClassNode &node)
+{
+    for(auto i: node.instances)
+    {
+        i->accept(*this);
     }
 }

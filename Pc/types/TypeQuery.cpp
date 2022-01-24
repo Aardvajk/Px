@@ -72,6 +72,11 @@ void TypeQuery::visit(AssignNode &node)
     node.target->accept(*this);
 }
 
+void TypeQuery::visit(ThisNode &node)
+{
+    r = node.assertedProperty("type").to<Type*>();
+}
+
 Type *TypeQuery::query(Context &c, Node *node)
 {
     TypeQuery v(c);

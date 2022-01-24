@@ -259,6 +259,11 @@ void AstPrinter::visit(AssignNode &node)
     node.value->accept(*this);
 }
 
+void AstPrinter::visit(ThisNode &node)
+{
+    tab() << "this\n";
+}
+
 std::ostream &AstPrinter::tab() const
 {
     return os << std::string(tc * 4, ' ');

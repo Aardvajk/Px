@@ -36,6 +36,7 @@ static const std::vector<Reserved> pcReserved =
     { "inline", Token::Type::RwInline },
     { "ptr", Token::Type::RwPtr },
     { "ref", Token::Type::RwRef },
+    { "this", Token::Type::RwThis },
     { "return", Token::Type::RwReturn }
 };
 

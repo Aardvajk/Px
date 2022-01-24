@@ -31,6 +31,7 @@ public:
     virtual void visit(DerefNode &node) override;
     virtual void visit(AddrNode &node) override;
     virtual void visit(AssignNode &node) override;
+    virtual void visit(ThisNode &node) override;
 
 private:
     std::ostringstream r;

@@ -53,6 +53,11 @@ bool compareTypes(const Type *a, const Type *b, bool exact)
         }
     }
 
+    if(a->method != b->method)
+    {
+        return false;
+    }
+
     if(exact)
     {
         if(a->ref != b->ref)
@@ -92,7 +97,7 @@ std::string describeType(const Type *t)
 
 }
 
-Type::Type() : ref(false), ptr(0), sym(nullptr), returnType(nullptr)
+Type::Type() : ref(false), ptr(0), sym(nullptr), returnType(nullptr), method(false)
 {
 }
 

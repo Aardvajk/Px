@@ -1,0 +1,48 @@
+include("stdtest.ph");
+
+class foo
+{
+    func check(x:std.int, y:std.char)
+    {
+        std.test.same(this.a, x);
+        std.test.same(this.b, y);
+    }
+
+    var a:std.int;
+    var b:std.char;
+}
+
+class<x> foo_t
+{
+    func check(p:x)
+    {
+        std.test.same(this.a, p);
+    }
+
+    var a:x;
+}
+
+func main
+{
+    var a:foo;
+    a.a = 123;
+    a.b = 'a';
+
+    a.check(123, 'a');
+
+    var b:foo;
+    b.a = 321;
+    b.b = 'z';
+
+    b.check(321, 'z');
+
+    var c:foo_t<std.int>;
+    c.a = 999;
+
+    c.check(999);
+
+    var d:foo_t<std.char>;
+    d.a = 'a';
+
+    d.check('a');
+}

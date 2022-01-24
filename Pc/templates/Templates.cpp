@@ -77,6 +77,11 @@ void fullfillFuncReq(Context &c, const TemplateFuncReq &r)
     auto fn = new FuncNode(r.node->location());
     r.node->instances.push_back(fn);
 
+    if(r.node->property("method").value<bool>())
+    {
+        fn->setProperty("method", true);
+    }
+
     auto returnType = c.types.nullType();
 
     if(r.node->type)
@@ -221,7 +226,13 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
         returnType = c.types.insert(returnType->addPointer());
     }
 
-    auto type = c.types.insert(Type::function(returnType, args));
+    auto t = Type::function(returnType, args);
+    if(node->property("method").value<bool>())
+    {
+        t.method = true;
+    }
+
+    auto type = c.types.insert(t);
 
     auto name = pcx::str(sym->name(), "<", pcx::join_str(types, ","), ">(", pcx::join_str(args, ","), "):", returnType->description());
 

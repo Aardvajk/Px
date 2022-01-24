@@ -230,6 +230,21 @@ void ExprDecorator::visit(AssignNode &node)
     }
 }
 
+void ExprDecorator::visit(ThisNode &node)
+{
+    auto s = c.tree.current()->container();
+
+    if(!s->assertedProperty("type").to<Type*>()->method)
+    {
+        throw Error(node.location(), "this cannot be used outside method - ", node.description());
+    }
+
+    auto t = Type::primary(s->parent());
+    t.ref = true;
+
+    node.setProperty("type", c.types.insert(t));
+}
+
 NodePtr ExprDecorator::decorate(Context &c, NodePtr node, Type *expected)
 {
     ExprDecorator el(c, node, expected);

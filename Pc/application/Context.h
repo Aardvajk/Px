@@ -17,6 +17,8 @@
 #include <vector>
 #include <unordered_map>
 
+class FuncNode;
+
 class Context
 {
 public:
@@ -38,6 +40,9 @@ public:
 
     std::vector<std::unordered_map<std::string, Type*> > templateParams;
     std::vector<TemplateFuncReq> templateFuncReqs;
+
+    std::size_t classDepth;
+    std::vector<FuncNode*> deferredMethods;
 };
 
 #endif // CONTEXT_H

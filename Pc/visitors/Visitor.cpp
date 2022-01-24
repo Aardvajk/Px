@@ -75,3 +75,7 @@ void Visitor::visit(AddrNode &node)
 void Visitor::visit(AssignNode &node)
 {
 }
+
+void Visitor::visit(ThisNode &node)
+{
+}

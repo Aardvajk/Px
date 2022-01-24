@@ -144,3 +144,8 @@ void Describer::visit(AssignNode &node)
 {
     r << node.target->description() << " = " << node.value->description();
 }
+
+void Describer::visit(ThisNode &node)
+{
+    r << "this";
+}

@@ -20,3 +20,8 @@ void SymScopeVisitor::visit(DerefNode &node)
 {
     node.expr->accept(*this);
 }
+
+void SymScopeVisitor::visit(ThisNode &node)
+{
+    curr = curr->container()->parent();
+}

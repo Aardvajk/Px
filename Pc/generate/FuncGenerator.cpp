@@ -20,6 +20,7 @@ void FuncGenerator::visit(BlockNode &node)
 
 void FuncGenerator::visit(ScopeNode &node)
 {
+    auto g = c.tree.open(node.assertedProperty("sym").to<Sym*>());
     node.body->accept(*this);
 }
 

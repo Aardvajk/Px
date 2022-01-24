@@ -10,6 +10,8 @@
 
 #include "types/TypeQuery.h"
 
+#include "visitors/QueryVisitors.h"
+
 namespace
 {
 
@@ -76,6 +78,19 @@ void ExprGenerator::visit(CallNode &node)
 
     os << "    allocs " << size << ";\n";
 
+    if(type->method)
+    {
+        auto p = Visitor::query<QueryVisitors::GetParent, NodePtr>(node.target.get());
+        Error::assert(p, node.location(), "GetParent failed ", node.description());
+
+        if(!TypeQuery::query(c, p.get()))
+        {
+            throw Error(node.location(), "method cannot be called without object - ", node.description());
+        }
+
+        generate(c, os, p.get(), Flag::Addr);
+    }
+
     for(auto a: node.args)
     {
         generate(c, os, a.get());
@@ -136,6 +151,12 @@ void ExprGenerator::visit(AssignNode &node)
     os << "    store " << sz << ";\n";
 
     r = sz;
+}
+
+void ExprGenerator::visit(ThisNode &node)
+{
+    os << "    push \"" << c.tree.current()->container()->fullname() << ".this\";\n";
+    r = sizeof(std::size_t);
 }
 
 std::size_t ExprGenerator::generate(Context &c, std::ostream &os, Node *node, Flags flags)

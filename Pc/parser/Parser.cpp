@@ -82,6 +82,11 @@ template<typename T> void buildFuncImp(Context &c, T *n, bool get)
         throw Error(n->name->location(), "invalid location for function - ", n->name->description());
     }
 
+    if(c.containers.back() == Sym::Type::Class)
+    {
+        n->setProperty("method", true);
+    }
+
     if(c.scanner.token().type() == Token::Type::LeftParen)
     {
         c.scanner.consume(Token::Type::LeftParen, false);

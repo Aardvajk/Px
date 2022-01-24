@@ -18,6 +18,7 @@
 #include "decorate/FuncDecorator.h"
 
 #include <pcx/scoped_push.h>
+#include <pcx/scoped_counter.h>
 
 namespace
 {
@@ -68,6 +69,28 @@ Sym *searchFunc(Context &c, Node *node, Type *func)
     return nullptr;
 }
 
+void decorateFuncBody(Context &c, FuncNode &node, Sym *sym)
+{
+    if(sym->property("defined").value<bool>())
+    {
+        throw Error(node.location(), "function already defined - ", node.name->description());
+    }
+
+    sym->setProperty("defined", true);
+
+    c.funcInfos.push_back(new FuncInfo());
+    sym->setProperty("info", c.funcInfos.back_ptr());
+
+    auto g = c.tree.open(sym);
+
+    for(auto &a: node.args)
+    {
+        Visitor::visit<VarDecorator>(a.get(), c);
+    }
+
+    Visitor::visit<FuncDecorator>(node.body.get(), c);
+}
+
 }
 
 Decorator::Decorator(Context &c) : c(c)
@@ -96,7 +119,6 @@ void Decorator::visit(NamespaceNode &node)
     auto g = c.tree.open(sym);
     node.body->accept(*this);
 }
-
 
 void Decorator::visit(FuncNode &node)
 {
@@ -128,7 +150,13 @@ void Decorator::visit(FuncNode &node)
             returnType = c.types.insert(returnType->addPointer());
         }
 
-        auto type = c.types.insert(Type::function(returnType, args));
+        auto t = Type::function(returnType, args);
+        if(node.property("method").value<bool>())
+        {
+            t.method = true;
+        }
+
+        auto type = c.types.insert(t);
 
         sym = searchFunc(c, node.name.get(), type);
         if(!sym)
@@ -144,24 +172,14 @@ void Decorator::visit(FuncNode &node)
 
     if(node.body)
     {
-        if(sym->property("defined").value<bool>())
+        if(c.classDepth)
         {
-            throw Error(node.location(), "function already defined - ", node.name->description());
+            c.deferredMethods.push_back(&node);
         }
-
-        sym->setProperty("defined", true);
-
-        c.funcInfos.push_back(new FuncInfo());
-        sym->setProperty("info", c.funcInfos.back_ptr());
-
-        auto g = c.tree.open(sym);
-
-        for(auto &a: node.args)
+        else
         {
-            Visitor::visit<VarDecorator>(a.get(), c);
+            decorateFuncBody(c, node, sym);
         }
-
-        Visitor::visit<FuncDecorator>(node.body.get(), c);
     }
 }
 
@@ -205,7 +223,13 @@ void Decorator::visit(TemplateFuncNode &node)
         }
     }
 
-    auto type = c.types.insert(Type::function(returnType, args));
+    auto t = Type::function(returnType, args);
+    if(node.property("method").value<bool>())
+    {
+        t.method = true;
+    }
+
+    auto type = c.types.insert(t);
 
     auto sym = searchFunc(c, node.name.get(), type);
     if(!sym)
@@ -267,8 +291,20 @@ void Decorator::visit(ClassNode &node)
 
         sym->setProperty("defined", true);
 
+        auto cd = pcx::scoped_counter(c.classDepth);
+
         auto g = c.tree.open(sym);
         node.body->accept(*this);
+    }
+
+    if(!c.classDepth)
+    {
+        for(auto d: c.deferredMethods)
+        {
+            decorateFuncBody(c, *d, d->assertedProperty("sym").to<Sym*>());
+        }
+
+        c.deferredMethods.clear();
     }
 }
 

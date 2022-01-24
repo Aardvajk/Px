@@ -15,6 +15,7 @@ public:
 
     virtual void visit(CallNode &node) override;
     virtual void visit(DerefNode &node) override;
+    virtual void visit(ThisNode &node) override;
 
 private:
     Context &c;

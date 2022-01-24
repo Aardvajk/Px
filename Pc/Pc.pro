@@ -46,6 +46,7 @@ SOURCES += \
         nodes/Node.cpp \
         nodes/ReturnNode.cpp \
         nodes/ScopeNode.cpp \
+        nodes/ThisNode.cpp \
         nodes/TypeNode.cpp \
         nodes/VarNode.cpp \
         parser/CommonParser.cpp \
@@ -68,6 +69,7 @@ SOURCES += \
         visitors/AstPrinter.cpp \
         visitors/Describer.cpp \
         visitors/NameVisitors.cpp \
+        visitors/QueryVisitors.cpp \
         visitors/Visitor.cpp
 
 HEADERS += \
@@ -99,6 +101,7 @@ HEADERS += \
     nodes/Nodes.h \
     nodes/ReturnNode.h \
     nodes/ScopeNode.h \
+    nodes/ThisNode.h \
     nodes/TypeNode.h \
     nodes/VarNode.h \
     parser/CommonParser.h \
@@ -121,6 +124,7 @@ HEADERS += \
     visitors/AstPrinter.h \
     visitors/Describer.h \
     visitors/NameVisitors.h \
+    visitors/QueryVisitors.h \
     visitors/Visitor.h
 
 DISTFILES += \
@@ -140,6 +144,7 @@ DISTFILES += \
     ../unittests/template_overload.pc \
     ../unittests/template_overloads.pc \
     ../unittests/templates.pc \
+    ../unittests/this_methods.pc \
     ../workspace/run.bat \
     ../workspace/source.pc \
     ../workspace/source.pi

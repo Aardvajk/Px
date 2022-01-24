@@ -113,6 +113,8 @@ NodePtr primary(Context &c, bool get)
         case Token::Type::Star: return exprNode<DerefNode>(c, entity, true);
         case Token::Type::Amp: return exprNode<AddrNode>(c, entity, true);
 
+        case Token::Type::RwThis: n = new ThisNode(tok.location()); c.scanner.next(true); return n;
+
         default: throw Error(tok.location(), "primary expected - ", tok.text());
     }
 }

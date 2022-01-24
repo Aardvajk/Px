@@ -44,6 +44,8 @@ public:
 
     Type *returnType;
     std::vector<Type*> args;
+
+    bool method;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Type *t){ return os << t->description(); }
