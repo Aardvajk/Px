@@ -6,6 +6,14 @@ class foo
     {
         std.test.same(this.a, x);
         std.test.same(this.b, y);
+
+        this.this_param(this, x, y);
+    }
+
+    func this_param(a:ref foo, x:std.int, y:std.char)
+    {
+        std.test.same(a.a, x);
+        std.test.same(a.b, y);
     }
 
     var a:std.int;
@@ -22,6 +30,8 @@ class<x> foo_t
     func<x> check_t(p:x)
     {
         std.test.same(this.a, p);
+
+        var a:x;
     }
 
     var a:x;
@@ -50,6 +60,8 @@ func main
     var d:foo_t<std.char>;
     d.a = 'a';
 
+    var e = 'a';
+
     d.check('a');
-    d.check_t('a');
+    d.check_t(e);
 }
