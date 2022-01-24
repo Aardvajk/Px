@@ -19,6 +19,11 @@ class<x> foo_t
         std.test.same(this.a, p);
     }
 
+    func<x> check_t(p:x)
+    {
+        std.test.same(this.a, p);
+    }
+
     var a:x;
 }
 
@@ -40,9 +45,11 @@ func main
     c.a = 999;
 
     c.check(999);
+    c.check_t(999);
 
     var d:foo_t<std.char>;
     d.a = 'a';
 
     d.check('a');
+    d.check_t('a');
 }
