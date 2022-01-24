@@ -82,45 +82,36 @@ void collapseGroups(Context &c, Entity &e, Code::Type code)
 
 void optimiseFunc(Context &c, Entity &e)
 {
-    if(c.args.contains("o", "remove_no_effects"))
+    auto i = e.entities.begin();
+    while(i != e.entities.end())
     {
-        auto i = e.entities.begin();
-        while(i != e.entities.end())
+        if(hasNoEffect(c, *i))
         {
-            if(hasNoEffect(c, *i))
-            {
-                i = e.entities.erase(i);
-            }
-            else
-            {
-                ++i;
-            }
+            i = e.entities.erase(i);
         }
-    }
-
-    if(c.args.contains("o", "collapse_increment_groups"))
-    {
-        collapseGroups(c, e, Code::Type::AllocS);
-        collapseGroups(c, e, Code::Type::IncrS);
-    }
-
-    if(c.args.contains("o", "remove_redundant_jumps"))
-    {
-        auto i = e.entities.begin();
-        while(i != e.entities.end() - 1)
+        else
         {
-            if(isType(*i, Code::Type::Jump))
-            {
-                auto n = i + 1;
-
-                if(n->type == Entity::Type::Label && n->property("name").to<std::string>() == i->property("target").to<std::string>())
-                {
-                    i->type = Entity::Type::Invalid;
-                }
-            }
-
             ++i;
         }
+    }
+
+    collapseGroups(c, e, Code::Type::AllocS);
+    collapseGroups(c, e, Code::Type::IncrS);
+
+    i = e.entities.begin();
+    while(i != e.entities.end() - 1)
+    {
+        if(isType(*i, Code::Type::Jump))
+        {
+            auto n = i + 1;
+
+            if(n->type == Entity::Type::Label && n->property("name").to<std::string>() == i->property("target").to<std::string>())
+            {
+                i->type = Entity::Type::Invalid;
+            }
+        }
+
+        ++i;
     }
 
     purgeInvalids(c, e);
