@@ -1,0 +1,33 @@
+include("stdtest.ph");
+
+var g = 99;
+
+class<x> foo
+{
+    func bar(a:x)
+    {
+        woo(a);
+    }
+
+    func woo(a:x)
+    {
+        std.test.same(a, z);
+        g = 100;
+    }
+
+    var z:x;
+}
+
+func main
+{
+    var a:foo<std.char>;
+    a.z = 'a';
+
+    var b:foo<std.int>;
+    b.z = 123;
+
+    a.bar('a');
+    b.bar(123);
+
+    std.test.same(g, 100);
+}

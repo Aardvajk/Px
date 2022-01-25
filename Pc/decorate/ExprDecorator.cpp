@@ -148,6 +148,7 @@ void ExprDecorator::visit(IdNode &node)
             rn = d;
 
             d->expr = cn;
+            cn = rn;
         }
     }
 
@@ -163,6 +164,17 @@ void ExprDecorator::visit(IdNode &node)
     }
 
     node.setProperty("sym", sym);
+
+    if(sym->property("method").value<bool>() || sym->property("member").value<bool>())
+    {
+        if(!node.parent)
+        {
+            auto t = new ThisNode(node.location());
+            node.parent = t;
+
+            decorate(c, node.parent);
+        }
+    }
 }
 
 void ExprDecorator::visit(CallNode &node)
