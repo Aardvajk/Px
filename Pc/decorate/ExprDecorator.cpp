@@ -77,32 +77,35 @@ void ExprDecorator::visit(IdNode &node)
 
         for(auto s: sv)
         {
-            if(s->type() == Sym::Type::Func)
+            if(auto t = s->property("type"))
             {
-                auto type = s->assertedProperty("type").to<Type*>();
+                auto type = t.to<Type*>();
 
-                if(type->args.size() == expected->args.size())
+                if(type->returnType)
                 {
-                    auto ps = s->property("paramindices").value<std::unordered_set<std::size_t> >();
-
-                    std::size_t m = 0;
-                    std::size_t cv = 0;
-
-                    for(std::size_t i = 0; i < type->args.size(); ++i)
+                    if(type->args.size() == expected->args.size())
                     {
-                        if(Type::compare(type->args[i], expected->args[i]))
+                        auto ps = s->property("paramindices").value<std::unordered_set<std::size_t> >();
+
+                        std::size_t m = 0;
+                        std::size_t cv = 0;
+
+                        for(std::size_t i = 0; i < type->args.size(); ++i)
                         {
-                            ++m;
-                            if(ps.find(i) != ps.end())
+                            if(Type::compare(type->args[i], expected->args[i]))
                             {
-                                ++cv;
+                                ++m;
+                                if(ps.find(i) != ps.end())
+                                {
+                                    ++cv;
+                                }
                             }
                         }
-                    }
 
-                    if(m == type->args.size())
-                    {
-                        matches.push_back(Match(s, cv));
+                        if(m == type->args.size())
+                        {
+                            matches.push_back(Match(s, cv));
+                        }
                     }
                 }
             }

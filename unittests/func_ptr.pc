@@ -1,0 +1,16 @@
+include("stdtest.ph");
+
+var g:std.int;
+
+func f()
+{
+    g = 123;
+}
+
+func main
+{
+    var a = f;
+    a();
+
+    std.test.same(g, 123);
+}

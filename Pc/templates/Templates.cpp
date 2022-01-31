@@ -188,7 +188,7 @@ Sym *Templates::generateFuncReq(Context &c, Sym *sym, Type *expected, IdNode &id
 
     if(pv.size() != types.size())
     {
-        throw Error(id.location(), "mismatched template params - ", sym->fullname());
+        throw Error(id.location(), "unable to deduce template params - ", sym->fullname());
     }
 
     std::unordered_map<std::string, Type*> map;

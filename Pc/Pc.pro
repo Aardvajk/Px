@@ -132,6 +132,7 @@ DISTFILES += \
     ../unittests/basic_ptr.pc \
     ../unittests/deduce.pc \
     ../unittests/func_deref.pc \
+    ../unittests/func_ptr.pc \
     ../unittests/implicit_this.pc \
     ../unittests/initialisers.pc \
     ../unittests/local_refs.pc \
