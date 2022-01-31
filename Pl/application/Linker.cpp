@@ -20,12 +20,9 @@ void Linker::link(Context &c)
                         throw Error("symbol not found - ", u.strings[n.id]);
                     }
 
-                    if(!c.args.contains("trim") || c.refs.find(u.strings[n.id]) != c.refs.end())
-                    {
-                        auto addr = (t->type == 'F' ? c.ds.position() : 0) + t->offset;
+                    auto addr = (t->type == 'F' ? c.ds.position() : 0) + t->offset;
 
-                        c.cs.writeAt(n.address + e.offset, reinterpret_cast<const char*>(&addr), sizeof(std::size_t));
-                    }
+                    c.cs.writeAt(n.address + e.offset, reinterpret_cast<const char*>(&addr), sizeof(std::size_t));
                 }
             }
         }
