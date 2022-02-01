@@ -146,6 +146,7 @@ DISTFILES += \
     ../unittests/template_overload.pc \
     ../unittests/template_overloads.pc \
     ../unittests/templates.pc \
+    ../unittests/this_addr.pc \
     ../unittests/this_methods.pc \
     ../workspace/run.bat \
     ../workspace/source.pc \

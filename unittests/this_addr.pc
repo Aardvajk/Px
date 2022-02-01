@@ -1,0 +1,21 @@
+include("stdtest.ph");
+
+class foo
+{
+    func bar
+    {
+        var a = &this;
+
+        std.test.same((*a).n, n);
+    }
+
+    var n:std.int;
+}
+
+func main
+{
+    var a:foo;
+    a.n = 123;
+
+    a.bar();
+}
