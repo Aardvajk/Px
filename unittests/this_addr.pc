@@ -1,6 +1,6 @@
 include("stdtest.ph");
 
-class foo
+class<x> foo
 {
     func bar
     {
@@ -9,12 +9,12 @@ class foo
         std.test.same((*a).n, n);
     }
 
-    var n:std.int;
+    var n:x;
 }
 
 func main
 {
-    var a:foo;
+    var a:foo<std.int>;
     a.n = 123;
 
     a.bar();
