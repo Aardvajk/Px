@@ -140,6 +140,7 @@ DISTFILES += \
     ../unittests/ptr_assign_deref.pc \
     ../unittests/ref_args.pc \
     ../unittests/ref_returns.pc \
+    ../unittests/ref_syntax.pc \
     ../unittests/return.pc \
     ../unittests/run.bat \
     ../unittests/runtest.bat \

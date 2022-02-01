@@ -156,10 +156,15 @@ void buildFuncOrTemplate(Context &c, BlockNode *block, bool get)
     }
 }
 
-void buildVar(Context &c, BlockNode *block, bool get)
+void buildVar(Context &c, Token::Type type, BlockNode *block, bool get)
 {
     auto n = new VarNode(c.scanner.token().location());
     block->push_back(n);
+
+    if(type == Token::Type::RwRef)
+    {
+        n->ref = true;
+    }
 
     n->name = CommonParser::name(c, get);
 
@@ -175,7 +180,7 @@ void buildVar(Context &c, BlockNode *block, bool get)
 
     if(c.scanner.token().type() == Token::Type::Comma)
     {
-        buildVar(c, block, true);
+        buildVar(c, type, block, true);
     }
     else
     {
@@ -253,7 +258,10 @@ void Parser::construct(Context &c, BlockNode *block, bool get)
 
         case Token::Type::RwNamespace: buildNamespace(c, block, true); break;
         case Token::Type::RwFunc: buildFuncOrTemplate(c, block, true); break;
-        case Token::Type::RwVar: buildVar(c, block, true); break;
+
+        case Token::Type::RwVar:
+        case Token::Type::RwRef: buildVar(c, tok.type(), block, true); break;
+
         case Token::Type::RwClass: buildClassOrTemplate(c, block, true); break;
 
         default: FuncParser::build(c, block, false);

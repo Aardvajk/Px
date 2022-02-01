@@ -28,6 +28,11 @@ void VarDecorator::visit(VarNode &node)
 
     if(node.type)
     {
+        if(node.ref)
+        {
+            throw Error(node.location(), "reference cannot have explicit type - ", node.description());
+        }
+
         if(!node.type->property("type"))
         {
             node.type->setProperty("type", TypeBuilder::build(c, node.type.get()));
@@ -52,8 +57,19 @@ void VarDecorator::visit(VarNode &node)
         }
         else
         {
-            type = c.types.insert(t->removeRef());
+            auto ft = t->removeRef();
+
+            if(node.ref)
+            {
+                ft.ref = true;
+            }
+
+            type = c.types.insert(ft);
         }
+    }
+    else if(node.ref)
+    {
+        throw Error(node.location(), "reference must be initialised - ", node.description());
     }
 
     if(!type)

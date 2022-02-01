@@ -1,0 +1,31 @@
+include("stdtest.ph");
+
+class<x> foo
+{
+    func bar
+    {
+        ref a = this;
+
+        a.n = 321;
+        std.test.same(n, 321);
+    }
+
+    var n:x;
+}
+
+func main
+{
+    var f:foo<std.int>;
+    f.bar();
+
+    var a = 123;
+    ref b = a;
+    ref c = b;
+
+    std.test.same(c, 123);
+
+    c = 321;
+
+    std.test.same(a, 321);
+    std.test.same(b, 321);
+}
