@@ -180,7 +180,19 @@ Type Type::addPointer() const
 Type Type::removePointer() const
 {
     auto t = *this;
-    --t.ptr;
+
+    if(t.ptr)
+    {
+        --t.ptr;
+    }
+
+    return t;
+}
+
+Type Type::removeRef() const
+{
+    auto t = *this;
+    t.ref = false;
 
     return t;
 }

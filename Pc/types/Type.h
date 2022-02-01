@@ -29,6 +29,7 @@ public:
 
     Type addPointer() const;
     Type removePointer() const;
+    Type removeRef() const;
 
     static bool compare(const Type *a, const Type *b);
     static bool compare(const std::vector<Type*> &a, const std::vector<Type*> &b);

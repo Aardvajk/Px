@@ -52,7 +52,7 @@ void VarDecorator::visit(VarNode &node)
         }
         else
         {
-            type = t;
+            type = c.types.insert(t->removeRef());
         }
     }
 
