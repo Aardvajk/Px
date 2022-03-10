@@ -20,5 +20,6 @@ func main
     var c = &a;
     (*c) = 99;
 
+
     std.test.same(a, foo(99));
 }
