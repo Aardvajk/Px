@@ -2,6 +2,8 @@
 
 #include "framework/Error.h"
 
+#include "scanner/Lexer.h"
+
 Scanner::Scanner()
 {
 }
@@ -20,7 +22,7 @@ Token Scanner::next(bool get)
 {
     if(get)
     {
-        state.back().tok;// = Lexer::next(mode, *state.back().src);
+        state.back().tok = Lexer::next(*state.back().src);
         if(state.back().tok.type() == Token::Type::Invalid)
         {
             throw Error(state.back().tok.location(), "invalid token - ", state.back().tok.text());

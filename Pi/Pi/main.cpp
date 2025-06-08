@@ -23,6 +23,13 @@ int main(int argc, char *argv[])
         }
 
         c.open(files[0]);
+
+        auto t = c.scanner.next(true);
+        while(t.type() != Token::Type::Eof)
+        {
+            std::cout << "[" << t.text() << "]\n";
+            t = c.scanner.next(true);
+        }
     }
 
     catch(const Error &error)

@@ -12,9 +12,14 @@ INCLUDEPATH += "C:/wclang/include" \
 LIBS += "C:/Projects/Px/buildPx/release/libpx.a" \
         "C:/Projects/pcx/build/Release/libpcx.a"
 
+PRE_TARGETDEPS += "C:/Projects/Px/buildPx/release/libPx.a"
+
 SOURCES += \
         application/Context.cpp \
         main.cpp
 
 HEADERS += \
     application/Context.h
+
+DISTFILES += \
+    ../../../workspace/source.pi
