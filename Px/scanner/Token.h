@@ -12,6 +12,7 @@ public:
     enum class Type
     {
         Id,
+        CharLiteral, StringLiteral,
         Eof, Invalid
     };
 
