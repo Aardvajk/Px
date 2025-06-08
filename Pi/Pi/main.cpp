@@ -12,6 +12,17 @@ int main(int argc, char *argv[])
 
     try
     {
+        if(files.size() < 1)
+        {
+            throw Error("no source specified");
+        }
+
+        if(files.size() < 2)
+        {
+            throw Error("no output specified");
+        }
+
+        c.open(files[0]);
     }
 
     catch(const Error &error)

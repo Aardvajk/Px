@@ -11,9 +11,15 @@ INCLUDEPATH += "C:/Projects/pcx"
 LIBS += "C:/Projects/pcx/build/release/libpcx.a"
 
 SOURCES += \
-    scanner/SourceList.cpp
+    scanner/Scanner.cpp \
+    scanner/Source.cpp \
+    scanner/SourceList.cpp \
+    scanner/Token.cpp
     
 HEADERS += \
     framework/Error.h \
     scanner/Location.h \
-    scanner/SourceList.h
+    scanner/Scanner.h \
+    scanner/Source.h \
+    scanner/SourceList.h \
+    scanner/Token.h
